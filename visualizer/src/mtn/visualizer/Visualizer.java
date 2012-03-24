@@ -8,7 +8,6 @@ import mtn.visualizer.objects.SendSphereLayer;
 
 import processing.core.*;
 import ijeoma.motion.*;
-import ijeoma.motion.tween.*;
 import wblut.geom.core.*;
 import wblut.hemesh.creators.*;
 import wblut.hemesh.tools.*;
@@ -37,16 +36,24 @@ public class Visualizer {
 	LayerGroup layerGroup;
 	PApplet app;
 
-	public Visualizer(PApplet app)
-	{
+	public static final int OBJECT_EVENT_CHANNEL = 1;
+	public static final int CAM_EVENT_CHANNEL = 2;
+
+	public Visualizer(PApplet app) {
 		this.app = app;
-		//this.cam = cam;
+		cam = new PeasyCam(app, 600);
 	}
 
 	public void setup() {
 		Motion.setup(app);
+		// cam.pan(app.width/2, -app.height/2);
+
+		cam.setMinimumDistance(0);
+		cam.setMaximumDistance(600);
+		cam.setDistance(600);
+		// cam.setActive(false);
 		render = new WB_Render(app);
-		
+
 		layerGroup = new LayerGroup();
 
 		layerGroup.addLayer(new SendCylinderLayer(4, 200, 0, 0, app, render), 0);
@@ -66,18 +73,11 @@ public class Visualizer {
 
 	public void draw() {
 		app.lights();
-		//app.camera(507.98f, (float)app.frameCount, (float)app.frameCount, 3, 4, 5, 0, 1, 0);
-			for (int i = 0; i < layerGroup.getLayerCount(); i++) {
-				if (layerGroup.getLayer(i).isPlaying())
-					layerGroup.getLayer(i).draw();
-			}
-/*		System.out.println(cam.getPosition()[0] + ", " +  
-				cam.getPosition()[1] + ", " +
-				cam.getPosition()[2] + "; " + 
-				cam.getLookAt()[0] + ", " + 
-				cam.getLookAt()[1] + ", " + 
-				cam.getLookAt()[2]);*/
-		
+		cam.feed();
+		for (int i = 0; i < layerGroup.getLayerCount(); i++) {
+			if (layerGroup.getLayer(i).isPlaying())
+				layerGroup.getLayer(i).draw();
+		}
 	}
 
 	public void keyPressed() {
@@ -87,23 +87,18 @@ public class Visualizer {
 				layerGroup.getLayer(0).play();
 		} else if (app.keyCode == 50) {
 
-			/*CameraState state = cam.getState(); // get a serializable settings
-												// object for current state
+			/*
+			 * CameraState state = cam.getState(); // get a serializable
+			 * settings // object for current state
+			 * 
+			 * FileOutputStream f_out; ObjectOutputStream obj_out; try { f_out =
+			 * new FileOutputStream("data\\camState" + camCounter); obj_out =
+			 * new ObjectOutputStream(f_out); // Write object out to disk
+			 * obj_out.writeObject(state); } catch (IOException e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); } camCounter++;
+			 */
 
-			FileOutputStream f_out;
-			ObjectOutputStream obj_out;
-			try {
-				f_out = new FileOutputStream("data\\camState" + camCounter);
-				obj_out = new ObjectOutputStream(f_out);
-				// Write object out to disk
-				obj_out.writeObject(state);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			camCounter++;*/
-
-		} 
+		}
 	}
 
 	public void keyReleased() {
@@ -111,9 +106,8 @@ public class Visualizer {
 			layerGroup.getLayer(i).stop();
 		}
 	}
-	
-	void loadCamState(int index)
-	{
+
+	void loadCamState(int index) {
 		// Read from disk using FileInputStream
 		FileInputStream f_in;
 		try {
@@ -142,14 +136,13 @@ public class Visualizer {
 	}
 
 	public void oscEvent(OscMessage msg) {
-		
+
 		if (msg.checkAddrPattern("/mtn/note")) {
 			int note = msg.get(0).intValue();
 			int vel = msg.get(1).intValue();
 			int chan = msg.get(2).intValue();
 
-			// Objects
-			if (chan == 0) {
+			if (chan == OBJECT_EVENT_CHANNEL) {
 				// Escape if incoming note is higher than max number of layers
 				if (note < layerGroup.getLayerCount()) {
 					// NoteOn
@@ -161,10 +154,9 @@ public class Visualizer {
 						layerGroup.getLayer(note).stop();
 					}
 				}
-			}
-			// Camera
-			else if (chan == 1) {
-				//if(vel>0)loadCamState(note);
+			} else if (chan == CAM_EVENT_CHANNEL) {
+				if (vel > 0)
+					loadCamState(note);
 			}
 		} else if (msg.checkAddrPattern("/mtn/ctrl")) {
 			int ctrlNum = msg.get(0).intValue();

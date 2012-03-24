@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="lib/ijeomamotion.jar"/>
 	<classpathentry kind="lib" path="lib/javolution-5.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/oscP5.jar"/>
-	<classpathentry kind="lib" path="lib/peasycam.jar"/>
+	<classpathentry kind="lib" path="lib/peasycam.jar" sourcepath="/PeasyCam/src"/>
 	<classpathentry kind="lib" path="lib/quickhull3d.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

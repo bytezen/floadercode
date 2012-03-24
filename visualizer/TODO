@@ -1,8 +1,5 @@
--add global effects with different notes
-	ex: twist
--hook up spacenavigator to drop background fill and rotate camera
 -add themeing layer (with theme and alt for each theme)
 -7 generators and 7 effects
-
-==
--why is the core.jar file in c:\program files\jre\lib\ext needed?
+-work in prev visuals
+-figure out peasycam
+-receive meta-loader commands to load scenes
