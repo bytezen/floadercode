@@ -1,4 +1,4 @@
-package mtvisualizer;
+package mtvisualizer.components;
 
 import org.mt4j.components.MTComponent;
 import org.mt4j.components.visibleComponents.AbstractVisibleComponent;
@@ -6,8 +6,6 @@ import org.mt4j.components.visibleComponents.widgets.MTClipRectangle;
 import org.mt4j.components.visibleComponents.widgets.MTWindow;
 
 import oscP5.OscMessage;
-
-import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import wblut.hemesh.*;
@@ -16,7 +14,6 @@ import wblut.hemesh.creators.*;
 import wblut.core.*;
 import wblut.core.processing.*;
 import mtn.visualizer.*;
-
 
 public class VisualizerComponent extends AbstractVisibleComponent{
 
