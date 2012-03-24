@@ -9,13 +9,13 @@ import wblut.hemesh.core.HE_Mesh;
 import wblut.hemesh.creators.HEC_Cone;
 
 
-public class SimpleComponent extends AbstractVisibleComponent {
+public class TestHEMeshComponent extends AbstractVisibleComponent {
 
 	HE_Mesh cone;
 	WB_Render render;
 	PApplet app;
 
-	public SimpleComponent(PApplet app) {
+	public TestHEMeshComponent(PApplet app) {
 		super(app);
 		this.app = app;
 		// TODO Auto-generated constructor stub

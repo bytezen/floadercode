@@ -1,7 +1,6 @@
 package mtvisualizer;
 
-import mtvisualizer.scenes.AbstractVisualizationScene;
-import mtvisualizer.scenes.FlyingObjectsScene;
+import mtvisualizer.scenes.VisualScene;
 import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;
@@ -18,12 +17,12 @@ public class StartMTVisualizer extends MTApplication {
 	public static final String OSC_REMOTE_ADDR = "localhost";
 	public static final int OSC_REMOTE_PORT = 7500;
 	NetAddress remoteAddress;
-	AbstractVisualizationScene currentScene;
-	AbstractVisualizationScene newScene;
+	VisualScene currentScene;
+	VisualScene newScene;
 	boolean changeScene;
 	OscP5 oscP5;
-	String[] sceneList = { FlyingObjectsScene.class.getName(), 
-			FlyingObjectsScene.class.getName()
+	String[] sceneList = { floader.visuals.flyingobjects.FlyingObjectsVisual.class.getName(), 
+			floader.visuals.tearsfordears.TearsForDearsVisual.class.getName()
 	};
 	int currentSceneIndex;
 	
@@ -32,40 +31,40 @@ public class StartMTVisualizer extends MTApplication {
 		oscP5 = new OscP5(this, OSC_PORT);
 		remoteAddress = new NetAddress(OSC_REMOTE_ADDR, OSC_REMOTE_PORT);
 		
-		currentScene = SceneFactory.getScene(this, FlyingObjectsScene.class.getName(), oscP5, remoteAddress);
+		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[0]);
 		addScene(currentScene);
 	}
 
 	public void oscEvent(OscMessage msg) {
-		if (msg.checkAddrPattern("/mtn/note")) {
+		if (msg.checkAddrPattern("/mtn/note") && msg.get(2).intValue() == SCENE_CHANGE) {
 			int note = msg.get(0).intValue();
 			int vel = msg.get(1).intValue();
-			int chan = msg.get(2).intValue();
-
-			if (chan == SCENE_CHANGE) {
 				if (vel > 0 && note < sceneList.length) {
-					newScene = SceneFactory.getScene(this, sceneList[note], oscP5, remoteAddress);
+					newScene = new VisualScene(this, oscP5, remoteAddress, sceneList[note]);
 					currentScene = newScene;
 					this.changeScene(newScene);
-				}
 			} else {
+				
 				currentScene.oscEvent(msg);
 			}
+		} else {
+			currentScene.oscEvent(msg);
 		}
 	}
 	
 	public void keyPressed()
 	{
+		VisualScene newScene;
 		if(keyCode == 50)
 		{
 			System.out.println("change scene to: " + sceneList[0]);
-			AbstractVisualizationScene newScene = SceneFactory.getScene(this, sceneList[0], oscP5, remoteAddress);
+			newScene = new VisualScene(this,oscP5, remoteAddress, sceneList[0]);
 			currentScene = newScene;
 			this.changeScene(newScene);
 		} else if(keyCode == 51)
 		{
 			System.out.println("change scene to: " + sceneList[1]);
-			AbstractVisualizationScene newScene = SceneFactory.getScene(this, sceneList[1], oscP5, remoteAddress);
+			newScene = new VisualScene(this,oscP5, remoteAddress, sceneList[1]);
 			currentScene = newScene;
 			this.changeScene(newScene);
 		}
@@ -73,18 +72,6 @@ public class StartMTVisualizer extends MTApplication {
 	
 	public static void main(String[] args) {
 		initialize();
-	}
-
-	public static class SceneFactory {
-		public static AbstractVisualizationScene getScene(AbstractMTApplication app, String name, OscP5 oscP5, NetAddress remoteAddress) {
-			if (name.equals(FlyingObjectsScene.class.getName())) {
-				return new FlyingObjectsScene(app, name, oscP5, remoteAddress);
-			} else {
-				System.err.println("Error: undefined scene name: " + name);
-				return null;
-			}
-
-		}
 	}
 
 }

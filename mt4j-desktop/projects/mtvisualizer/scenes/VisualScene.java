@@ -4,8 +4,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import mtvisualizer.components.NanoUIComponent;
-import mtvisualizer.components.SimpleComponent;
-import mtvisualizer.components.VisualizerComponent;
+import mtvisualizer.components.TestHEMeshComponent;
+import mtvisualizer.components.FloaderVisualComponent;
 import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;
@@ -33,22 +33,24 @@ import org.mt4j.util.math.Vertex;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
-public class FlyingObjectsScene extends AbstractVisualizationScene {
+public class VisualScene extends AbstractScene implements IOSCScene {
 
 	AbstractMTApplication app;
-	VisualizerComponent vizComp;
+	FloaderVisualComponent vizComp;
 	NanoUIComponent uiComp;
 	OscP5 oscP5;
 	NetAddress remoteAddress;
+	SlideTransition slideLeftTransition;
 	
-	public FlyingObjectsScene(AbstractMTApplication app, String name, OscP5 oscP5, NetAddress remoteAddress) {
-		super(app, name);
+	public VisualScene(AbstractMTApplication app, OscP5 oscP5, NetAddress remoteAddress, String visualName) {
+		super(app, visualName);
 		this.app = app;
 		this.oscP5 = oscP5;
 		this.remoteAddress = remoteAddress;
 		this.registerGlobalInputProcessor(new CursorTracer(app, this));
+		this.setTransition(new SlideTransition(app, 800, true));
 		
-		vizComp = new VisualizerComponent(app);
+		vizComp = new FloaderVisualComponent(app, visualName);
 		//TODO make this relative to screen width
 		vizComp.translate(new Vector3D(400, 400, 0, 1));
 		uiComp = new NanoUIComponent(app, oscP5, remoteAddress);

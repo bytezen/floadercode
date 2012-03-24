@@ -2,6 +2,9 @@ package floader.visuals.flyingobjects;
 
 import java.io.*;
 
+import floader.visuals.IVisual;
+import floader.visuals.VisualConstants;
+
 
 
 import processing.core.*;
@@ -26,15 +29,14 @@ import processing.opengl.*;
 import peasy.*;
 import oscP5.*;
 
-public class FlyingObjectsVisual {
+public class FlyingObjectsVisual implements IVisual {
 
 	WB_Render render;
 	PeasyCam cam;
 	LayerGroup layerGroup;
 	PApplet app;
 
-	public static final int OBJECT_EVENT_CHANNEL = 1;
-	public static final int CAM_EVENT_CHANNEL = 2;
+	
 	public static final int LAYER_SIZE = 11;
 	private float baseDuration = 10;
 
@@ -140,7 +142,7 @@ public class FlyingObjectsVisual {
 			int vel = msg.get(1).intValue();
 			int chan = msg.get(2).intValue();
 
-			if (chan == OBJECT_EVENT_CHANNEL) {
+			if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
 				// Escape if incoming note is higher than max number of layers
 				if (note < LAYER_SIZE) {
 					if (vel > 0) {
@@ -149,7 +151,7 @@ public class FlyingObjectsVisual {
 						layerGroup.getLayer(note).stop();
 					}
 				}
-			} else if (chan == CAM_EVENT_CHANNEL) {
+			} else if (chan == VisualConstants.CAM_EVENT_CHANNEL) {
 				if (vel > 0)
 					loadCamState(note);
 			}
