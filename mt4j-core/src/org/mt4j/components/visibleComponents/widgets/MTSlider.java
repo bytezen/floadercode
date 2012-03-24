@@ -159,7 +159,7 @@ public class MTSlider extends MTRectangle {
 		}
 		
 //		outerShape = new MTRectangle(x,y, width, height, applet);
-		outerShape = new MTRoundRectangle(applet,x,y, 0, width, height, knobWidth/2f + innerPadding, knobHeight/2f  + innerPadding);
+		outerShape = new MTRectangle(applet,x,y, 0, width, height);
 		outerShape.unregisterAllInputProcessors();
 		//When we click on the outershape move the knob in that direction a certain step
 		outerShape.registerInputProcessor(new TapProcessor(applet, 35));
@@ -189,8 +189,8 @@ public class MTSlider extends MTRectangle {
 			}
 		});
 		
-//		knob = new MTRectangle(x+innerOffset, y+innerOffset, 	knobWidth, knobHeight, applet);
-		knob = new MTEllipse(applet,  new Vector3D(0,0,0), knobWidth*0.5f, knobHeight*0.5f);
+		knob = new MTRectangle(applet,x+innerPadding, y+innerPadding, 	knobWidth, knobHeight);
+		//knob = new MTEllipse(applet,  new Vector3D(0,0,0), knobWidth*0.5f, knobHeight*0.5f);
 		knob.setFillColor(new MTColor(140, 140, 140, 255));
 		AbstractComponentProcessor[] inputPs = knob.getInputProcessors();
         for (AbstractComponentProcessor p : inputPs) {
