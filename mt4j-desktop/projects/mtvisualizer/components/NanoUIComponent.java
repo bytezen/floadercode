@@ -20,6 +20,7 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
@@ -29,7 +30,6 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 	OscP5 oscP5;
 	NetAddress remoteAddress;
 	NanoUIComponent thisComponent;
-	private String imagePath =  "data"+  AbstractMTApplication.separator;
 	
 	public NanoUIComponent(PApplet app, OscP5 oscP5, NetAddress remoteAddress) {
 		super(app);
@@ -52,7 +52,7 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 	
 	public void addDelayButtons(float x, float y)
 	{
-		addButton(x, y, "button.jpg").addGestureListener(TapProcessor.class, new IGestureEventListener() {
+		addButton(x, y, 80, 80).addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent) ge;
 				buttonEvent(6,te);
@@ -60,7 +60,7 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 			}
 		});
 		
-		addButton(x + 90, y, "button.jpg").addGestureListener(TapProcessor.class, new IGestureEventListener() {
+		addButton(x + 90, y, 80, 80).addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent) ge;
 				buttonEvent(7,te);
@@ -71,7 +71,7 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 	
 	public void addGoButton(float x, float y)
 	{
-		addButton(x, y, "button2.jpg").addGestureListener(TapProcessor.class, new IGestureEventListener() {
+		addButton(x, y, 170, 80).addGestureListener(TapProcessor.class, new IGestureEventListener() {
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent) ge;
 				buttonEvent(8,te);
@@ -80,10 +80,15 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 		});
 	}
 	
-	public MTImageButton addButton(float x, float y, String imageName)
+	public MTImageButton addButton(float x, float y, int width, int height)
 	{
-		PImage eraser = app.loadImage(imagePath + imageName);
-		MTImageButton b = new MTImageButton(app, eraser);
+		PImage buttonImg = app.createImage(width, height, PConstants.RGB);
+		buttonImg.loadPixels();
+		for (int i = 0; i < buttonImg.pixels.length; i++) {
+			buttonImg.pixels[i] = app.color(0, 90, 102); 
+		}
+		
+		MTImageButton b = new MTImageButton(app, buttonImg);
 		b.setFillColor(new MTColor(200,100,200,180));
 		b.setStrokeColor(new MTColor(255,255,255,200));
 		b.translate(new Vector3D(x, y, 0));

@@ -12,8 +12,6 @@ import wblut.hemesh.core.HE_Mesh;
 import wblut.hemesh.core.HE_Selection;
 import wblut.hemesh.modifiers.HEM_Extrude;
 import wblut.hemesh.modifiers.HEM_Twist;
-import ijeoma.motion.*;
-import ijeoma.motion.tween.*;
 
 public abstract class AbstractMovingObject {
 	
@@ -22,7 +20,6 @@ public abstract class AbstractMovingObject {
 	public boolean isPlaying;
 	protected int yOffset;
 	protected int xOffset;
-	TweenParallel tp;
 	PApplet sketch;
 	WB_Render render;
 	
@@ -48,26 +45,24 @@ public abstract class AbstractMovingObject {
 		yOffset = _yOffset;
 		xOffset = _xOffset;
 		
-		tp = new TweenParallel();
-		tp.addChild(new Tween("distance", 0, -1000 * distanceMult, duration));
+		//new Tween("distance", 0, -1000 * distanceMult, duration);
+		
 	}
 	
 	protected void applyGlobalMovement(HE_Mesh mesh)
 	{
 		//Move backwards
-		mesh.move(xOffset, yOffset, tp.getTween("distance").getPosition());
+		//TODO retween
+		//mesh.move(xOffset, yOffset, tp.getTween("distance").getPosition());
 	}
 	
 	public void play()
 	{
-		tp.repeat();
-		tp.play();
 		isPlaying = true;
 	}
 	
 	public void stop()
 	{
-		tp.stop();
 		isPlaying = false;
 	}
 	

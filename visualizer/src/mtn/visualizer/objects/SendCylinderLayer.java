@@ -4,8 +4,6 @@ import java.util.Iterator;
 
 
 import processing.core.*;
-import ijeoma.motion.*;
-import ijeoma.motion.tween.*;
 import wblut.geom.core.*;
 import wblut.hemesh.creators.*;
 import wblut.hemesh.tools.*;
@@ -30,24 +28,15 @@ public class SendCylinderLayer extends AbstractMovingObject {
 
 	HE_Mesh cylinder;
 
-	TweenSequence extrudeTween;
-	Tween rotationTween;
-	Tween opacityTween;
 	
 	public SendCylinderLayer(int _distanceScale, int _duration, int _yOffset, int _xOffset, PApplet _sketch, WB_Render _render) {
 		super(_distanceScale, _duration, _yOffset, _xOffset, _sketch, _render);
 		
-		tp = new TweenParallel();
-		tp.addChild(new Tween("distance", 0, -1000 * distanceMult, duration));
+		//tp.addChild(new Tween("distance", 0, -1000 * distanceMult, duration));
 		
-		rotationTween = new Tween("rotation", 0f, 2 * PConstants.PI, 60);
-		opacityTween = new Tween("opacity", 255,0,200);
-		
-		
-		extrudeTween = new TweenSequence();
-		extrudeTween.appendChild(new Tween("t1", 0f, 100f, 10));
-		extrudeTween.appendChild(new Tween("t2", 100f, 0f, 10));
-		
+		//rotationTween = new Tween("rotation", 0f, 2 * PConstants.PI, 60);
+		//opacityTween = new Tween("opacity", 255,0,200);
+				
 		effectExtrudeDistanceBase = 10;
 		effectTwistXBase = 1f;
 		effectScaleBase = 40;
@@ -55,21 +44,10 @@ public class SendCylinderLayer extends AbstractMovingObject {
 
 	public void play() {
 		super.play();
-		extrudeTween.repeat();
-		extrudeTween.play();
-		rotationTween.repeat();
-		rotationTween.play();
-		opacityTween.repeat();
-		opacityTween.play();
-		
-		
 	}
 
 	public void stop() {
 		super.stop();
-		extrudeTween.stop();
-		rotationTween.stop();
-		opacityTween.stop();
 	}
 
 	public void draw() {
@@ -85,7 +63,8 @@ public class SendCylinderLayer extends AbstractMovingObject {
 		// Rotate to timeline
 		p = cylinder.getCenter();
 		q = new WB_Point3d(p.x + 500, p.y, p.z);
-		cylinder.rotateAboutAxis(rotationTween.getPosition(), p, q);
+		//TODO retween
+		//cylinder.rotateAboutAxis(rotationTween.getPosition(), p, q);
 
 		// Extrude
 		HEM_Extrude extrude = new HEM_Extrude();
@@ -102,8 +81,8 @@ public class SendCylinderLayer extends AbstractMovingObject {
 		applyGlobalEffects(cylinder);
 		
 		sketch.noStroke();
-		//render.drawEdges(cylinder);
-		sketch.fill(125,242,24, opacityTween.getPosition());
+		//TODO retween
+		//sketch.fill(125,242,24, opacityTween.getPosition());
 		render.drawFaces(cylinder);
 	}
 

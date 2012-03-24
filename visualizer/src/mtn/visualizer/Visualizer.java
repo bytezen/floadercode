@@ -7,7 +7,6 @@ import mtn.visualizer.objects.SendCylinderLayer;
 import mtn.visualizer.objects.SendSphereLayer;
 
 import processing.core.*;
-import ijeoma.motion.*;
 import wblut.geom.core.*;
 import wblut.hemesh.creators.*;
 import wblut.hemesh.tools.*;
@@ -38,6 +37,7 @@ public class Visualizer {
 
 	public static final int OBJECT_EVENT_CHANNEL = 1;
 	public static final int CAM_EVENT_CHANNEL = 2;
+	public static final int LAYER_SIZE = 11;
 
 	public Visualizer(PApplet app) {
 		this.app = app;
@@ -46,16 +46,15 @@ public class Visualizer {
 
 	public void setup() {
 		
-		
 		cam.setMinimumDistance(0);
 		cam.setMaximumDistance(600);
 		cam.setDistance(600);
-		//turn off touch rotation
-		// cam.setActive(false);
 		render = new WB_Render(app);
-
 		layerGroup = new LayerGroup();
-
+		
+		//turn off touch rotation
+		//cam.setActive(false);
+		
 		layerGroup.addLayer(new SendCylinderLayer(4, 200, 0, 0, app, render), 0);
 		layerGroup.addLayer(new SendCylinderLayer(4, 200, 0, 0, app, render), 1);
 		layerGroup.addLayer(new SendCylinderLayer(4, 200, 0, 0, app, render), 2);
@@ -121,7 +120,7 @@ public class Visualizer {
 			if (obj instanceof CameraState) {
 				// Cast object to a Vector
 				CameraState state = (CameraState) obj;
-				cam.setState(state);
+				//cam.setState(state);
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -144,13 +143,10 @@ public class Visualizer {
 
 			if (chan == OBJECT_EVENT_CHANNEL) {
 				// Escape if incoming note is higher than max number of layers
-				if (note < layerGroup.getLayerCount()) {
-					// NoteOn
+				if (note < LAYER_SIZE) {
 					if (vel > 0) {
 						layerGroup.getLayer(note).play();
-					}
-					// NoteOff
-					else if (vel == 0) {
+					} else if (vel == 0) {
 						layerGroup.getLayer(note).stop();
 					}
 				}

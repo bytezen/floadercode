@@ -4,8 +4,6 @@ import java.util.Iterator;
 
 
 import processing.core.*;
-import ijeoma.motion.*;
-import ijeoma.motion.tween.*;
 import wblut.geom.core.*;
 import wblut.hemesh.creators.*;
 import wblut.hemesh.tools.*;
@@ -29,12 +27,11 @@ import peasy.*;
 public class SendConeLayer extends AbstractMovingObject {
 
 	HE_Mesh cone;
-	Tween rotationTween;
 
 	public SendConeLayer(int _distanceScale, int _duration, int _yOffset, int _xOffset, PApplet _sketch, WB_Render _render) {
 		super(_distanceScale, _duration, _yOffset, _xOffset, _sketch, _render);
 
-		rotationTween = new Tween("rotation", 0f, 2 * PConstants.PI, 213);
+		//rotationTween = new Tween("rotation", 0f, 2 * PConstants.PI, 213);
 		effectExtrudeDistanceBase = 20;
 		effectTwistXBase = 10f;
 		effectScaleBase = 10;
@@ -42,13 +39,10 @@ public class SendConeLayer extends AbstractMovingObject {
 
 	public void play() {
 		super.play();
-		rotationTween.repeat();
-		rotationTween.play();
 	}
 
 	public void stop() {
 		super.stop();
-		rotationTween.stop();
 	}
 
 	public void draw() {

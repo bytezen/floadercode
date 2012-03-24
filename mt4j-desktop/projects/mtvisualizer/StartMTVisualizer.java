@@ -1,13 +1,11 @@
 package mtvisualizer;
 
-import ijeoma.motion.Motion;
 import mtvisualizer.scenes.AbstractVisualizationScene;
 import mtvisualizer.scenes.FlyingObjectsScene;
 import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;
 import org.mt4j.MTApplication;
-import org.mt4j.sceneManagement.transition.SlideTransition;
 
 import oscP5.OscMessage;
 import oscP5.OscP5;
@@ -32,7 +30,6 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void startUp() {
 		oscP5 = new OscP5(this, OSC_PORT);
-		Motion.setup(this);
 		remoteAddress = new NetAddress(OSC_REMOTE_ADDR, OSC_REMOTE_PORT);
 		
 		currentScene = SceneFactory.getScene(this, FlyingObjectsScene.class.getName(), oscP5, remoteAddress);

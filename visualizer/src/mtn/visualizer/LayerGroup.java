@@ -7,11 +7,11 @@ import mtn.visualizer.objects.AbstractMovingObject;
 public class LayerGroup {
 
 	AbstractMovingObject[] layers;
-	private static final int SIZE = 11;
+	
 	
 	public LayerGroup()
 	{
-		layers = new AbstractMovingObject[SIZE];
+		layers = new AbstractMovingObject[Visualizer.LAYER_SIZE];
 	}
 	
 	public void addLayer(AbstractMovingObject layer, int index)
