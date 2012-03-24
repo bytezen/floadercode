@@ -23,7 +23,6 @@ public class TestHEMeshComponent extends AbstractVisibleComponent {
 		conCreator.setRadius(100).setHeight(40).setFacets(10).setSteps(10);
 		cone = new HE_Mesh(conCreator);
 		render = new WB_Render(app);
-		
 	}
 
 	@Override
@@ -34,7 +33,6 @@ public class TestHEMeshComponent extends AbstractVisibleComponent {
 
 		render.drawEdges(cone);
 		render.drawFaces(cone);
-
 	}
 
 }

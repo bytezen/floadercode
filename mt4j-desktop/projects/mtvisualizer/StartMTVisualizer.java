@@ -1,6 +1,5 @@
 package mtvisualizer;
 
-import mtvisualizer.scenes.VisualScene;
 import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;

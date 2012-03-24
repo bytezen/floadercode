@@ -11,12 +11,12 @@ import oscP5.OscMessage;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-public class FloaderVisualComponent extends AbstractVisibleComponent {
+public class VisualComponent extends AbstractVisibleComponent {
 
 	IVisual viz;
 	PApplet app;
 
-	public FloaderVisualComponent(PApplet app, String visualName) {
+	public VisualComponent(PApplet app, String visualName) {
 		super(app);
 		this.app = app;
 		viz = VisualFactory.getVisual(app, visualName);

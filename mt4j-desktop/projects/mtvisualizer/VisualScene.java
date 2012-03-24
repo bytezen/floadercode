@@ -1,11 +1,11 @@
-package mtvisualizer.scenes;
+package mtvisualizer;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import mtvisualizer.components.NanoUIComponent;
 import mtvisualizer.components.TestHEMeshComponent;
-import mtvisualizer.components.FloaderVisualComponent;
+import mtvisualizer.components.VisualComponent;
 import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;
@@ -33,10 +33,10 @@ import org.mt4j.util.math.Vertex;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
-public class VisualScene extends AbstractScene implements IOSCScene {
+public class VisualScene extends AbstractScene {
 
 	AbstractMTApplication app;
-	FloaderVisualComponent vizComp;
+	VisualComponent vizComp;
 	NanoUIComponent uiComp;
 	OscP5 oscP5;
 	NetAddress remoteAddress;
@@ -50,7 +50,7 @@ public class VisualScene extends AbstractScene implements IOSCScene {
 		this.registerGlobalInputProcessor(new CursorTracer(app, this));
 		this.setTransition(new SlideTransition(app, 800, true));
 		
-		vizComp = new FloaderVisualComponent(app, visualName);
+		vizComp = new VisualComponent(app, visualName);
 		//TODO make this relative to screen width
 		vizComp.translate(new Vector3D(400, 400, 0, 1));
 		uiComp = new NanoUIComponent(app, oscP5, remoteAddress);
