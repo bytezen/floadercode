@@ -45,12 +45,12 @@ public class Visualizer {
 	}
 
 	public void setup() {
-		Motion.setup(app);
-		// cam.pan(app.width/2, -app.height/2);
-
+		
+		
 		cam.setMinimumDistance(0);
 		cam.setMaximumDistance(600);
 		cam.setDistance(600);
+		//turn off touch rotation
 		// cam.setActive(false);
 		render = new WB_Render(app);
 

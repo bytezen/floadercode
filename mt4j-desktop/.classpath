@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="lib/tuio/tuio4j.jar"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/oscP5.jar"/>
+	<classpathentry kind="lib" path="lib/ijeomamotion.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

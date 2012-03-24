@@ -5,7 +5,7 @@
 	<classpathentry kind="lib" path="lib/apfloat.jar"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/hemesh.jar"/>
-	<classpathentry kind="lib" path="lib/ijeomamotion.jar"/>
+	<classpathentry kind="lib" path="lib/ijeomamotion.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/ijeomamotion/src"/>
 	<classpathentry kind="lib" path="lib/javolution-5.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/oscP5.jar"/>
 	<classpathentry kind="lib" path="lib/peasycam.jar" sourcepath="/PeasyCam/src"/>

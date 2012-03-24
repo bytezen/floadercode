@@ -1,5 +1,6 @@
 package mtvisualizer;
 
+import ijeoma.motion.Motion;
 import mtvisualizer.scenes.AbstractVisualizationScene;
 import mtvisualizer.scenes.FlyingObjectsScene;
 import netP5.NetAddress;
@@ -31,6 +32,7 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void startUp() {
 		oscP5 = new OscP5(this, OSC_PORT);
+		Motion.setup(this);
 		remoteAddress = new NetAddress(OSC_REMOTE_ADDR, OSC_REMOTE_PORT);
 		
 		currentScene = SceneFactory.getScene(this, FlyingObjectsScene.class.getName(), oscP5, remoteAddress);
@@ -46,7 +48,8 @@ public class StartMTVisualizer extends MTApplication {
 			if (chan == SCENE_CHANGE) {
 				if (vel > 0 && note < sceneList.length) {
 					newScene = SceneFactory.getScene(this, sceneList[note], oscP5, remoteAddress);
-					changeScene = true;
+					currentScene = newScene;
+					this.changeScene(newScene);
 				}
 			} else {
 				currentScene.oscEvent(msg);
@@ -71,18 +74,6 @@ public class StartMTVisualizer extends MTApplication {
 		}
 	}
 	
-	public void draw()
-	{
-		super.draw();
-		if(changeScene)
-		{
-			System.out.println("change scene to: " + newScene.getName());
-			changeScene = false;
-			currentScene = newScene;
-			this.changeScene(newScene);
-		}
-	}
-
 	public static void main(String[] args) {
 		initialize();
 	}

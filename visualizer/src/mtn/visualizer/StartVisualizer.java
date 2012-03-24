@@ -1,5 +1,6 @@
 package mtn.visualizer;
 
+import ijeoma.motion.Motion;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 import peasy.PeasyCam;
@@ -9,12 +10,14 @@ public class StartVisualizer extends PApplet {
 
 	Visualizer visualizer;
 	OscP5 oscP5;
+	
 	public static final int OSC_PORT = 7400;
 	
 	public void setup()
 	{
 		size(1024, 768, OPENGL);
 		oscP5 = new OscP5(this, OSC_PORT);
+		Motion.setup(this);
 		visualizer= new Visualizer(this);
 		visualizer.setup();
 	}
