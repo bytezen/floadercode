@@ -36,6 +36,11 @@ public class StartMTVisualizer extends MTApplication {
 		initialize();
 	}
 	
+	public void keyPressed()
+	{
+		System.out.println("someting");
+	}
+	
 	
 	
 }
