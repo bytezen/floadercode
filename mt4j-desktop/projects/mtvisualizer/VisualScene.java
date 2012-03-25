@@ -52,7 +52,7 @@ public class VisualScene extends AbstractScene {
 		
 		vizComp = new VisualComponent(app, visualName);
 		//TODO make this relative to screen width
-		vizComp.translate(new Vector3D(400, 400, 0, 1));
+		vizComp.translate(new Vector3D(app.width/2, app.height/2, 0, 1));
 		uiComp = new NanoUIComponent(app, oscP5, remoteAddress);
 	}
 

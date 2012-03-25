@@ -56,5 +56,6 @@
 	<classpathentry kind="lib" path="lib/tuio/tuio4j.jar"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/oscP5.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/oscP5/src"/>
+	<classpathentry kind="lib" path="/floader visualizer/lib/Ani.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/Ani/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

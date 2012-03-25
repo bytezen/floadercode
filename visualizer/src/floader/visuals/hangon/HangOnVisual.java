@@ -23,13 +23,11 @@ public class HangOnVisual implements IVisual {
 
 	float multiplier = 1;
 
-	int numSpheres = 40;
+	int numSpheres = 20;
 	WB_Render meshRenderer;
 	HE_Mesh[] spheres;
 	int[] sphereColors;
 
-	HEM_Extrude[] extrudes;
-	HE_Selection[] selections;
 	float[] zRates;
 	float[] yRates;
 	float[] xRates;
@@ -67,8 +65,6 @@ public class HangOnVisual implements IVisual {
 		meshRenderer = new WB_Render(app);
 		spheres = new HE_Mesh[numSpheres];
 		sphereColors = new int[numSpheres];
-		extrudes = new HEM_Extrude[numSpheres];
-		selections = new HE_Selection[numSpheres];
 		zRates = new float[numSpheres];
 		yRates = new float[numSpheres];
 		xRates = new float[numSpheres];
@@ -76,15 +72,14 @@ public class HangOnVisual implements IVisual {
 		ySpins = new float[numSpheres];
 		xSpins = new float[numSpheres];
 
-		createSpheres(3);
-		randomizeSelection();
+		createSpheres();
 		cam = new PeasyCam(app, minDistance);
 		distance = minDistance;
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
 	}
 
-	void createSpheres(int width) {
+	void createSpheres() {
 		HEC_Creator creator;
 		sphereCount = 0;
 		for (int i = 0; i < numSpheres; i++) {
@@ -92,13 +87,14 @@ public class HangOnVisual implements IVisual {
 			creator = new HEC_Sphere().setRadius(startingRadius + sphereCount * radiusIncrement).setUFacets(7).setVFacets(7);
 			spheres[i] = new HE_Mesh(creator);
 
-			// Cap
+			//Lattice & Cap
 			if (i > 0) {
-				spheres[i].modify(new HEM_Lattice().setDepth(2).setWidth(width).setThresholdAngle(PApplet.radians(90)).setFuse(true));
+				//TODO figure out way to incorporate lattice in a performant way
+				//spheres[i].modify(new HEM_Lattice().setDepth(1).setWidth(5).setThresholdAngle(PApplet.radians(90)).setFuse(true));
 				spheres[i].modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, -25, 0), new WB_Vector3d(0, 1, 0))));
 				spheres[i].modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, 25, 0), new WB_Vector3d(0, -1, 0))));
 			}
-			sphereColors[i] = app.color(i * 4 + 10, i * 3 + app.random(20), 40 + app.random(40), 255);
+			sphereColors[i] = app.color(i * 5 + 10, i * 4 + app.random(20), 40 + app.random(40), 255);
 			sphereCount++;
 		}
 		
@@ -108,6 +104,7 @@ public class HangOnVisual implements IVisual {
 	@Override
 	public void draw() {
 		app.lights();
+		cam.feed();
 		
 		for (int i = 0; i < numSpheres; i++) {
 			app.pushMatrix();
@@ -146,23 +143,6 @@ public class HangOnVisual implements IVisual {
 		meshRenderer.drawFaces(spheres[sphereNum]);
 	}
 
-	void randomizeSelection() {
-		Iterator<HE_Face> fItr;
-		HE_Face f;
-		for (int i = 0; i < numSpheres; i++) {
-			
-			extrudes[i] = new HEM_Extrude();
-			fItr = spheres[i].fItr();
-			while (fItr.hasNext()) {
-				f = fItr.next();
-				selections[i] = new HE_Selection(spheres[i]);
-				if (app.random(100) < 5) {
-					selections[i].add(f);
-				}
-			}
-		}
-	}
-
 /*	@Override
 	public void keyPressed() {
 		if (key == '1') {
@@ -179,7 +159,7 @@ public class HangOnVisual implements IVisual {
 
 	public void oscEvent(OscMessage msg) {
 		if (msg.checkAddrPattern("/mtn/note")) {
-			System.out.println(msg.get(0).intValue());
+			//System.out.println(msg.get(0).intValue());
 			if (msg.get(0).intValue() == 1 && msg.get(1).intValue() > 1) {
 				initSpinRates();
 			} else if (msg.get(0).intValue() == 0 && msg.get(1).intValue() > 1) {

@@ -3,8 +3,12 @@ package mtvisualizer.components;
 
 import org.mt4j.components.visibleComponents.AbstractVisibleComponent;
 
+import de.looksgood.ani.Ani;
+
 import floader.visuals.*;
 import floader.visuals.flyingobjects.FlyingObjectsVisual;
+import floader.visuals.hangon.HangOnVisual;
+import floader.visuals.imagineyourgarden.ImagineYourGardenVisual;
 import floader.visuals.tearsfordears.TearsForDearsVisual;
 
 import oscP5.OscMessage;
@@ -37,6 +41,10 @@ public class VisualComponent extends AbstractVisibleComponent {
 				return new FlyingObjectsVisual(app);
 			} else if (name.equals(floader.visuals.tearsfordears.TearsForDearsVisual.class.getName())) {
 				return new TearsForDearsVisual(app);
+			} else if (name.equals(floader.visuals.hangon.HangOnVisual.class.getName())) {
+				return new HangOnVisual(app);
+			} else if (name.equals(floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName())) {
+				return new ImagineYourGardenVisual(app);
 			} else {
 				System.err.println("Error: undefined visual named: " + name);
 				return null;

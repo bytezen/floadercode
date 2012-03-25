@@ -4,9 +4,12 @@ import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;
 import org.mt4j.MTApplication;
+import org.mt4j.util.animation.ani.AniAnimation;
 
+import de.looksgood.ani.Ani;
 import oscP5.OscMessage;
 import oscP5.OscP5;
+import processing.core.PApplet;
 
 public class StartMTVisualizer extends MTApplication {
 	private static final long serialVersionUID = 1L;
@@ -21,7 +24,9 @@ public class StartMTVisualizer extends MTApplication {
 	boolean changeScene;
 	OscP5 oscP5;
 	String[] sceneList = { floader.visuals.flyingobjects.FlyingObjectsVisual.class.getName(), 
-			floader.visuals.tearsfordears.TearsForDearsVisual.class.getName()
+			floader.visuals.tearsfordears.TearsForDearsVisual.class.getName(),
+			floader.visuals.hangon.HangOnVisual.class.getName(),
+			floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName()
 	};
 	int currentSceneIndex;
 	
@@ -29,8 +34,8 @@ public class StartMTVisualizer extends MTApplication {
 	public void startUp() {
 		oscP5 = new OscP5(this, OSC_PORT);
 		remoteAddress = new NetAddress(OSC_REMOTE_ADDR, OSC_REMOTE_PORT);
-		
-		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[0]);
+		//de.looksgood.ani.Ani.setDefaultEasing(de.looksgood.ani.AniConstants.LINEAR);
+		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[3]);
 		addScene(currentScene);
 	}
 
