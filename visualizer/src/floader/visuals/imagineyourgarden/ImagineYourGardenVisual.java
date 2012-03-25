@@ -1,6 +1,6 @@
 package floader.visuals.imagineyourgarden;
 
-import de.looksgood.ani.Ani;
+import floader.looksgood.ani.Ani;
 import floader.visuals.IVisual;
 import peasy.PeasyCam;
 import processing.core.PApplet;

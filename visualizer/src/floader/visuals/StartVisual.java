@@ -1,6 +1,6 @@
 package floader.visuals;
 
-import de.looksgood.ani.Ani;
+import floader.looksgood.ani.Ani;
 import floader.visuals.flyingobjects.FlyingObjectsVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.imagineyourgarden.ImagineYourGardenVisual;

@@ -2,7 +2,7 @@ package floader.visuals.flyingobjects;
 
 import java.util.Iterator;
 
-import de.looksgood.ani.*;
+import floader.looksgood.ani.*;
 import processing.core.PApplet;
 import wblut.core.processing.WB_Render;
 import wblut.geom.core.WB_Line;
