@@ -62,6 +62,7 @@ public class FlickrMTFotoLoader extends FlickrLoader {
 	/* (non-Javadoc)
 	 * @see util.FlickrLoader#processFoto(com.aetrion.flickr.photos.Photo)
 	 */
+	@Override
 	protected void processFoto(Photo foto){
 		String fotoUrl;
 		if (this.isGetHighResolution()){

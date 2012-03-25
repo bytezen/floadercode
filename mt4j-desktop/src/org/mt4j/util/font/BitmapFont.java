@@ -144,6 +144,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontCharacterByName(java.lang.String)
 	 */
+	@Override
 	public IFontCharacter getFontCharacterByName(String characterName){
 		BitmapFontCharacter returnChar = charNameToChar.get(characterName);
 		if (returnChar == null)
@@ -156,6 +157,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontCharacterByUnicode(java.lang.String)
 	 */
+	@Override
 	public IFontCharacter getFontCharacterByUnicode(String unicode){
 		BitmapFontCharacter returnChar = uniCodeToChar.get(unicode);
 		if (returnChar == null){
@@ -215,6 +217,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getCharacters()
 	 */
+	@Override
 	public IFontCharacter[] getCharacters() {
 		return this.characters;
 	}
@@ -236,6 +239,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getDefaultHorizontalAdvX()
 	 */
+	@Override
 	public int getDefaultHorizontalAdvX() {
 		return this.defaultHorizontalAdvX;
 	}
@@ -243,6 +247,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontAbsoluteHeight()
 	 */
+	@Override
 	public int getFontAbsoluteHeight() {
 		return ((Math.abs(this.getFontMaxAscent())) + (Math.abs(this.getFontMaxDescent())));
 	}
@@ -250,6 +255,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontFamily()
 	 */
+	@Override
 	public String getFontFamily() {
 		return this.fontFamily;
 	}
@@ -266,6 +272,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontFileName()
 	 */
+	@Override
 	public String getFontFileName() {
 		return this.fontFileName;
 	}
@@ -273,6 +280,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontMaxAscent()
 	 */
+	@Override
 	public int getFontMaxAscent() {
 		return this.fontMaxAscent;
 	}
@@ -280,6 +288,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontMaxDescent()
 	 */
+	@Override
 	public int getFontMaxDescent() {
 		return this.fontMaxDescent;
 	}
@@ -287,6 +296,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getOriginalFontSize()
 	 */
+	@Override
 	public int getOriginalFontSize() {
 		return this.originalFontSize;
 	}
@@ -294,6 +304,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getUnitsPerEM()
 	 */
+	@Override
 	public int getUnitsPerEM() {
 		return this.unitsPerEM;
 	}
@@ -301,6 +312,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFillColor()
 	 */
+	@Override
 	public MTColor getFillColor() {
 		return fillColor;
 	}
@@ -312,6 +324,7 @@ public class BitmapFont implements IFont, ITextureFont {
 //		return strokeColor;
 //	}
 
+	@Override
 	public void setFillColor(MTColor color){
 		this.fillColor = color;
 	}
@@ -320,6 +333,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#isAntiAliased()
 	 */
+	@Override
 	public boolean isAntiAliased() {
 		return this.antiAliased;
 	}
@@ -328,6 +342,7 @@ public class BitmapFont implements IFont, ITextureFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#destroy()
 	 */
+	@Override
 	public void destroy() {
 		IFontCharacter[] characters = this.getCharacters();
         for (IFontCharacter iFontCharacter : characters) {

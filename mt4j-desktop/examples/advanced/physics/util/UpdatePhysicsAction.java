@@ -24,6 +24,7 @@ public class UpdatePhysicsAction implements IPreDrawAction {
 		this.scale = scale;
 	}
 
+	@Override
 	public void processAction() {
 		try{
 			//Take a timestep in the physics world
@@ -48,6 +49,7 @@ public class UpdatePhysicsAction implements IPreDrawAction {
 		}
 	}
 
+	@Override
 	public boolean isLoop() {
 		return true;
 	}

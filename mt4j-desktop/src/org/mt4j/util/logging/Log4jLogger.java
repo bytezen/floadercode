@@ -18,6 +18,7 @@ public class Log4jLogger implements ILogger {
 		logger.addAppender(ca);
 	}
 
+	@Override
 	public void setLevel(int level) {
 		switch (level) {
 		case OFF:
@@ -43,18 +44,22 @@ public class Log4jLogger implements ILogger {
 		}
 	}
 
+	@Override
 	public void info(Object message) {
 		this.logger.info(message);
 	}
 
+	@Override
 	public void debug(Object message) {
 		this.logger.debug(message);
 	}
 
+	@Override
 	public void warn(Object message) {
 		this.logger.warn(message);
 	}
 
+	@Override
 	public void error(Object message) {
 		this.logger.error(message);
 	}
@@ -70,11 +75,13 @@ public class Log4jLogger implements ILogger {
 //		return this;
 //	}
 	
+	@Override
 	public ILogger createNew(String name) {
 		return new Log4jLogger(name);
 	}
 	
 
+	@Override
 	public int getLevel() {
 		Level level = this.logger.getLevel();
 		if (level.equals(Level.OFF)){

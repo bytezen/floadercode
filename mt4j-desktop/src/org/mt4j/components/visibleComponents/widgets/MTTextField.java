@@ -45,6 +45,7 @@ public class MTTextField extends MTTextArea {
 	 * @param applet the applet
 	 * @deprecated constructor will be deleted! Please , use the constructor with the PApplet instance as the first parameter.
 	 */
+	@Deprecated
 	public MTTextField(float x, float y, float width, float height, IFont font, PApplet applet) {
 		this(applet, x, y, width, height, font);
 	}
@@ -67,6 +68,7 @@ public class MTTextField extends MTTextArea {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.widgets.MTTextArea#characterAdded(org.mt4j.components.visibleComponents.font.IFontCharacter)
 	 */
+	@Override
 	protected void characterAdded(IFontCharacter character){
 		//Intercept new line characters
 		if (character.getUnicode().equalsIgnoreCase("\n")){

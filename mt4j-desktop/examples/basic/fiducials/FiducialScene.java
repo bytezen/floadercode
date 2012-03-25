@@ -8,6 +8,7 @@ import org.mt4j.components.visibleComponents.shapes.AbstractShape;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
 import org.mt4j.components.visibleComponents.widgets.MTTextArea;
 import org.mt4j.input.IMTInputEventListener;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.MTFiducialInputEvt;
 import org.mt4j.input.inputData.MTInputEvent;
 import org.mt4j.input.inputProcessors.globalProcessors.RawFiducialProcessor;
@@ -17,6 +18,8 @@ import org.mt4j.util.font.FontManager;
 import org.mt4j.util.font.IFont;
 import org.mt4j.util.math.ToolsMath;
 import org.mt4j.util.math.Vector3D;
+
+import processing.core.PApplet;
 
 
 public class FiducialScene extends AbstractScene implements IMTInputEventListener {
@@ -41,6 +44,7 @@ public class FiducialScene extends AbstractScene implements IMTInputEventListene
 	}
 
 	//Global input processor listener implementation (IMTInputEventListener)
+	@Override
 	public boolean processInputEvent(MTInputEvent inEvt) {
 		if (inEvt instanceof MTFiducialInputEvt) {
 			MTFiducialInputEvt fEvt = (MTFiducialInputEvt)inEvt;
@@ -49,7 +53,7 @@ public class FiducialScene extends AbstractScene implements IMTInputEventListene
 
 			AbstractShape comp;
 			switch (fEvt.getId()) {
-			case MTFiducialInputEvt.INPUT_STARTED:
+			case AbstractCursorInputEvt.INPUT_STARTED:
 				//Create a new component for the fiducial
 				AbstractShape newComp = createComponent(fID, position);
 				fiducialIDToComp.put(fID, newComp); //Map id to component
@@ -58,11 +62,11 @@ public class FiducialScene extends AbstractScene implements IMTInputEventListene
 				//Save the absolute rotation angle in the component for late
 				newComp.setUserData("angle", fEvt.getAngle()); 
 				//Rotate the component
-				newComp.rotateZ(newComp.getCenterPointRelativeToParent(), AbstractMTApplication.degrees(fEvt.getAngle()));
+				newComp.rotateZ(newComp.getCenterPointRelativeToParent(), PApplet.degrees(fEvt.getAngle()));
 				//Add the component to the canvas to draw it
 				getCanvas().addChild(newComp);	
 				break;
-			case MTFiducialInputEvt.INPUT_UPDATED:
+			case AbstractCursorInputEvt.INPUT_UPDATED:
 				//Retrieve the corresponding component for the fiducial ID from the map
 				comp = fiducialIDToComp.get(fID);
 				if (comp != null){
@@ -75,12 +79,12 @@ public class FiducialScene extends AbstractScene implements IMTInputEventListene
 					if (oldAngle != newAngle){
 						float diff = newAngle-oldAngle;
 						comp.setUserData("angle", newAngle);
-						diff = AbstractMTApplication.degrees(diff); //our rotation expects degrees (not radians)
+						diff = PApplet.degrees(diff); //our rotation expects degrees (not radians)
 						comp.rotateZ(comp.getCenterPointRelativeToParent(), diff); 
 					}
 				}
 				break;
-			case MTFiducialInputEvt.INPUT_ENDED:
+			case AbstractCursorInputEvt.INPUT_ENDED:
 				comp = fiducialIDToComp.get(fID);
 				if (comp != null){
 					comp.destroy();
@@ -117,8 +121,10 @@ public class FiducialScene extends AbstractScene implements IMTInputEventListene
 		return comp;
 	}
 	
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {	}
 
 }

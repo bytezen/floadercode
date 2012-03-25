@@ -206,6 +206,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 //		fotoButton.translate(new Vector3D(MT4jSettings.getInstance().getScreenWidth() - fotoButton.getWidthXY(TransformSpace.RELATIVE_TO_PARENT) -5, MT4jSettings.getInstance().getScreenHeight()- fotoButton.getHeightXY(TransformSpace.RELATIVE_TO_PARENT) -5, 0));
 		fotoButton.translate(new Vector3D(0, MT4jSettings.getInstance().getWindowHeight()- fotoButton.getHeightXY(TransformSpace.RELATIVE_TO_PARENT) , 0));
 		fotoButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -262,6 +263,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 //		final IAnimation slideOut = new Animation("slide out animation", in, mapMenu);
 		final IAnimation slideOut = new AniAnimation(0, 170, 700, AniAnimation.BACK_OUT, mapMenu);
 		slideOut.addAnimationListener(new IAnimationListener() {
+			@Override
 			public void processAnimationEvent(AnimationEvent ae) {
 				float delta = ae.getDelta();
 				((IMTComponent3D)ae.getTarget()).translateGlobal(new Vector3D(delta,0,0));
@@ -277,6 +279,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 //		final IAnimation slideIn = new Animation("slide out animation", in, mapMenu);
 		final IAnimation slideIn = new AniAnimation(0, 170, 700, AniAnimation.BACK_OUT, mapMenu);
 		slideIn.addAnimationListener(new IAnimationListener() {
+			@Override
 			public void processAnimationEvent(AnimationEvent ae) {
 				float delta = -ae.getDelta();
 				((IMTComponent3D)ae.getTarget()).translateGlobal(new Vector3D(delta,0,0));
@@ -292,6 +295,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 		mapMenu.unregisterAllInputProcessors();
 		mapMenu.registerInputProcessor(new TapProcessor(mtApplication, 50));
 		mapMenu.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				if (((TapEvent)ge).getTapID() == TapEvent.TAPPED){
 					if (!animationRunning){
@@ -329,6 +333,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 		cell.unregisterAllInputProcessors();
 		cell.registerInputProcessor(new TapProcessor(p, 15));
 		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				switch (te.getTapID()) { 
@@ -356,6 +361,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 	 * @author C.Ruff
 	 */
 	private class MapDrag implements IGestureEventListener{
+		@Override
 		public boolean processGestureEvent(MTGestureEvent g) {
 			if (g instanceof DragEvent){
 				DragEvent dragEvent = (DragEvent)g;
@@ -381,6 +387,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 
 //		private Vector3D scaleP =  new Vector3D(p.width/2, p.height/2, 0);
 //		scaleP.setXYZ(p.width/2, p.height/2, 0);
+		@Override
 		public boolean processGestureEvent(MTGestureEvent g) {
 			if (g instanceof ScaleEvent){
 				ScaleEvent se = (ScaleEvent)g;
@@ -427,6 +434,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 
 						AniAnimation anim = new AniAnimation(currentF, bestZoom, 1000, map);
 						anim.addAnimationListener(new IAnimationListener() {
+							@Override
 							public void processAnimationEvent(AnimationEvent ae) {
 //								map.sc += ae.getDelta();
 								double nowScale = map.sc;
@@ -493,10 +501,10 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 		
 		try {
 			mgl.set(new float[]{
-					(float)model.get(0), (float)model.get(4), (float)model.get(8),  (float)model.get(12),
-					(float)model.get(1), (float)model.get(5), (float)model.get(9),  (float)model.get(13),
-					(float)model.get(2), (float)model.get(6), (float)model.get(10), (float)model.get(14),
-					(float)model.get(3), (float)model.get(7), (float)model.get(11), (float)model.get(15)});
+					model.get(0), model.get(4), model.get(8),  model.get(12),
+					model.get(1), model.get(5), model.get(9),  model.get(13),
+					model.get(2), model.get(6), model.get(10), model.get(14),
+					model.get(3), model.get(7), model.get(11), model.get(15)});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -537,12 +545,14 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
         }
 	}
 
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 		getMTApplication().addMouseWheelListener(this);
 		getMTApplication().addMouseListener(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 		getMTApplication().removeMouseWheelListener(this);
@@ -657,14 +667,17 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
         flickrLoader.setUsePlacesForGeoSearch(usePlacesForGeoSearch);
         
         flickrLoader.addProgressFinishedListener(new IMTEventListener(){
+			@Override
 			public void processMTEvent(MTEvent mtEvent) {
 				System.out.println("Loading finished!");
 				
 				p.getCurrentScene().registerPreDrawAction(new IPreDrawAction(){
+					@Override
 					public boolean isLoop() {
 						return false;
 					}
 
+					@Override
 					public void processAction() {
 						progressBar.setVisible(false);
 						Photo[] photos = flickrLoader.getPhotos();
@@ -716,7 +729,8 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
                                         tagCircle.registerInputProcessor(new TapProcessor(p));
                                         tagCircle.addGestureListener(TapProcessor.class, new IGestureEventListener() {
                                             //@Override
-                                            public boolean processGestureEvent(MTGestureEvent g) {
+                                            @Override
+											public boolean processGestureEvent(MTGestureEvent g) {
                                                 if (g instanceof TapEvent) {
                                                     TapEvent ce = (TapEvent) g;
                                                     switch (ce.getTapID()) {
@@ -731,11 +745,13 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
                                                                 tagCircle.setGestureAllowance(TapProcessor.class, false);
 
                                                                 p.getCurrentScene().registerPreDrawAction(new IPreDrawAction() {
-                                                                    public boolean isLoop() {
+                                                                    @Override
+																	public boolean isLoop() {
                                                                         return false;
                                                                     }
 
-                                                                    public void processAction() {
+                                                                    @Override
+																	public void processAction() {
 //																	fotoTagContainer.removeChild(tagCircle);
                                                                         tagToPhoto.remove(tagCircle);
                                                                         tagCircle.destroy();
@@ -842,6 +858,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 		/* (non-Javadoc)
 		 * @see org.mt4j.components.visibleComponents.widgets.progressBar.AbstractProgressThread#run()
 		 */
+		@Override
 		public void run() {
 			try {
 				Thread.sleep(this.getSleepTime());
@@ -853,12 +870,15 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 			image = new MTImage(p, p.loadImage(fotoUrl));
 
 			this.addProgressFinishedListener(new IMTEventListener(){
+				@Override
 				public void processMTEvent(MTEvent mtEvent) {
 					p.getCurrentScene().registerPreDrawAction(new IPreDrawAction(){
+						@Override
 						public boolean isLoop() {
 							return false;
 						}
 
+						@Override
 						public void processAction() {
 							//User direct gl..
 							image.setDisplayCloseButton(true);
@@ -937,23 +957,28 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 	}
 
 
+	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 	       int notches = e.getWheelRotation();
 	       System.out.println(notches);
 	       if (notches < 0) {
 	    	   p.getCurrentScene().registerPreDrawAction(new IPreDrawAction(){
+					@Override
 					public boolean isLoop() {
 						return false;
 					}
+					@Override
 					public void processAction() {
 						scaleMap(1.1f);
 					}
 	    	   });
 	       } else {
 	    	   p.getCurrentScene().registerPreDrawAction(new IPreDrawAction(){
+					@Override
 					public boolean isLoop() {
 						return false;
 					}
+					@Override
 					public void processAction() {
 						scaleMap(0.9f);
 					}
@@ -962,6 +987,7 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 	}
 	
 	
+	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		int b = arg0.getButton();
 		switch (b) {
@@ -970,9 +996,11 @@ public class MapsScene extends AbstractScene implements MouseWheelListener, Mous
 			System.out.println("Current zoom: " + map.sc);
 			map.setZoom(map.bestZoomForScale((float) map.sc));
 			 p.getCurrentScene().registerPreDrawAction(new IPreDrawAction(){
+					@Override
 					public boolean isLoop() {
 						return false;
 					}
+					@Override
 					public void processAction() {
 						updateTagContainerScale();
 					}

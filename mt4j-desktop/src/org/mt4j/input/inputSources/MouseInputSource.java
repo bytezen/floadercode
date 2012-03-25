@@ -23,6 +23,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import org.mt4j.AbstractMTApplication;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.ActiveCursorPool;
 import org.mt4j.input.inputData.InputCursor;
 import org.mt4j.input.inputData.MTFingerInputEvt;
@@ -93,6 +94,7 @@ public class MouseInputSource extends AbstractInputSource implements MouseMotion
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseMotionListener#mouseMoved(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		
 	}
@@ -100,31 +102,35 @@ public class MouseInputSource extends AbstractInputSource implements MouseMotion
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if (!mouseBusy )	{
 			mousePressedButton = e.getButton();
 			mouseBusy = true;
 			
 			InputCursor m = new InputCursor();
-			MTMouseInputEvt te = new MTMouseInputEvt(this, e.getModifiers(), e.getX(), e.getY(), MTFingerInputEvt.INPUT_STARTED, m);
+			MTMouseInputEvt te = new MTMouseInputEvt(this, e.getModifiers(), e.getX(), e.getY(), AbstractCursorInputEvt.INPUT_STARTED, m);
 			
 			lastUsedMouseID = m.getId();
 			ActiveCursorPool.getInstance().putActiveCursor(lastUsedMouseID, m);
@@ -137,11 +143,12 @@ public class MouseInputSource extends AbstractInputSource implements MouseMotion
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		try {
 			InputCursor m = ActiveCursorPool.getInstance().getActiveCursorByID(lastUsedMouseID);
 			if (m != null){
-				MTMouseInputEvt te = new MTMouseInputEvt(this, e.getModifiers(), e.getX(), e.getY(), MTFingerInputEvt.INPUT_UPDATED, m);
+				MTMouseInputEvt te = new MTMouseInputEvt(this, e.getModifiers(), e.getX(), e.getY(), AbstractCursorInputEvt.INPUT_UPDATED, m);
 //				System.out.println("MouseSource Finger UPDATE, Motion ID: " + m.getId());
 				this.enqueueInputEvent(te);
 			}
@@ -154,10 +161,11 @@ public class MouseInputSource extends AbstractInputSource implements MouseMotion
 	/* (non-Javadoc)
 	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
 	 */
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == mousePressedButton) {
 			InputCursor m = ActiveCursorPool.getInstance().getActiveCursorByID(lastUsedMouseID);
-			MTMouseInputEvt te = new MTMouseInputEvt(this, e.getModifiers(), e.getX(), e.getY(), MTFingerInputEvt.INPUT_ENDED, m);
+			MTMouseInputEvt te = new MTMouseInputEvt(this, e.getModifiers(), e.getX(), e.getY(), AbstractCursorInputEvt.INPUT_ENDED, m);
 			
 			//System.out.println("MouseSource Finger UP, Motion ID: " + m.getId());
 			this.enqueueInputEvent(te);

@@ -446,7 +446,7 @@ public class SVGLoader implements SVGConstants{
 			  
 			  group.registerInputProcessor(new DragProcessor(pa));
 			  group.setGestureAllowance(DragProcessor.class, true);
-			  group.addGestureListener(DragProcessor.class, (IGestureEventListener)defaultDragAction);
+			  group.addGestureListener(DragProcessor.class, defaultDragAction);
 			  
 			  group.registerInputProcessor(new RotateProcessor(pa));
 			  group.addGestureListener(RotateProcessor.class, defaultRotateAction);
@@ -779,7 +779,7 @@ public class SVGLoader implements SVGConstants{
 						  }
 						  //Set the positions of the textareas
                           for (MTTextArea textArea : textAreas) {
-                              logger.debug("Adding text area at: " + (Vector3D) textArea.getUserData("posRelParent"));
+                              logger.debug("Adding text area at: " + textArea.getUserData("posRelParent"));
                               textArea.setPositionRelativeToParent((Vector3D) textArea.getUserData("posRelParent"));
                           }
 						  comps.addAll(textAreas);
@@ -1220,6 +1220,7 @@ public class SVGLoader implements SVGConstants{
 			this.shape = shape;
 		}
 		//@Override	
+		@Override
 		public void run() {
 			shape.setUseDirectGL(true);
 		    shape.generateAndUseDisplayLists();
@@ -1594,6 +1595,7 @@ public class SVGLoader implements SVGConstants{
 			this.setSize(Math.round(width), Math.round(height));
 		}
 
+		@Override
 		protected void paintComponent(Graphics g) {
 	        super.paintComponent(g);
 	        Graphics2D g2 = (Graphics2D)g;
@@ -1764,7 +1766,7 @@ public class SVGLoader implements SVGConstants{
 		//Get copy of shapes vertices
 		Vertex[] shapeVertsCopy = Vertex.getDeepVertexArrayCopy(testShape.getGeometryInfo().getVertices());
 		//Rotate the vertices in the inverse direction of the gradients vector angle
-		shapeVertsCopy = (Vertex[]) Vertex.rotateZVectorArray(shapeVertsCopy, testShape.getCenterPointLocal(), invAngle);
+		shapeVertsCopy = (Vertex[]) Vector3D.rotateZVectorArray(shapeVertsCopy, testShape.getCenterPointLocal(), invAngle);
 		
 		Vertex vP1 = new Vertex((float)p1.getX(), (float)p1.getY(), 0);
 		Vertex vP2 = new Vertex((float)p2.getX(), (float)p2.getY(), 0);
@@ -1777,7 +1779,7 @@ public class SVGLoader implements SVGConstants{
 				new Vertex((float)p1.getX(), (float)p2.getY(),0) 
 				};
 		//Rotate the vertices in the inverse direction of the gradients vector angle
-		gradientRectVerts = (Vertex[]) Vertex.rotateZVectorArray(gradientRectVerts, testShape.getCenterPointLocal(), invAngle);
+		gradientRectVerts = (Vertex[]) Vector3D.rotateZVectorArray(gradientRectVerts, testShape.getCenterPointLocal(), invAngle);
 		
 		//Copy the rotated bounding shape vertices and the rotated gradient rectangle vertices into one array
 		Vertex[] shapeAndGradVerts = new Vertex[shapeVertsCopy.length + gradientRectVerts.length];
@@ -1903,7 +1905,7 @@ public class SVGLoader implements SVGConstants{
 			//Get copy of shapes vertices
 			Vertex[] shapeVertsCopy = Vertex.getDeepVertexArrayCopy(testShape.getGeometryInfo().getVertices());
 			//Rotate the vertices in the inverse direction of the gradients vector angle
-			shapeVertsCopy = (Vertex[]) Vertex.rotateZVectorArray(shapeVertsCopy, testShape.getCenterPointLocal(), -gradAngle);
+			shapeVertsCopy = (Vertex[]) Vector3D.rotateZVectorArray(shapeVertsCopy, testShape.getCenterPointLocal(), -gradAngle);
 			
 			//Create a temporary polygon with the roated vertices to calc BBox
 			MTPolygon inverseRotatedShape = new MTPolygon(pa, shapeVertsCopy);
@@ -2102,7 +2104,8 @@ public class SVGLoader implements SVGConstants{
     	}
 
     	//@Override
-    	public int compareTo(GradientStop o) {
+    	@Override
+		public int compareTo(GradientStop o) {
     		if (this.offset < o.offset){
     			return -1;
     		}
@@ -2180,7 +2183,7 @@ public class SVGLoader implements SVGConstants{
 	private float queryPrimitiveFloatValue(SVGGraphicsElement gfxElem, String queryProperty, float defaultValue){
 		float returnValue = defaultValue;
 		CSSStyleDeclaration style = gfxElem.getOwnerSVGElement().getComputedStyle(gfxElem, "");
-		CSSValue cssValue = (CSSValue) style.getPropertyCSSValue(queryProperty);
+		CSSValue cssValue = style.getPropertyCSSValue(queryProperty);
 //		  logger.debug("CSSValue.getCssText() of proerty " + queryProperty + ": " + cssValue.getCssText());
 		if (cssValue != null){
 			if (cssValue.getCssValueType() == CSSValue.CSS_PRIMITIVE_VALUE){
@@ -2417,6 +2420,7 @@ public class SVGLoader implements SVGConstants{
 			super(applet, vertices);
 		}
 		
+		@Override
 		protected IBoundingShape computeDefaultBounds() {
 			//Use z plane bounding rect instead default boundingsphere for svg!
 			return new BoundsZPlaneRectangle(this);

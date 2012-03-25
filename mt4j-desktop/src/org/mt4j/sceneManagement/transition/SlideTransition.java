@@ -99,6 +99,7 @@ public class SlideTransition extends AbstractTransition {
 		if (!slideLeft)
 			((AniAnimation)anim).reverse();
 		anim.addAnimationListener(new IAnimationListener(){
+			@Override
 			public void processAnimationEvent(AnimationEvent ae) {
 				switch (ae.getId()) {
 				case AnimationEvent.ANIMATION_STARTED:
@@ -122,6 +123,7 @@ public class SlideTransition extends AbstractTransition {
 	/* (non-Javadoc)
 	 * @see org.mt4j.sceneManagement.transition.ITransition#isFinished()
 	 */
+	@Override
 	public boolean isFinished() {
 		return finished;
 	}
@@ -131,6 +133,7 @@ public class SlideTransition extends AbstractTransition {
 	/* (non-Javadoc)
 	 * @see org.mt4j.sceneManagement.transition.ITransition#setup(org.mt4j.sceneManagement.Iscene, org.mt4j.sceneManagement.Iscene)
 	 */
+	@Override
 	public void setup(Iscene lastScenee, Iscene nextScenee) {
 		this.lastScene = lastScenee;
 		this.nextScene = nextScenee;
@@ -142,6 +145,7 @@ public class SlideTransition extends AbstractTransition {
 		app.getInputManager().disableGlobalInputProcessors(nextScene);
 		
 		app.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				lastSceneWindow = new MTSceneTexture(app,0, 0, lastScene);
 				nextSceneWindow = new MTSceneTexture(app,0, 0, nextScene);

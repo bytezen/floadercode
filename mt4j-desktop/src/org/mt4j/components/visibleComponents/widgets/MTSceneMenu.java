@@ -208,6 +208,7 @@ public class MTSceneMenu extends MTRectangle{
 			this.addChild(restoreButton);
 			
 			menuShape.addGestureListener(DragProcessor.class, new IGestureEventListener() {
+				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					DragEvent de = (DragEvent)ge;
 					switch (de.getId()) {
@@ -268,6 +269,7 @@ public class MTSceneMenu extends MTRectangle{
 		}else{
 			if (scene != null){
 				menuShape.addGestureListener(DragProcessor.class, new IGestureEventListener() {
+					@Override
 					public boolean processGestureEvent(MTGestureEvent ge) {
 						DragEvent de = (DragEvent)ge;
 						switch (de.getId()) {

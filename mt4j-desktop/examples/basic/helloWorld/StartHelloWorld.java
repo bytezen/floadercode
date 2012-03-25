@@ -2,8 +2,6 @@ package basic.helloWorld;
 
 import org.mt4j.MTApplication;
 
-import processing.core.PFont;
-
 public class StartHelloWorld extends MTApplication {
 	private static final long serialVersionUID = 1L;
 	

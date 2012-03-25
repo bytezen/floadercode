@@ -922,7 +922,8 @@ public interface IPAppletDesktop {
   /**
    * @deprecated As of release 0136, use createInput() instead.
    */
-  public InputStream openStream(String filename);
+  @Deprecated
+public InputStream openStream(String filename);
 
   /**
    * This is a method for advanced programmers to open a Java InputStream. The method is useful if you want to use the facilities provided by PApplet to easily open files from the data folder or from a URL, but want an InputStream object so that you can use other Java methods to take more control of how the stream is read.

@@ -223,7 +223,8 @@ public class GLuTesselator extends GLUtessellatorCallbackAdapter{
        /* (non-Javadoc)
         * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#begin(int)
         */
-       public void begin(int type) {
+       @Override
+	public void begin(int type) {
            gl.glBegin(type);
     	   /*
            switch (type) {
@@ -254,7 +255,8 @@ public class GLuTesselator extends GLUtessellatorCallbackAdapter{
         * 
         * @param vertexData the vertex data
         */
-       public void vertex(Object vertexData) {
+       @Override
+	public void vertex(Object vertexData) {
 //    	   double[] dv = (double[]) vertexData;
 //    	   gl.glColor4d(dv[3], dv[4], dv[5], dv[6]);
     	   
@@ -317,7 +319,8 @@ public class GLuTesselator extends GLUtessellatorCallbackAdapter{
         * @param weight the weight
         * @param outData the out data
         */
-       public void combine(double[] coords, Object[] data, float[] weight, Object[] outData) {
+       @Override
+	public void combine(double[] coords, Object[] data, float[] weight, Object[] outData) {
 //           double[] vertex = new double[3];
 //           vertex[0] = coords[0];
 //           vertex[1] = coords[1];
@@ -358,7 +361,8 @@ public class GLuTesselator extends GLUtessellatorCallbackAdapter{
        /* (non-Javadoc)
         * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#end()
         */
-       public void end() {
+       @Override
+	public void end() {
            gl.glEnd();
        }
        
@@ -366,7 +370,8 @@ public class GLuTesselator extends GLUtessellatorCallbackAdapter{
        /* (non-Javadoc)
         * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#error(int)
         */
-       public void error(int errnum) {
+       @Override
+	public void error(int errnum) {
            System.err.println("Tessellation Error: " + glu.gluErrorString(errnum));
 //           System.exit(0);
        }

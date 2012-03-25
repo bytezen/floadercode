@@ -2,14 +2,9 @@ package mtvisualizer;
 
 import netP5.NetAddress;
 
-import org.mt4j.AbstractMTApplication;
 import org.mt4j.MTApplication;
-import org.mt4j.util.animation.ani.AniAnimation;
-
-import de.looksgood.ani.Ani;
 import oscP5.OscMessage;
 import oscP5.OscP5;
-import processing.core.PApplet;
 
 public class StartMTVisualizer extends MTApplication {
 	private static final long serialVersionUID = 1L;
@@ -32,9 +27,12 @@ public class StartMTVisualizer extends MTApplication {
 	
 	@Override
 	public void startUp() {
+		//this.frameRate = 30;
 		oscP5 = new OscP5(this, OSC_PORT);
 		remoteAddress = new NetAddress(OSC_REMOTE_ADDR, OSC_REMOTE_PORT);
-		//de.looksgood.ani.Ani.setDefaultEasing(de.looksgood.ani.AniConstants.LINEAR);
+
+		floader.looksgood.ani.Ani.init(this);
+		floader.looksgood.ani.Ani.setDefaultEasing(floader.looksgood.ani.AniConstants.LINEAR);
 		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[3]);
 		addScene(currentScene);
 	}
@@ -56,6 +54,7 @@ public class StartMTVisualizer extends MTApplication {
 		}
 	}
 	
+	@Override
 	public void keyPressed()
 	{
 		VisualScene newScene;

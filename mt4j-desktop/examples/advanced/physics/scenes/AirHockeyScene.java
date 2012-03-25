@@ -256,6 +256,7 @@ public class AirHockeyScene extends AbstractScene {
 			}
 		}
 		
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			DragEvent de = (DragEvent)ge;
 			try{
@@ -265,14 +266,14 @@ public class AirHockeyScene extends AbstractScene {
 				//Un-scale position from mt4j to box2d
 				PhysicsHelper.scaleDown(to, scale);
 				switch (de.getId()) {
-				case DragEvent.GESTURE_STARTED:
+				case MTGestureEvent.GESTURE_STARTED:
 					comp.sendToFront();
 					body.wakeUp();
 					body.setXForm(new Vec2(to.x,  to.y), body.getAngle());
 					mouseJoint = PhysicsHelper.createDragJoint(world, body, to.x, to.y);
 					comp.setUserData(comp.getID(), mouseJoint);
 					break;
-				case DragEvent.GESTURE_UPDATED:
+				case MTGestureEvent.GESTURE_UPDATED:
 					mouseJoint = (MouseJoint) comp.getUserData(comp.getID());
 					if (mouseJoint != null){
 						boolean onCorrectGameSide = ((MTComponent)de.getTarget()).containsPointGlobal(de.getTo());
@@ -282,7 +283,7 @@ public class AirHockeyScene extends AbstractScene {
 						}
 					}
 					break;
-				case DragEvent.GESTURE_ENDED:
+				case MTGestureEvent.GESTURE_ENDED:
 					mouseJoint = (MouseJoint) comp.getUserData(comp.getID());
 					if (mouseJoint != null){
 						comp.setUserData(comp.getID(), null);
@@ -377,18 +378,22 @@ public class AirHockeyScene extends AbstractScene {
 	
 	private void addWorldContactListener(World world){
 		world.setContactListener(new ContactListener() {
+			@Override
 			public void result(ContactResult point) {
 //				System.out.println("Result contact");
 			}
 			//@Override
+			@Override
 			public void remove(ContactPoint point) {
 //				System.out.println("remove contact");
 			}
 			//@Override
+			@Override
 			public void persist(ContactPoint point) {
 //				System.out.println("persist contact");
 			}
 			//@Override
+			@Override
 			public void add(ContactPoint point) {
 //				/*
 				Shape shape1 = point.shape1;
@@ -460,6 +465,7 @@ public class AirHockeyScene extends AbstractScene {
 								if (theBall.getUserData("resetted") == null){ //To make sure that we call destroy only once
 									theBall.setUserData("resetted", true); 
 									app.invokeLater(new Runnable() {
+										@Override
 										public void run() {
 											IPhysicsComponent a = (IPhysicsComponent)theBall;
 											a.getBody().setXForm(new Vec2(getMTApplication().width/2f/scale, getMTApplication().height/2f/scale), a.getBody().getAngle());
@@ -519,8 +525,9 @@ public class AirHockeyScene extends AbstractScene {
 		if (ball.getUserData("resetted") == null){ //To make sure that we call destroy only once
 			ball.setUserData("resetted", true); 
 			app.invokeLater(new Runnable() {
+				@Override
 				public void run() {
-					IPhysicsComponent a = (IPhysicsComponent)ball;
+					IPhysicsComponent a = ball;
 					a.getBody().setXForm(new Vec2(getMTApplication().width/2f/scale, getMTApplication().height/2f/scale), a.getBody().getAngle());
 //					a.getBody().setLinearVelocity(new Vec2(0,0));
 					a.getBody().setLinearVelocity(new Vec2(ToolsMath.getRandom(-8, 8),ToolsMath.getRandom(-8, 8)));
@@ -563,10 +570,12 @@ public class AirHockeyScene extends AbstractScene {
 	}
 	
 
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 	}

@@ -7,6 +7,7 @@ import org.mt4j.util.math.ToolsMath;
 import org.mt4j.util.math.Vector3D;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 /**
  * The Class TailGesture.
@@ -109,7 +110,7 @@ public class TailGesture {
 		float pressure;
 		Vector3D tmp;
 		float t = 0;
-		float u = 1.0f / (nPoints - 1)*PApplet.TWO_PI;
+		float u = 1.0f / (nPoints - 1)*PConstants.TWO_PI;
 		for (int i = 0; i < nPoints; i++) {
 			pressure = PApplet.sqrt((1.0f - PApplet.cos(t)) * 0.5f);
 			path[i].z = pressure;

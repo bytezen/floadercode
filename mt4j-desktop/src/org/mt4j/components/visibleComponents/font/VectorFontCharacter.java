@@ -36,6 +36,7 @@ import org.mt4j.util.opengl.GLTexture;
 import org.mt4j.util.opengl.GluTrianglulator;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 
 /**
@@ -100,7 +101,7 @@ public class VectorFontCharacter extends
 				g.noStroke();
 				g.noSmooth();
 				g.fill = true;
-				this.drawWithProcessing(g, this.getVerticesLocal(), PGraphics.TRIANGLES, true);
+				this.drawWithProcessing(g, this.getVerticesLocal(), PConstants.TRIANGLES, true);
 			}
 
 			if (!this.isNoStroke() && this.isDrawSmooth()){
@@ -109,7 +110,7 @@ public class VectorFontCharacter extends
 				g.smooth();
 
 				for (Vertex[] outline : this.outlineContours){
-					this.drawWithProcessing(g, outline, PGraphics.POLYGON, false);
+					this.drawWithProcessing(g, outline, PConstants.POLYGON, false);
 				}
 				g.fill = true;
 			}
@@ -268,6 +269,7 @@ public class VectorFontCharacter extends
 	}
 
 
+	@Override
 	public String getUnicode() {
 		return unicode;
 	}
@@ -286,6 +288,7 @@ public class VectorFontCharacter extends
 	 * 
 	 * @return the horizontal dist
 	 */
+	@Override
 	public int getHorizontalDist() {
 		return horizontalDist;
 	}

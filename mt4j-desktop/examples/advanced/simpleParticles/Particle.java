@@ -1,6 +1,7 @@
 package advanced.simpleParticles;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -39,7 +40,7 @@ public class Particle {
 
 	// Method to display
 	public void render(PGraphics g) {
-		app.ellipseMode(PApplet.CENTER);
+		app.ellipseMode(PConstants.CENTER);
 		app.stroke(255,timer);
 		app.fill(100,timer);
 		app.ellipse(loc.x,loc.y,r,r);

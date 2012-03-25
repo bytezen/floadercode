@@ -19,6 +19,7 @@ public class BorderTest extends TestCase {
 	private CSSParserConnection pc;
 	private List<CSSStyle> styles;
 
+	@Override
 	@Before
 	public void setUp() {
 		pc = new CSSParserConnection("junit/bordertest.css", app);
@@ -26,6 +27,7 @@ public class BorderTest extends TestCase {
 	}
 	
 	
+	@Override
 	protected void tearDown() {
 		//app.destroy();
 	}

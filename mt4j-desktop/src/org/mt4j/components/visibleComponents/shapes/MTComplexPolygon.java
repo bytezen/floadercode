@@ -136,14 +136,16 @@ public class MTComplexPolygon extends MTTriangleMesh implements CSSStylableCompo
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#isCSSStyled()
      */
-    public boolean isCSSStyled() {
+    @Override
+	public boolean isCSSStyled() {
             return cssStyled;
     }
 
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#enableCSS()
      */
-    public void enableCSS() {
+    @Override
+	public void enableCSS() {
     	if (mtApp != null && cssHelper != null) {
     		cssStyled = true;
     	}
@@ -153,7 +155,8 @@ public class MTComplexPolygon extends MTTriangleMesh implements CSSStylableCompo
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#disableCSS()
      */
-    public void disableCSS() {
+    @Override
+	public void disableCSS() {
             cssStyled = false;
             
     }
@@ -161,7 +164,8 @@ public class MTComplexPolygon extends MTTriangleMesh implements CSSStylableCompo
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#applyStyleSheet()
      */
-    public void applyStyleSheet() {
+    @Override
+	public void applyStyleSheet() {
     	//Custom behaviour goes here..
 
     	if (cssStyled && mtApp != null && cssHelper != null) {
@@ -176,14 +180,16 @@ public class MTComplexPolygon extends MTTriangleMesh implements CSSStylableCompo
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#isCssForceDisabled()
      */
-    public boolean isCssForceDisabled() {
+    @Override
+	public boolean isCssForceDisabled() {
             return cssForceDisabled;
     }
 
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#setCssForceDisable(boolean)
      */
-    public void setCssForceDisable(boolean cssForceDisabled) {
+    @Override
+	public void setCssForceDisable(boolean cssForceDisabled) {
             this.cssForceDisabled = cssForceDisabled;
             
     }
@@ -191,7 +197,8 @@ public class MTComplexPolygon extends MTTriangleMesh implements CSSStylableCompo
     /* (non-Javadoc)
      * @see org.mt4j.components.css.util.CSSStylableComponent#getCssHelper()
      */
-    public CSSHelper getCssHelper() {
+    @Override
+	public CSSHelper getCssHelper() {
             return this.cssHelper;
     }
 //    */

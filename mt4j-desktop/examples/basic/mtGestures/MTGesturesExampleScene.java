@@ -180,6 +180,7 @@ public class MTGesturesExampleScene extends AbstractScene {
 		this.clearAllGestures(tapOnly);
 		tapOnly.registerInputProcessor(new TapProcessor(app));
 		tapOnly.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				switch (te.getId()) {
@@ -213,6 +214,7 @@ public class MTGesturesExampleScene extends AbstractScene {
 		this.clearAllGestures(doubleTap);
 		doubleTap.registerInputProcessor(new TapProcessor(app, 25, true, 350));
 		doubleTap.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isDoubleTap()){
@@ -237,14 +239,15 @@ public class MTGesturesExampleScene extends AbstractScene {
 		tapAndHoldOnly.registerInputProcessor(new TapAndHoldProcessor(app, 2000));
 		tapAndHoldOnly.addGestureListener(TapAndHoldProcessor.class, new TapAndHoldVisualizer(app, getCanvas()));
 		tapAndHoldOnly.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapAndHoldEvent th = (TapAndHoldEvent)ge;
 				switch (th.getId()) {
-				case TapAndHoldEvent.GESTURE_STARTED:
+				case MTGestureEvent.GESTURE_STARTED:
 					break;
-				case TapAndHoldEvent.GESTURE_UPDATED:
+				case MTGestureEvent.GESTURE_UPDATED:
 					break;
-				case TapAndHoldEvent.GESTURE_ENDED:
+				case MTGestureEvent.GESTURE_ENDED:
 					if (th.isHoldComplete()){
 						if (tapAndHoldOnly.getText().endsWith("--"))
 							tapAndHoldOnly.setText("Tap&Hold me!  -|-");
@@ -319,6 +322,7 @@ public class MTGesturesExampleScene extends AbstractScene {
 		this.clearAllGestures(flick);
 		flick.registerInputProcessor(new FlickProcessor(300, 5));
 		flick.addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				FlickEvent e = (FlickEvent)ge;
 				if (e.getId() == MTGestureEvent.GESTURE_ENDED)
@@ -380,15 +384,16 @@ public class MTGesturesExampleScene extends AbstractScene {
 		
 		strokeGestureRect.registerInputProcessor(up);
 		strokeGestureRect.addGestureListener(UnistrokeProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				UnistrokeEvent ue = (UnistrokeEvent)ge;
 				switch (ue.getId()) {
-				case UnistrokeEvent.GESTURE_STARTED:
+				case MTGestureEvent.GESTURE_STARTED:
 					getCanvas().addChild(ue.getVisualization());
 					break;
-				case UnistrokeEvent.GESTURE_UPDATED:
+				case MTGestureEvent.GESTURE_UPDATED:
 					break;
-				case UnistrokeEvent.GESTURE_ENDED:
+				case MTGestureEvent.GESTURE_ENDED:
 					UnistrokeGesture g = ue.getGesture();
 					System.out.println("Recognized gesture: " + g);
 					recognizedGestureText.setText("Recognized: " + g);
@@ -407,8 +412,10 @@ public class MTGesturesExampleScene extends AbstractScene {
 		comp.removeAllGestureEventListeners();
 	}
 	
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {}
 
 }

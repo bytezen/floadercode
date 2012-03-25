@@ -26,8 +26,10 @@ public class SwingIntegrationScene extends AbstractScene {
 		}
 	}
 	
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {}
 
 }

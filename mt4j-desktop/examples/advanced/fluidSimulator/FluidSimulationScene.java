@@ -91,14 +91,15 @@ public class FluidSimulationScene extends AbstractScene{
         fluidSolver.enableRGB(true).setFadeSpeed(0.003f).setDeltaT(0.8f).setVisc(0.00004f);
      
         // Create image to hold fluid picture
-        imgFluid = mtApplication.createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), PApplet.RGB);
+        imgFluid = mtApplication.createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), PConstants.RGB);
         
         // Create particle system
         particleSystem = new ParticleSystem(mtApplication, fluidSolver);
         
         this.getCanvas().addInputListener(new IMTInputEventListener() {
         	//@Override
-        	public boolean processInputEvent(MTInputEvent inEvt){
+        	@Override
+			public boolean processInputEvent(MTInputEvent inEvt){
         		if(inEvt instanceof AbstractCursorInputEvt){
         			AbstractCursorInputEvt posEvt = (AbstractCursorInputEvt)inEvt;
         			if (posEvt.hasTarget() && posEvt.getTarget().equals(getCanvas())){
@@ -143,6 +144,7 @@ public class FluidSimulationScene extends AbstractScene{
 			super(applet);
 		}
 		//@Override
+		@Override
 		public void drawComponent(PGraphics g) {
 			super.drawComponent(g);
 			drawFluidImage();
@@ -164,6 +166,7 @@ public class FluidSimulationScene extends AbstractScene{
 	
 	
 	//@Override
+	@Override
 	public void drawAndUpdate(PGraphics graphics, long timeDelta) {
 //		this.drawFluidImage();
 		super.drawAndUpdate(graphics, timeDelta);
@@ -205,10 +208,10 @@ public class FluidSimulationScene extends AbstractScene{
 	        int index = fluidSolver.getIndexForNormalizedPosition(x, y);
 	 
 //	        PApplet.color drawColor;
-	        app.colorMode(PApplet.HSB, 360, 1, 1);
+	        app.colorMode(PConstants.HSB, 360, 1, 1);
 	        float hue = ((x + y) * 180 + app.frameCount) % 360;
 	        int drawColor = app.color(hue, 1, 1);
-	        app.colorMode(PApplet.RGB, 1);  
+	        app.colorMode(PConstants.RGB, 1);  
 	 
 	        fluidSolver.rOld[index]  += app.red(drawColor) 	* colorMult;
 	        fluidSolver.gOld[index]  += app.green(drawColor) 	* colorMult;
@@ -225,13 +228,13 @@ public class FluidSimulationScene extends AbstractScene{
 //			mtApp.tint(255,255,255,255);
 			
 			//FIXME TEST
-			app.colorMode(PApplet.RGB, 255);  
+			app.colorMode(PConstants.RGB, 255);  
 	    }
 	}
 	
 	
 	private void drawFluidImage(){
-		app.colorMode(PApplet.RGB, 1);  
+		app.colorMode(PConstants.RGB, 1);  
 		 
 		fluidSolver.update();
 	    if(drawFluid) {
@@ -257,14 +260,16 @@ public class FluidSimulationScene extends AbstractScene{
 	    } 
 	    particleSystem.updateAndDraw();
 	    
-	    app.colorMode(PApplet.RGB, 255);  
+	    app.colorMode(PConstants.RGB, 255);  
 	}
 
 	
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 		/*

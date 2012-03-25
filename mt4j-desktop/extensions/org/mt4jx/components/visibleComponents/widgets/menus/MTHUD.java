@@ -156,6 +156,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#applyStyleSheet()
 	 */
+	@Override
 	public void applyStyleSheet() {
 		if (cssStyled && mtApp != null && cssHelper != null) {
 			cssHelper.applyStyleSheet(this);
@@ -264,6 +265,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#disableCSS()
 	 */
+	@Override
 	public void disableCSS() {
 		cssStyled = false;
 
@@ -301,6 +303,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#enableCSS()
 	 */
+	@Override
 	public void enableCSS() {
 		if (mtApp != null && cssHelper != null) {
 			cssStyled = true;
@@ -313,6 +316,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#getCssHelper()
 	 */
+	@Override
 	public CSSHelper getCssHelper() {
 		return this.cssHelper;
 	}
@@ -322,6 +326,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#isCssForceDisabled()
 	 */
+	@Override
 	public boolean isCssForceDisabled() {
 		return cssForceDisabled;
 	}
@@ -331,6 +336,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#isCSSStyled()
 	 */
+	@Override
 	public boolean isCSSStyled() {
 		return cssStyled;
 	}
@@ -340,6 +346,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 	 * 
 	 * @see org.mt4j.css.util.CSSStylableComponent#setCssForceDisable(boolean)
 	 */
+	@Override
 	public void setCssForceDisable(boolean cssForceDisabled) {
 		this.cssForceDisabled = cssForceDisabled;
 	}
@@ -411,10 +418,10 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 			if (workingCopy.width < workingCopy.height) {
 				workingCopy
 						.resize(size,
-								(int) ((float) workingCopy.height / ((float) workingCopy.width / (float) size)));
+								(int) (workingCopy.height / ((float) workingCopy.width / (float) size)));
 			} else {
 				workingCopy
-						.resize((int) ((float) workingCopy.width / ((float) workingCopy.height / (float) size)),
+						.resize((int) (workingCopy.width / ((float) workingCopy.height / (float) size)),
 								size);
 			}
 
@@ -475,7 +482,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 			}
 		}
 
-		float spc = size / (float) maxNumberCharacters; // Space Per Character
+		float spc = size / maxNumberCharacters; // Space Per Character
 		int returnValue = (int) (-0.5 + 1.725 * spc); // Determined using Linear
 														// Regression
 		return returnValue;
@@ -548,7 +555,7 @@ public class MTHUD extends MTOverlayContainer implements CSSStylableComponent {
 			rect.setStrokeWeight(vss.getBorderWidth());
 
 			// Set Font and Position for the child MTTextAreas
-			if (((MTRectangle) c).getTexture() == null) {
+			if ((c).getTexture() == null) {
 				rect.setFillColor(vss.getBackgroundColor());
 				for (MTComponent d : c.getChildren()) {
 					if (d instanceof MTTextArea) {

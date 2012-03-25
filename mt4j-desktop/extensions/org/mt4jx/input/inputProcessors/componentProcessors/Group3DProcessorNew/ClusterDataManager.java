@@ -15,7 +15,6 @@ import org.mt4j.input.inputProcessors.componentProcessors.rotate3DProcessor.Clus
 import org.mt4j.input.inputProcessors.componentProcessors.rotate3DProcessor.Rotate3DProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4jx.input.gestureAction.CreateDragHelperAction;
 import org.mt4jx.util.extension3D.collision.CollisionManager;
 
@@ -81,7 +80,7 @@ public class ClusterDataManager implements ISelectionListener {
 		cl.addGestureListener(ScaleProcessor.class,  new DefaultScaleAction());
 		
 		//cl.registerInputProcessor(new TapProcessor(pApplet,999999.0f));
-		cl.addGestureListener(DragProcessor.class,new CreateDragHelperAction((AbstractMTApplication)pApplet,this.canvas,this.canvas.getAttachedCamera(),cl));
+		cl.addGestureListener(DragProcessor.class,new CreateDragHelperAction(pApplet,this.canvas,this.canvas.getAttachedCamera(),cl));
 				
 		cl.attachCamera(canvas.getAttachedCamera());
 		cl.setComposite(true);
@@ -108,6 +107,7 @@ public class ClusterDataManager implements ISelectionListener {
 		}
 	}
 	
+	@Override
 	public void processMTEvent(MTEvent mtEvent) {
 		if(mtEvent instanceof MTSelectionEvent)
 		{

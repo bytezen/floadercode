@@ -151,6 +151,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontCharacterByName(java.lang.String)
 	 */
+	@Override
 	public IFontCharacter getFontCharacterByName(String characterName){
 		VectorFontCharacter returnChar = charNameToChar.get(characterName);
 		if (returnChar == null){
@@ -164,6 +165,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontCharacterByUnicode(java.lang.String)
 	 */
+	@Override
 	public IFontCharacter getFontCharacterByUnicode(String unicode){
 		VectorFontCharacter returnChar = uniCodeToChar.get(unicode);
 		if (returnChar == null){
@@ -220,6 +222,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getCharacters()
 	 */
+	@Override
 	public IFontCharacter[] getCharacters() {
 		return characters;
 	}
@@ -242,6 +245,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getDefaultHorizontalAdvX()
 	 */
+	@Override
 	public int getDefaultHorizontalAdvX() {
 		return defaultHorizontalAdvX;
 	}
@@ -249,6 +253,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontFamily()
 	 */
+	@Override
 	public String getFontFamily() {
 		return fontFamily;
 	}
@@ -266,6 +271,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontMaxAscent()
 	 */
+	@Override
 	public int getFontMaxAscent() {
 		return fontMaxAscent;
 	}
@@ -274,6 +280,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontMaxDescent()
 	 */
+	@Override
 	public int getFontMaxDescent() {
 		return fontMaxDescent;
 	}
@@ -299,6 +306,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontAbsoluteHeight()
 	 */
+	@Override
 	public int getFontAbsoluteHeight(){
 		return ((Math.abs(fontMaxAscent)) + (Math.abs(fontMaxDescent)));
 	}
@@ -306,6 +314,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getUnitsPerEM()
 	 */
+	@Override
 	public int getUnitsPerEM() {
 		return unitsPerEM;
 	}
@@ -342,6 +351,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFontFileName()
 	 */
+	@Override
 	public String getFontFileName() {
 		return fontFileName;
 	}
@@ -360,6 +370,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getOriginalFontSize()
 	 */
+	@Override
 	public int getOriginalFontSize() {
 		return originalFontSize;
 	}
@@ -368,6 +379,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#getFillColor()
 	 */
+	@Override
 	public MTColor getFillColor() {
 		return fillColor;
 	}
@@ -376,6 +388,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#setFillColor(org.mt4j.util.MTColor)
 	 */
+	@Override
 	public void setFillColor(MTColor color){
 		this.fillColor = color;
 	}
@@ -388,6 +401,7 @@ public class VectorFont implements IFont {
 //	}
 	
 
+	@Override
 	public boolean isAntiAliased() {
 		return this.antiAliased;
 	}
@@ -396,6 +410,7 @@ public class VectorFont implements IFont {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.IFont#destroy()
 	 */
+	@Override
 	public void destroy() {
 		IFontCharacter[] characters = this.getCharacters();
         for (IFontCharacter iFontCharacter : characters) {

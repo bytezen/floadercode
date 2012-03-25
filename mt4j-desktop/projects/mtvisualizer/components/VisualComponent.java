@@ -3,8 +3,6 @@ package mtvisualizer.components;
 
 import org.mt4j.components.visibleComponents.AbstractVisibleComponent;
 
-import de.looksgood.ani.Ani;
-
 import floader.visuals.*;
 import floader.visuals.flyingobjects.FlyingObjectsVisual;
 import floader.visuals.hangon.HangOnVisual;
@@ -27,6 +25,7 @@ public class VisualComponent extends AbstractVisibleComponent {
 		viz.setup();
 	}
 
+	@Override
 	public void drawComponent(PGraphics g) {
 		viz.draw();
 	}
@@ -49,7 +48,6 @@ public class VisualComponent extends AbstractVisibleComponent {
 				System.err.println("Error: undefined visual named: " + name);
 				return null;
 			}
-
 		}
 	}
 }

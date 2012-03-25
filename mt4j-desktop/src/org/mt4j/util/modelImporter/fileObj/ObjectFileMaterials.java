@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StreamTokenizer;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -194,7 +195,7 @@ class ObjectFileMaterials implements ImageObserver {
     private void readName(ObjectFileParser st) throws ParsingErrorException {
     	st.getToken();
 
-    	if (st.ttype == ObjectFileParser.TT_WORD) {
+    	if (st.ttype == StreamTokenizer.TT_WORD) {
 
     		if (curName != null) materials.put(curName, cur);
     		curName = st.sval;
@@ -296,11 +297,11 @@ class ObjectFileMaterials implements ImageObserver {
 //    			tFile += st.sval;
 //    			
 //    		}
-    		if (st.ttype != ObjectFileParser.TT_EOL ){ 
+    		if (st.ttype != StreamTokenizer.TT_EOL ){ 
     			tFile += st.sval; 
     		}
     		
-    	} while (st.ttype != ObjectFileParser.TT_EOL);
+    	} while (st.ttype != StreamTokenizer.TT_EOL);
 
     	st.lowerCaseMode(true);
 
@@ -497,10 +498,10 @@ class ObjectFileMaterials implements ImageObserver {
 //    		if (st.ttype == ObjectFileParser.TT_WORD){ 
 //    			tFile += st.sval;
 //    		}
-    		if (st.ttype != ObjectFileParser.TT_EOL ){ 
+    		if (st.ttype != StreamTokenizer.TT_EOL ){ 
     			tFile += st.sval; 
     		}
-    	}while (st.ttype != ObjectFileParser.TT_EOL);
+    	}while (st.ttype != StreamTokenizer.TT_EOL);
 
     	st.lowerCaseMode(true);
 
@@ -544,18 +545,18 @@ class ObjectFileMaterials implements ImageObserver {
     private void readFile(ObjectFileParser st) throws ParsingErrorException {
     	int t;
     	st.getToken();
-    	while (st.ttype != ObjectFileParser.TT_EOF) {
+    	while (st.ttype != StreamTokenizer.TT_EOF) {
 
     		// Print out one token for each line
     		if ((DEBUG & 16) != 0) {
     			System.out.print("Token ");
-    			if (st.ttype == ObjectFileParser.TT_EOL) System.out.println("EOL");
-    			else if (st.ttype == ObjectFileParser.TT_WORD)
+    			if (st.ttype == StreamTokenizer.TT_EOL) System.out.println("EOL");
+    			else if (st.ttype == StreamTokenizer.TT_WORD)
     				System.out.println(st.sval);
     			else System.out.println((char)st.ttype);
     		}
 
-    		if (st.ttype == ObjectFileParser.TT_WORD) {
+    		if (st.ttype == StreamTokenizer.TT_WORD) {
     			if (st.sval.equals("newmtl")) {
     				readName(st);
     			} else if (st.sval.equals("ka")) {
@@ -612,8 +613,7 @@ class ObjectFileMaterials implements ImageObserver {
 
     	try {
     		if (fromUrl) {
-    			reader = (Reader)
-    			(new InputStreamReader(
+    			reader = (new InputStreamReader(
     					new BufferedInputStream(
     							(new URL(basePath + fileName).openStream()))));
     		} else {
@@ -659,7 +659,8 @@ class ObjectFileMaterials implements ImageObserver {
      * Implement the ImageObserver interface.  Needed to load jpeg and gif
      * files using the Toolkit.
      */
-    public boolean imageUpdate(Image img, int flags,
+    @Override
+	public boolean imageUpdate(Image img, int flags,
     		int x, int y, int w, int h) {
 
     	return (flags & (ALLBITS | ABORT)) == 0;

@@ -33,12 +33,14 @@ public class FontParserTest extends TestCase{
 		}
 	}
 	
+	@Override
 	@Before
 	public void setUp() {
 
 	}
 
 
+	@Override
 	protected void tearDown() {
 		//app.destroy();
 	}

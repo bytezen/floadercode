@@ -77,6 +77,7 @@ public class TTFontFactory implements IFontFactory{
 
 	public TTFontFactory(){	}
 	
+	@Override
 	public IFont getCopy(IFont font) {
 		if (font instanceof VectorFont) {
 			VectorFont vf = (VectorFont) font;
@@ -86,10 +87,12 @@ public class TTFontFactory implements IFontFactory{
 		return null;
 	}
 	
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color) {
 		return this.createFont(pa, fontName, fontSize, color, color, true);
 	}
 
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color, boolean antiAliased) {
 		return this.createFont(pa, fontName, fontSize, color, color, antiAliased);
 	}
@@ -99,6 +102,7 @@ public class TTFontFactory implements IFontFactory{
 		return this.createFont(pa, fontFileName, 50, new MTColor(0,0,0,255), new MTColor(0,0,0,255));
 	}
 			
+	@Override
 	public VectorFont createFont(
 			PApplet pa, 
 			String fontFileName, 
@@ -109,6 +113,7 @@ public class TTFontFactory implements IFontFactory{
 		return this.createFont(pa, fontFileName, fontSize, fillColor, strokeColor, true);
 	}
 	
+	@Override
 	public VectorFont createFont(
 			PApplet pa, 
 			String fontFileName, 
@@ -323,13 +328,13 @@ public class TTFontFactory implements IFontFactory{
 		//System.out.println("Screen resolution: " + resolution);
 		
 		//This calculates the font in "pt" point size (used in windows)
-		this.scaleFactor = ((float)fontSize * (float)resolution) / (72F * (float)unitsPerEm); //original
+		this.scaleFactor = ((float)fontSize * (float)resolution) / (72F * unitsPerEm); //original
 		
 		//FIXME TEST
 		float test = UnitTranslator.pointsToPixels(scaleFactor*fontSize, Math.round(resolution));
 //		test = Math.round((float)fontSize/(float)unitsPerEm);
 		//This calculates the font size in..pixels? at least same as in svg
-		test = (float)(1.0/(float)this.unitsPerEm) * fontSize;
+		test = (float)(1.0/this.unitsPerEm) * fontSize;
 		this.scaleFactor = test;
 		
 		//logger.info("->Scalefactor: " + this.scaleFactor);
@@ -425,7 +430,7 @@ public class TTFontFactory implements IFontFactory{
 				x += glyph.getAdvanceWidth();
 			}else{
 				logger.error("Couldnt find character: \"" + text.charAt(i) + "\" in " + fontPath);
-				x += (int)((float)default_advance_x /* *scaleFactor */);
+				x += (int)(default_advance_x /* *scaleFactor */);
 			}
 
 		}
@@ -557,12 +562,12 @@ public class TTFontFactory implements IFontFactory{
 			Point point_plus1 	= glyph.getPoint(startIndex + (offset+1)%count);
 			Point point_plus2 	= glyph.getPoint(startIndex + (offset+2)%count);
 
-			float pointx = ((float)point.x);
-			float pointy = ((float)point.y);
-			float point_plus1x = ((float)point_plus1.x);
-			float point_plus1y = ((float)point_plus1.y);
-			float point_plus2x = ((float)point_plus2.x);
-			float point_plus2y = ((float)point_plus2.y);
+			float pointx = (point.x);
+			float pointy = (point.y);
+			float point_plus1x = (point_plus1.x);
+			float point_plus1y = (point_plus1.y);
+			float point_plus2x = (point_plus2.x);
+			float point_plus2y = (point_plus2.y);
 
 			if (offset == 0) {
 				pathHandler.movetoAbs(pointx,pointy);
@@ -734,7 +739,7 @@ public class TTFontFactory implements IFontFactory{
 	 */
 	private void setSize(int size){
 		int resolution = Toolkit.getDefaultToolkit().getScreenResolution();
-		this.scaleFactor = ((float)size * (float)resolution) / (72F * (float)unitsPerEm);
+		this.scaleFactor = ((float)size * (float)resolution) / (72F * unitsPerEm);
 		//this.scaleFactorFixed = (int)(this.scaleFactor * 65536F);
 		//logger.info(scaleFactor);
 		//logger.info(scaleFactorFixed);

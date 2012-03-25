@@ -67,7 +67,7 @@ public class PhysicsPolygon extends MTTriangleMesh implements IPhysicsComponent 
 		//System.out.println("Diff:" +  realBodyCenterToMeshCenter);
 		
 		//Move the vertices so the body position is at the center of the shape 
-		Vertex.translateVectorArray(triangulatedBodyVerts, realBodyCenterToMeshCenter);
+		Vector3D.translateVectorArray(triangulatedBodyVerts, realBodyCenterToMeshCenter);
 		
 		this.setGeometryInfo(new GeometryInfo(applet, triangulatedBodyVerts));
 		
@@ -90,7 +90,7 @@ public class PhysicsPolygon extends MTTriangleMesh implements IPhysicsComponent 
 //		//Move the vertices so the body position is at the center of the shape 
 //		Vertex.translateVectorArray(vertices, realBodyCenterToMeshCenter);
 		
-		Vertex.translateVectorArray(vertices, realBodyCenterToMeshCenter);
+		Vector3D.translateVectorArray(vertices, realBodyCenterToMeshCenter);
 		
 		//Create vertex structure for creation of decomposition polygon (use the translated vertices)
 		float xArr[] = new float[vertices.length];
@@ -198,6 +198,7 @@ public class PhysicsPolygon extends MTTriangleMesh implements IPhysicsComponent 
 	
 	
 	//@Override
+	@Override
 	public void rotateZGlobal(Vector3D rotationPoint, float degree) {
 		angle += degree;
 		super.rotateZGlobal(rotationPoint, degree);
@@ -205,8 +206,9 @@ public class PhysicsPolygon extends MTTriangleMesh implements IPhysicsComponent 
 	public float getAngle() {
 		return angle;
 	}
+	@Override
 	public void setCenterRotation(float angle){
-		float degreeAngle = AbstractMTApplication.degrees(angle);
+		float degreeAngle = PApplet.degrees(angle);
 		float oldAngle = this.getAngle();
 		float diff = degreeAngle-oldAngle;
 		//System.out.println("Old angle: " + oldAngle + " new angle:" + degreeAngle + " diff->" +  diff);
@@ -214,6 +216,7 @@ public class PhysicsPolygon extends MTTriangleMesh implements IPhysicsComponent 
 	}
 	
 	//@Override
+	@Override
 	protected void destroyComponent() {
 		Object o = this.getUserData("box2d");
 		if (o != null && o instanceof Body){ 
@@ -239,6 +242,7 @@ public class PhysicsPolygon extends MTTriangleMesh implements IPhysicsComponent 
 
 
 
+	@Override
 	public Body getBody() {
 		return body;
 	}

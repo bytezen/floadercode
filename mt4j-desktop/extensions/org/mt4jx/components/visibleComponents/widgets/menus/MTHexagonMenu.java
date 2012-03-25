@@ -78,8 +78,8 @@ public class MTHexagonMenu extends MTRectangle{
 	 */
 	public MTHexagonMenu(AbstractMTApplication app, Vector3D position,
 			List<MenuItem> menuItems, float size) {
-		super(app, position.x, position.y, (float) (int) Math
-						.sqrt(menuItems.size() + 1) * size, (float) (int) Math
+		super(app, position.x, position.y, (int) Math
+						.sqrt(menuItems.size() + 1) * size, (int) Math
 				.sqrt(menuItems.size() + 1) * size);
 		this.app = app;
 		this.size = size;
@@ -161,10 +161,10 @@ public class MTHexagonMenu extends MTRectangle{
 
 					// Normalize Texture Coordinates
 					for (Vertex v : container.getVerticesLocal()) {
-						v.setTexCoordU(v.getX() / (float) texture.width);
+						v.setTexCoordU(v.getX() / texture.width);
 						if (v.getTexCoordU() > 1)
 							v.setTexCoordU(1);
-						v.setTexCoordV(v.getY() / (float) texture.height);
+						v.setTexCoordV(v.getY() / texture.height);
 						if (v.getTexCoordV() > 1)
 							v.setTexCoordV(1);
 					}
@@ -258,10 +258,10 @@ public class MTHexagonMenu extends MTRectangle{
 			if (((float) workingCopy.width / (float) width) < ((float) workingCopy.height / (float) height)) {
 				workingCopy.resize(
 						width,
-						(int) ((float) workingCopy.height / ((float) workingCopy.width / (float) width)));
+						(int) (workingCopy.height / ((float) workingCopy.width / (float) width)));
 			} else {
 				workingCopy.resize(
-						(int) ((float) workingCopy.width / ((float) workingCopy.height / (float) height)),
+						(int) (workingCopy.width / ((float) workingCopy.height / (float) height)),
 						height);
 			}
 
@@ -349,7 +349,7 @@ public class MTHexagonMenu extends MTRectangle{
 			}
 		}
 
-		float spc = size / (float) maxNumberCharacters; // Space Per Character
+		float spc = size / maxNumberCharacters; // Space Per Character
 		int returnValue = (int) (-0.5 + 1.725 * spc); // Determined using Linear
 		// Regression
 		return returnValue;
@@ -512,7 +512,7 @@ public class MTHexagonMenu extends MTRectangle{
 			rect.setStrokeWeight(vss.getBorderWidth());
 
 			// Set Font and Position for the child MTTextAreas
-			if (((MTPolygon) c).getTexture() == null) {
+			if ((c).getTexture() == null) {
 				rect.setFillColor(vss.getBackgroundColor());
 				for (MTComponent d : c.getChildren()) {
 					if (d instanceof MTTextArea) {
@@ -637,6 +637,7 @@ public class MTHexagonMenu extends MTRectangle{
 		 * org.mt4j.input.inputProcessors.IGestureEventListener#processGestureEvent
 		 * (org.mt4j.input.inputProcessors.MTGestureEvent)
 		 */
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			if (ge instanceof TapEvent) {
 	

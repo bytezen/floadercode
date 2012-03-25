@@ -48,6 +48,7 @@ import org.mt4j.util.math.Vertex;
 import org.mt4j.util.opengl.GLFBO;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 import scenes.WaterSceneExportObf;
 import advanced.drawing.MainDrawingScene;
@@ -200,36 +201,44 @@ public class MTShellScene extends AbstractScene {
 		font = FontManager.getInstance().createFont(app, "SansSerif", 18, MTColor.WHITE);
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new TouchTailScene(app, "Touch Tails");
 			}
+			@Override
 			public String getTitle() {
 				return "Touch Tails";
 			}
 		}, app.loadImage(this.getPathToIcons() + "touchtails_s.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new MapsScene(app, "Maps");
 			}
+			@Override
 			public String getTitle() {
 				return "Maps";
 			}
 		}, app.loadImage(this.getPathToIcons() + "maps_ss.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new AirHockeyScene(app, "Air Hockey");
 			}
+			@Override
 			public String getTitle() {
 				return "Air Hockey";
 			}
 		}, app.loadImage(this.getPathToIcons() + "airhockey_s.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new PuzzleScene(app, "Puzzle");
 			}
+			@Override
 			public String getTitle() {
 				return "Puzzle";
 			}
@@ -237,9 +246,11 @@ public class MTShellScene extends AbstractScene {
 		
 		if (this.hasFBO){
 			this.addScene(new ICreateScene() {
+				@Override
 				public Iscene getNewScene() {
 					return new MainDrawingScene(app, "MT Paint");
 				}
+				@Override
 				public String getTitle() {
 					return "MT Paint";
 				}
@@ -247,54 +258,66 @@ public class MTShellScene extends AbstractScene {
 		}
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new FlickrScene(app, "Flickr");
 			}
+			@Override
 			public String getTitle() {
 				return "Photo Search";
 			}
 		}, app.loadImage(this.getPathToIcons() + "flickr_s.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new WaterSceneExportObf(app, "Interactive Water"); 
 			}
+			@Override
 			public String getTitle() {
 				return "Interactive Water";
 			}
 		}, app.loadImage(this.getPathToIcons() + "water_s.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new FluidSimulationScene(app, "Fluid Particles");
 			}
+			@Override
 			public String getTitle() {
 				return "Fluid Particles";
 			}
 		}, app.loadImage(this.getPathToIcons() + "fluidparticles_s.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new Models3DScene(app, "3D Models");
 			}
+			@Override
 			public String getTitle() {
 				return "3D Models";
 			}
 		}, app.loadImage(this.getPathToIcons() + "teapot.jpg"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new PhysicsScene(app, "Physics Playground");
 			}
+			@Override
 			public String getTitle() {
 				return "Physics Playground";
 			}
 		}, app.loadImage(this.getPathToIcons() + "pyhsics_s.png"));
 		
 		this.addScene(new ICreateScene() {
+			@Override
 			public Iscene getNewScene() {
 				return new Space3DScene(app, "Earth 3D");
 			}
+			@Override
 			public String getTitle() {
 				return "Earth 3D";
 			}
@@ -339,6 +362,7 @@ public class MTShellScene extends AbstractScene {
 	private void addTapProcessor(MTListCell cell, final ICreateScene createScene){
 		cell.registerInputProcessor(new TapProcessor(app, 15));
 		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -507,7 +531,7 @@ public class MTShellScene extends AbstractScene {
 		int width =  image.width; 
 		int height = image.height;
 		
-		PImage copyOfImage = pa.createImage(image.width, image.height, PApplet.ARGB);
+		PImage copyOfImage = pa.createImage(image.width, image.height, PConstants.ARGB);
 		image.loadPixels();
 		copyOfImage.loadPixels();
 		   
@@ -541,10 +565,12 @@ public class MTShellScene extends AbstractScene {
 	}
 	
 	
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 	}
@@ -567,6 +593,7 @@ public class MTShellScene extends AbstractScene {
 			break;	
 		case KeyEvent.VK_C:
 			getMTApplication().invokeLater(new Runnable() {
+				@Override
 				public void run() {
 //					System.gc();
 //					GC.maxObjectInspectionAge();

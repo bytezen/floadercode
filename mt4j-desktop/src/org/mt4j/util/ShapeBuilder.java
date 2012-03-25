@@ -249,6 +249,7 @@ public class ShapeBuilder {
 			super(applet, vertices);
 		}
 		
+		@Override
 		protected IBoundingShape computeDefaultBounds() {
 			//Use z plane bounding rect instead default boundingsphere since always 2D!
 			return new BoundsZPlaneRectangle(this);

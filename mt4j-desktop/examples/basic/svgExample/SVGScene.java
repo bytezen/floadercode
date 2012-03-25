@@ -32,8 +32,10 @@ public class SVGScene extends AbstractScene {
 	}
 
 	
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {}
 
 }

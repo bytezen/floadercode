@@ -243,6 +243,7 @@ public class MTTextKeyboard extends MTKeyboard {
 			this.addTextInputListener(this.textInputListener);
 			//Remove textarea from listening if destroyed
 			t.addStateChangeListener(StateChange.COMPONENT_DESTROYED, new StateChangeListener() {
+				@Override
 				public void stateChanged(StateChangeEvent evt) {
 					removeTextInputListener(t);
 				}
@@ -303,6 +304,7 @@ public class MTTextKeyboard extends MTKeyboard {
 		/* (non-Javadoc)
 		 * @see com.jMT.input.gestureAction.DefaultDragAction#processGesture(com.jMT.input.inputAnalyzers.GestureEvent)
 		 */
+		@Override
 		public boolean processGestureEvent(MTGestureEvent g) {
 			
 			super.processGestureEvent(g);

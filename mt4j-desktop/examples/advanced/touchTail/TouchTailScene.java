@@ -31,9 +31,10 @@ public class TouchTailScene extends AbstractScene {
 		tapAndHold.setHoldTime(3000);
 		tails.registerInputProcessor(tapAndHold);
 		tails.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapAndHoldEvent t = (TapAndHoldEvent)ge;
-				if (t.getId() == TapAndHoldEvent.GESTURE_ENDED && t.isHoldComplete()){
+				if (t.getId() == MTGestureEvent.GESTURE_ENDED && t.isHoldComplete()){
 					tails.clearTails();	
 				}
 				return false;
@@ -63,10 +64,12 @@ public class TouchTailScene extends AbstractScene {
 		}
 	}
 	
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 	}

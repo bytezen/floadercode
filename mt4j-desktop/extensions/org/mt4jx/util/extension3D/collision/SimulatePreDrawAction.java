@@ -64,10 +64,12 @@ public class SimulatePreDrawAction implements IPreDrawAction {
 		this.canvas = v_canvas;
 	}
 	
+	@Override
 	public boolean isLoop() {
 		return true;
 	}
 		
+	@Override
 	public void processAction() {
 		
 		if(getCollisionWorld()!=null&&getCurrentTimeStep()!=0.f)
@@ -84,7 +86,7 @@ public class SimulatePreDrawAction implements IPreDrawAction {
     				CollisionObject obj = getCollisionWorld().getCollisionObjectArray().get(i);
     				CollisionShape shape = obj.getCollisionShape();
     							
-    				MTComponent mesh = (MTComponent)collisionManager.getAssociatedComponent(obj);
+    				MTComponent mesh = collisionManager.getAssociatedComponent(obj);
     				    				
     				if(mesh!=null)
     				{ 
@@ -170,7 +172,7 @@ public class SimulatePreDrawAction implements IPreDrawAction {
 					if(canvas.getChildren()[i] instanceof MTDepthHelper)
 					{
 						MTDepthHelper helper = (MTDepthHelper) canvas.getChildren()[i];
-						MTComponent targetComp = (MTComponent) helper.getTargetComponent();
+						MTComponent targetComp = helper.getTargetComponent();
 												
 						if(targetComp instanceof Cluster3DExt)
 						{

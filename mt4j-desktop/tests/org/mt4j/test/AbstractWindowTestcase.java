@@ -142,6 +142,7 @@ implements UncaughtExceptionHandler
 		final AbstractMTApplication appToDestroy = getMTApplication();
 		appToDestroy.invokeLater(new Runnable() {
 			
+			@Override
 			public void run() {
 				Iscene[] scenes = appToDestroy.getScenes();
                 for (Iscene iscene : scenes) {
@@ -156,6 +157,7 @@ implements UncaughtExceptionHandler
 	}
 	
 	
+	@Override
 	public void uncaughtException(Thread thread, final Throwable throwable) {
 		System.out.println("A uncaught exception was thrown -> Thread: " + thread + " Throwable: " + throwable);
 		if (throwable instanceof AssertionFailedError) {

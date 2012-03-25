@@ -136,9 +136,11 @@ public class PhysicsScene extends AbstractScene {
 		parent.addChild(borderBottom);
 	}
 
+	@Override
 	public void onEnter() {
 	}
 	
+	@Override
 	public void onLeave() {	
 	}
 

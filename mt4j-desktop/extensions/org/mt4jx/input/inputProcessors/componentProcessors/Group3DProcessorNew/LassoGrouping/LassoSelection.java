@@ -171,6 +171,7 @@ public class LassoSelection implements ISelection {
 		return sel;
 	}
 
+	@Override
 	public ArrayList<MTComponent> getSelectedComponents() {
 		selectedComps = new ArrayList<MTComponent>();
 		for (int i = 0; i < selectionManager.getDragSelectables().size(); i++) {

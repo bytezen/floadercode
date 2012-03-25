@@ -79,11 +79,12 @@ public class TouchTailComponent extends AbstractVisibleComponent {
 	
 	
 	private class DragListener implements IGestureEventListener{
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			DragEvent de = (DragEvent)ge;
 			Vector3D to = de.getTo();
 			switch (de.getId()) {
-			case DragEvent.GESTURE_STARTED:{
+			case MTGestureEvent.GESTURE_STARTED:{
 				currentGestureID = (currentGestureID+1) % nGestures;
 				//System.out.println("New current gesture ID => " + currentGestureID);
 				TailGesture G = gestureArray[currentGestureID];
@@ -92,7 +93,7 @@ public class TouchTailComponent extends AbstractVisibleComponent {
 				G.clearPolys();
 				G.addPoint(to.x, to.y);
 			}break;
-			case DragEvent.GESTURE_UPDATED:{
+			case MTGestureEvent.GESTURE_UPDATED:{
 				TailGesture G = idToGesture.get(de.getDragCursor().getId());
 				if (G.distToLast(to.x, to.y) > minMove) {
 					G.addPoint(to.x, to.y);
@@ -100,7 +101,7 @@ public class TouchTailComponent extends AbstractVisibleComponent {
 					G.compile();
 				}
 			}break;
-			case DragEvent.GESTURE_ENDED:{
+			case MTGestureEvent.GESTURE_ENDED:{
 				idToGesture.remove(de.getDragCursor().getId());
 			}break;
 			default:
@@ -179,7 +180,7 @@ public class TouchTailComponent extends AbstractVisibleComponent {
 					g.tint(c.getR(), c.getG(), c.getB(), c.getAlpha());
 				}
 
-				g.beginShape(PApplet.QUADS);
+				g.beginShape(PConstants.QUADS);
 				
 				if (useTexture){
 					g.texture(a); //FIXME TEST

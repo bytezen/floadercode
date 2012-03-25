@@ -92,6 +92,7 @@ public class SvgFontFactory extends DefaultHandler implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#getCopy(org.mt4j.components.visibleComponents.font.IFont)
 	 */
+	@Override
 	public IFont getCopy(IFont font) {
 		if (font instanceof VectorFont) {
 			VectorFont vf = (VectorFont) font;
@@ -101,14 +102,17 @@ public class SvgFontFactory extends DefaultHandler implements IFontFactory {
 		return null;
 	}
 	
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color) {
 		return this.createFont(pa, fontName, fontSize, color, color, true);
 	}
 
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color, boolean antiAliased) {
 		return this.createFont(pa, fontName, fontSize, color, color, antiAliased);
 	}
 	
+	@Override
 	public IFont createFont(
 			PApplet pa, 
 			String svgFontFileName, 
@@ -119,6 +123,7 @@ public class SvgFontFactory extends DefaultHandler implements IFontFactory {
 		return this.createFont(pa, svgFontFileName, fontSize, fillColor, strokeColor, true);
 	}
 
+	@Override
 	public IFont createFont(
 			PApplet pa, 
 			String svgFontFileName, 
@@ -222,7 +227,7 @@ public class SvgFontFactory extends DefaultHandler implements IFontFactory {
 					int unitsPerEm = this.font_units_per_em;
 					int resolution = Toolkit.getDefaultToolkit().getScreenResolution();
 					//System.out.println("Screen resolution: " + resolution);
-					this.scaleFactor = ((float)fontSize * (float)resolution) / (72F * (float)unitsPerEm);
+					this.scaleFactor = ((float)fontSize * (float)resolution) / (72F * unitsPerEm);
 					//System.out.println("->Scalefactor: " + this.scaleFactor);
 				}
 			}

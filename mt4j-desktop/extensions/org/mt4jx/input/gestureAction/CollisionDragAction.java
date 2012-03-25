@@ -21,6 +21,7 @@ public class CollisionDragAction implements IGestureEventListener {
 		this.useCustomTarget = true;
 	}	
 	
+	@Override
 	public boolean processGestureEvent(MTGestureEvent ge) {
 		
 		if (ge instanceof DragEvent){

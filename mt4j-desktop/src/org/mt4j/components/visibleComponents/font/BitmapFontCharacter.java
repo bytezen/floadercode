@@ -115,6 +115,7 @@ public class BitmapFontCharacter extends MTRectangle implements IFontCharacter, 
 	 * @see org.mt4j.components.visibleComponents.font.IFontCharacter#drawComponent(javax.media.opengl.GL)
 	 */
 	//@Override
+	@Override
 	public void drawComponent(GL10 gl) { 
 //		this.drawPureGl(gl);
 //		/*
@@ -266,6 +267,7 @@ public class BitmapFontCharacter extends MTRectangle implements IFontCharacter, 
 	 * @see org.mt4j.components.visibleComponents.shapes.MTRectangle#computeDefaultBounds()
 	 */
 	//@Override
+	@Override
 	protected IBoundingShape computeDefaultBounds() {
 		//We assume that font characters never get picked or anything 
 		//and hope the creation speeds up by not calculating a bounding shape
@@ -276,6 +278,7 @@ public class BitmapFontCharacter extends MTRectangle implements IFontCharacter, 
 	 * @see org.mt4j.components.visibleComponents.font.IFontCharacter#getHorizontalDist()
 	 */
 	//@Override
+	@Override
 	public int getHorizontalDist() {
 		return this.horizontalDist;
 	}
@@ -293,6 +296,7 @@ public class BitmapFontCharacter extends MTRectangle implements IFontCharacter, 
 	 * @see org.mt4j.components.visibleComponents.font.IFontCharacter#getUnicode()
 	 */
 	//@Override
+	@Override
 	public String getUnicode() {
 		return this.unicode;
 	}
@@ -313,6 +317,7 @@ public class BitmapFontCharacter extends MTRectangle implements IFontCharacter, 
 
 
 	//FIXME TEST
+	@Override
 	public void setTextureFiltered(boolean scalable) {
 		if (MT4jSettings.getInstance().isOpenGlMode()){
 			PImage tex = this.getTexture();

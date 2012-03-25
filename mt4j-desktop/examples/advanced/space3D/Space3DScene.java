@@ -112,7 +112,8 @@ public class Space3DScene extends AbstractScene {
         earth.setPositionGlobal(new Vector3D(pa.width/2f, pa.height/2f, 250)); //earth.setPositionGlobal(new Vector3D(200, 200, 250));
         //Animate earth rotation
         new Animation("rotation animation", new MultiPurposeInterpolator(0,360, 17000, 0, 1, -1) , earth).addAnimationListener(new IAnimationListener(){
-        	public void processAnimationEvent(AnimationEvent ae) {
+        	@Override
+			public void processAnimationEvent(AnimationEvent ae) {
         		earth.rotateY(earth.getCenterPointLocal(), ae.getDelta(), TransformSpace.LOCAL);
         	}}).start();
         
@@ -128,6 +129,7 @@ public class Space3DScene extends AbstractScene {
 		//Scale the earth from the center. Else it might get distorted
 		group.registerInputProcessor(new ScaleProcessor(mtApplication));
 		group.addGestureListener(ScaleProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				ScaleEvent se = (ScaleEvent)ge;
 				earth.scaleGlobal(se.getScaleFactorX(), se.getScaleFactorY(), se.getScaleFactorX(), earth.getCenterPointGlobal());
@@ -146,12 +148,14 @@ public class Space3DScene extends AbstractScene {
         moonSphere.unregisterAllInputProcessors();
         //Rotate the moon around the earth
         new Animation("moon animation", new MultiPurposeInterpolator(0,360, 12000, 0, 1, -1) , moonSphere).addAnimationListener(new IAnimationListener(){
-        	public void processAnimationEvent(AnimationEvent ae) {
+        	@Override
+			public void processAnimationEvent(AnimationEvent ae) {
         		moonSphere.rotateZ(earth.getCenterPointLocal(), ae.getDelta(), TransformSpace.RELATIVE_TO_PARENT);
         	}}).start();
         //Rotate the moon around ints own center
         new Animation("moon animation around own axis", new MultiPurposeInterpolator(0,360, 9000, 0, 1, -1) , moonSphere).addAnimationListener(new IAnimationListener(){
-        	public void processAnimationEvent(AnimationEvent ae) {
+        	@Override
+			public void processAnimationEvent(AnimationEvent ae) {
         		moonSphere.rotateZ(moonSphere.getCenterPointLocal(), -3*ae.getDelta(), TransformSpace.LOCAL);
         		moonSphere.rotateY(moonSphere.getCenterPointLocal(), 0.5f*ae.getDelta(), TransformSpace.LOCAL);
         	}}).start();
@@ -159,10 +163,12 @@ public class Space3DScene extends AbstractScene {
 	}
 
 
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 	}

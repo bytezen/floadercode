@@ -36,14 +36,17 @@ public final class JoglGL20 implements GL20 {
 		this.gl = gl;
 	}
 	
+	@Override
 	public void glCallList(int id) {
 		gl.glCallList(id);
 	}
 
+	@Override
 	public void glCallLists(int arg0, int arg1, Buffer arg2) {
 		gl.glCallLists(arg0, arg1, arg2);
 	}
 
+	@Override
 	public int glGenLists(int id) {
 		return gl.glGenLists(id);
 	}

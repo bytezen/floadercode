@@ -76,6 +76,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#startPath()
 	 */
+	@Override
 	public void startPath() throws ParseException {
 		if (verbose)
 			System.out.println("Start Path");
@@ -85,6 +86,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#movetoAbs(float, float)
 	 */
+	@Override
 	public void movetoAbs(float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("movetoAbs: x:" + x + " y:" + y);
@@ -106,6 +108,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#movetoRel(float, float)
 	 */
+	@Override
 	public void movetoRel(float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("movetoRel: " + x + "," + y);
@@ -133,6 +136,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#arcAbs(float, float, float, boolean, boolean, float, float)
 	 */
+	@Override
 	public void arcAbs(float rx, float ry, float phi, boolean large_arc, boolean sweep, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("arcAbs: " + rx + " " + ry + " " + phi + " " + large_arc + " "  + sweep + " " + x + " " + y);
@@ -155,6 +159,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#arcRel(float, float, float, boolean, boolean, float, float)
 	 */
+	@Override
 	public void arcRel(float rx, float ry, float phi, boolean large_arc, boolean sweep, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("arcRel: " + rx + " " + ry + " " + phi + " " + large_arc + " "  + sweep + " " + x + " " + y);
@@ -178,6 +183,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#linetoAbs(float, float)
 	 */
+	@Override
 	public void linetoAbs(float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("linetoAbs x:" + x + " y:" + y);
@@ -190,6 +196,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#linetoRel(float, float)
 	 */
+	@Override
 	public void linetoRel(float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("linetoRel: " + x + "," + y);
@@ -203,6 +210,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#linetoHorizontalAbs(float)
 	 */
+	@Override
 	public void linetoHorizontalAbs(float x) throws ParseException {
 		if (verbose)
 			System.out.println("linetoHorizontalAbs x:" + x);
@@ -215,6 +223,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#linetoHorizontalRel(float)
 	 */
+	@Override
 	public void linetoHorizontalRel(float x) throws ParseException {
 		if (verbose)
 			System.out.println("linetoHorizontalRel: " + x);
@@ -228,6 +237,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#linetoVerticalAbs(float)
 	 */
+	@Override
 	public void linetoVerticalAbs(float y) throws ParseException {
 		if (verbose)
 			System.out.println("linetoVerticalAbs y:" + y);
@@ -240,6 +250,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#linetoVerticalRel(float)
 	 */
+	@Override
 	public void linetoVerticalRel(float y) throws ParseException {
 		if (verbose)
 			System.out.println("linetoVerticalRel: " + y);
@@ -253,6 +264,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoQuadraticAbs(float, float, float, float)
 	 */
+	@Override
 	public void curvetoQuadraticAbs(float x1, float y1, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoQuadraticAbs x1:" + x1 + " y1:" + y1 + " x:" + x+ " y:" + y);
@@ -275,6 +287,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoQuadraticRel(float, float, float, float)
 	 */
+	@Override
 	public void curvetoQuadraticRel(float x1, float y1, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoQuadraticRel: " + x1 + "," + y1 + "  " + x + "," + y);
@@ -302,6 +315,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoQuadraticSmoothAbs(float, float)
 	 */
+	@Override
 	public void curvetoQuadraticSmoothAbs(float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoQuadraticSmoothAbs " + " x:" + x+ " y:" + y);
@@ -348,6 +362,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoQuadraticSmoothRel(float, float)
 	 */
+	@Override
 	public void curvetoQuadraticSmoothRel(float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoQuadraticSmoothRel: " + x + "," + y);
@@ -396,6 +411,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoCubicAbs(float, float, float, float, float, float)
 	 */
+	@Override
 	public void curvetoCubicAbs(float x1, float y1, float x2, float y2, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoCubicAbs x1:" + x1 + " y1:" + y1 + " x2:" + x2 + " y2:" + y2 +  " x:" + x+ " y:" + y);
@@ -408,6 +424,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoCubicRel(float, float, float, float, float, float)
 	 */
+	@Override
 	public void curvetoCubicRel(float x1, float y1, float x2, float y2, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoCubicSmoothRel: " + x1 + "," + y1 + "  " + x2 + "," + y2 + "  "  + x + "," + y);
@@ -425,6 +442,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoCubicSmoothAbs(float, float, float, float)
 	 */
+	@Override
 	public void curvetoCubicSmoothAbs(float x2, float y2, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoCubicSmoothAbs x2:" + x2 + " y2:" + y2 + " x:" + x+ " y:" + y);
@@ -458,6 +476,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#curvetoCubicSmoothRel(float, float, float, float)
 	 */
+	@Override
 	public void curvetoCubicSmoothRel(float x2, float y2, float x, float y) throws ParseException {
 		if (verbose)
 			System.out.println("curvetoCubicSmoothRel: " + x2 + "," + y2 + "  " + x + "," + y);
@@ -498,6 +517,7 @@ public class CustomPathHandler implements PathHandler {
 	 * 
 	 * @throws ParseException the parse exception
 	 */
+	@Override
 	public void closePath() throws ParseException {
 		if (verbose)
 			System.out.println("close Path");
@@ -516,6 +536,7 @@ public class CustomPathHandler implements PathHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.PathHandler#endPath()
 	 */
+	@Override
 	public void endPath() throws ParseException {
 		if (verbose)
 			System.out.println("End Path");
@@ -556,6 +577,7 @@ public class CustomPathHandler implements PathHandler {
 	 * 
 	 * @return the reverse move to vertices
 	 */
+	@Deprecated
 	public Vertex[] getReverseMoveToVertices() {
 		return reverseMoveToStack.toArray(new Vertex[reverseMoveToStack.size()]);
 	}
@@ -564,6 +586,7 @@ public class CustomPathHandler implements PathHandler {
 	 * @deprecated Only used when the intention is to draw the shapes using the stencil buffer..
 	 * @return the reverse move to stack
 	 */
+	@Deprecated
 	public Stack<Vertex> getReverseMoveToStack() {
 		return reverseMoveToStack;
 	}

@@ -68,6 +68,7 @@ public class DrawSurfaceScene extends AbstractScene {
 		this.cursorToLastDrawnPoint = new HashMap<InputCursor, Vector3D>();
 		
 		this.getCanvas().addInputListener(new IMTInputEventListener() {
+			@Override
 			public boolean processInputEvent(MTInputEvent inEvt){
 				if(inEvt instanceof AbstractCursorInputEvt){
 					final AbstractCursorInputEvt posEvt = (AbstractCursorInputEvt)inEvt;
@@ -77,6 +78,7 @@ public class DrawSurfaceScene extends AbstractScene {
 
 					if (posEvt.getId() != AbstractCursorInputEvt.INPUT_ENDED){
 						registerPreDrawAction(new IPreDrawAction() {
+							@Override
 							public void processAction() {
 								boolean firstPoint = false;
 								Vector3D lastDrawnPoint = cursorToLastDrawnPoint.get(m);
@@ -153,6 +155,7 @@ public class DrawSurfaceScene extends AbstractScene {
 								cursorToLastDrawnPoint.put(m, currentPos);
 							}
 
+							@Override
 							public boolean isLoop() {
 								return false;
 							}
@@ -191,9 +194,11 @@ public class DrawSurfaceScene extends AbstractScene {
 	}
 	
 	
+	@Override
 	public void onEnter() {
 	}
 	
+	@Override
 	public void onLeave() {
 	}
 }

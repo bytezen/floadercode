@@ -188,10 +188,12 @@ public class Extension3DScene extends AbstractScene {
 	}
 	
 	
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {
 		getMTApplication().unregisterKeyEvent(this);
 	}
@@ -249,6 +251,7 @@ public class Extension3DScene extends AbstractScene {
 		
 	}
 	
+	@Override
 	public void drawAndUpdate(PGraphics g, long timeDelta) {
         super.drawAndUpdate(g, timeDelta);
         g.pushMatrix();
@@ -458,6 +461,7 @@ public class Extension3DScene extends AbstractScene {
 		meshGroup.registerInputProcessor(new ScaleProcessor(mtApplication));
 		meshGroup.addGestureListener(ScaleProcessor.class, new IGestureEventListener(){
 			//@Override
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 					ScaleEvent se = (ScaleEvent)ge;				
 													

@@ -21,6 +21,7 @@ package org.mt4j.input.inputSources;
 import java.awt.event.KeyEvent;
 
 import org.mt4j.AbstractMTApplication;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.ActiveCursorPool;
 import org.mt4j.input.inputData.InputCursor;
 import org.mt4j.input.inputData.MTFingerInputEvt;
@@ -237,7 +238,7 @@ public class KeyboardInputSource extends AbstractInputSource {
 	private void fingerDown(KeyEvent e){
 		if (!spaceHasBeenPressed){
 			InputCursor m = new InputCursor();
-			MTFingerInputEvt touchEvt = new MTFingerInputEvt(this, locationX, locationY, MTFingerInputEvt.INPUT_STARTED, m);
+			MTFingerInputEvt touchEvt = new MTFingerInputEvt(this, locationX, locationY, AbstractCursorInputEvt.INPUT_STARTED, m);
 //			m.addEvent(touchEvt);
 			
 			lastUsedKeybID = m.getId();
@@ -251,7 +252,7 @@ public class KeyboardInputSource extends AbstractInputSource {
 			InputCursor m = ActiveCursorPool.getInstance().getActiveCursorByID(lastUsedKeybID);
 			
 //			if (m.getLastEvent().getPositionX() != locationX || m.getLastEvent().getPositionY() != locationY){
-			MTFingerInputEvt te = new MTFingerInputEvt(this, locationX, locationY, MTFingerInputEvt.INPUT_UPDATED, m);
+			MTFingerInputEvt te = new MTFingerInputEvt(this, locationX, locationY, AbstractCursorInputEvt.INPUT_UPDATED, m);
 //			m.addEvent(new MTFingerInputEvt2(this, e.getX(), e.getY(), MTFingerInputEvt.FINGER_UPDATE, m));
 			
 			//FIRE
@@ -267,7 +268,7 @@ public class KeyboardInputSource extends AbstractInputSource {
 	 */
 	private void fingerUp(KeyEvent e) {
 		InputCursor m = ActiveCursorPool.getInstance().getActiveCursorByID(lastUsedKeybID);
-		MTFingerInputEvt te = new MTFingerInputEvt(this, locationX, locationY, MTFingerInputEvt.INPUT_ENDED, m);
+		MTFingerInputEvt te = new MTFingerInputEvt(this, locationX, locationY, AbstractCursorInputEvt.INPUT_ENDED, m);
 //		m.addEvent(te);
 		
 		this.enqueueInputEvent(te);

@@ -8,7 +8,6 @@ import netP5.NetAddress;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
-import org.mt4j.AbstractMTApplication;
 import org.mt4j.components.TransformSpace;
 import org.mt4j.components.visibleComponents.AbstractVisibleComponent;
 import org.mt4j.components.visibleComponents.widgets.MTSlider;
@@ -53,6 +52,7 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 	public void addDelayButtons(float x, float y)
 	{
 		addButton(x, y, 80, 80).addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent) ge;
 				buttonEvent(6,te);
@@ -61,6 +61,7 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 		});
 		
 		addButton(x + 90, y, 80, 80).addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent) ge;
 				buttonEvent(7,te);
@@ -72,6 +73,7 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 	public void addGoButton(float x, float y)
 	{
 		addButton(x, y, 170, 80).addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent) ge;
 				buttonEvent(8,te);
@@ -99,11 +101,13 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 	
 	public void addStretchers(float x, float y, float width, float height) {
 		addSlider(x, y, width, height, 0).addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				thisComponent.sliderEvent(4, (Float) p.getNewValue() * -1 + 1);
 			}
 		});
 		addSlider(x + 90, y, width, height, 0).addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				thisComponent.sliderEvent(5, (Float) p.getNewValue() * -1 + 1);
 			}
@@ -112,21 +116,25 @@ public class NanoUIComponent extends AbstractVisibleComponent {
 
 	public void addFilters(float x, float y, float width, float height) {
 		addSlider(x, y, width, height, 0).addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				thisComponent.sliderEvent(0, (Float) p.getNewValue() * -1 + 1);
 			}
 		});
 		addSlider(x + 90, y, width, height, 0).addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				thisComponent.sliderEvent(1, (Float) p.getNewValue() * -1 + 1);
 			}
 		});
 		addSlider(x, y + 200, width, height, 1).addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				thisComponent.sliderEvent(2, (Float) p.getNewValue() * -1 + 1);
 			}
 		});
 		addSlider(x + 90, y + 200, width, height, 1).addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				thisComponent.sliderEvent(3, (Float) p.getNewValue() * -1 + 1);
 			}

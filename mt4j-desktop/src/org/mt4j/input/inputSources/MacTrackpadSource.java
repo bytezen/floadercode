@@ -6,6 +6,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.mt4j.AbstractMTApplication;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.ActiveCursorPool;
 import org.mt4j.input.inputData.InputCursor;
 import org.mt4j.input.inputData.MTFingerInputEvt;
@@ -38,6 +39,7 @@ public class MacTrackpadSource extends AbstractInputSource implements Observer {
 		this.fingerIdToCursorId = new HashMap<Integer, Long>();
 	}
 
+	@Override
 	public void update(Observable obj, Object arg) {
 		Finger finger = (Finger) arg;
 		int fingerID = finger.getID();
@@ -52,16 +54,16 @@ public class MacTrackpadSource extends AbstractInputSource implements Observer {
 				cursor = new InputCursor();
 				fingerIdToCursorId.put(fingerID, cursor.getId());
 				cursorPool.putActiveCursor(cursor.getId(), cursor);
-				inputID = MTFingerInputEvt.INPUT_STARTED;
+				inputID = AbstractCursorInputEvt.INPUT_STARTED;
 			} else { //updated finger
-				inputID = MTFingerInputEvt.INPUT_UPDATED;
+				inputID = AbstractCursorInputEvt.INPUT_UPDATED;
 			}
 		} else { //removed finger
 			if (cursorID != null){
 				cursorPool.removeCursor(cursorID);
 			}
 			fingerIdToCursorId.remove(fingerID);
-			inputID = MTFingerInputEvt.INPUT_ENDED;
+			inputID = AbstractCursorInputEvt.INPUT_ENDED;
 		}
 		
 		int absoluteX = Math.round(finger.getX()*this.windowWidth);

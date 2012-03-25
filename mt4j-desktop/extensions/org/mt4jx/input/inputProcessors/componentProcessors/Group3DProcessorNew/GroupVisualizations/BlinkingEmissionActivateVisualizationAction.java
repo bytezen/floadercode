@@ -20,16 +20,17 @@ public class BlinkingEmissionActivateVisualizationAction implements IGestureEven
 		this.methodProvider = methodProvider;
 		this.cluster.setVisualizeProvider(null);
 	}
+	@Override
 	public boolean processGestureEvent(MTGestureEvent ge) {
 		if(ge instanceof TapEvent)
 		{
 			TapEvent tapEv = (TapEvent)ge;
 			switch(tapEv.getId())
 			{
-			case TapEvent.GESTURE_STARTED:
+			case MTGestureEvent.GESTURE_STARTED:
 				cluster.setVisualizeProvider(methodProvider);
 				break;
-			case TapEvent.GESTURE_ENDED:
+			case MTGestureEvent.GESTURE_ENDED:
 				for(MTComponent groups : cluster.getChildren())
 				{
 					

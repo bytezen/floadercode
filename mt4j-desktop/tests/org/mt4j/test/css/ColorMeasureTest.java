@@ -19,6 +19,7 @@ public class ColorMeasureTest extends TestCase {
 	private CSSParserConnection pc;
 	private List<CSSStyle> styles;
 	
+	@Override
 	@Before
 	public void setUp() {
 		pc = new CSSParserConnection("junit/colormeasuretest.css", app);
@@ -26,6 +27,7 @@ public class ColorMeasureTest extends TestCase {
 	}
 	
 	
+	@Override
 	protected void tearDown() {
 		//app.destroy();
 	}

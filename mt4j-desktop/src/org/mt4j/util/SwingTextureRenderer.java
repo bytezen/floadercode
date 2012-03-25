@@ -146,7 +146,8 @@ public class SwingTextureRenderer {
       
       if (!mtApp.isRenderThreadCurrent()){
     	  mtApp.invokeLater(new Runnable() {
-        	  public void run() {
+        	  @Override
+			public void run() {
 //        		  textureToRenderTo.initTexture(rectC.width, rectC.height);
         		  textureToRenderTo.setupGLTexture(rectC.width, rectC.height);
         	  }
@@ -177,6 +178,7 @@ public class SwingTextureRenderer {
 	public void startTimedRefresh(int time){
 		t = new Timer(time, new ActionListener() {
 			//@Override
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				scheduleRefresh();
 			}
@@ -204,6 +206,7 @@ public class SwingTextureRenderer {
 //			SwingUtilities.invokeAndWait(new Runnable(){
 		SwingUtilities.invokeLater(new Runnable(){
 				//@Override
+				@Override
 				public void run() {
 					Rectangle boundingRect = SwingUtilities.getLocalBounds(compToDraw);
 					//System.out.println("BoundingRect w:" + boundingRect.width + " h:" + boundingRect.height);
@@ -299,6 +302,7 @@ public class SwingTextureRenderer {
 		//Refresh GL texture next draw
 		mtApp.invokeLater(new Runnable() {
 			//@Override
+			@Override
 			public void run() {
 //				textureToRenderTo.putPixelsIntoTexture(tempImage); //OpenGL
 //				textureToRenderTo.putImage(tempImage); //SLOWER but also fills the PImage pixels[] with the image

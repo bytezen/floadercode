@@ -137,7 +137,7 @@ public class PuzzleFactory {
 		downUpOrderVerticalLeftOut = getInvertOrderCopy(upDownOrderVerticalLeftOut);
 		
 		leftRightHorizontalUpOut = Vertex.getDeepVertexArrayCopy(originalVerts);
-		Vertex.rotateZVectorArray(leftRightHorizontalUpOut, Vector3D.ZERO_VECTOR, -90);
+		Vector3D.rotateZVectorArray(leftRightHorizontalUpOut, Vector3D.ZERO_VECTOR, -90);
 		//Scale to desired width
 		Vertex.scaleVectorArray(leftRightHorizontalUpOut, Vector3D.ZERO_VECTOR, (1f/origHeight) * tileWidth, (1f/origHeight) * tileWidth, 1);
 //		MTPolygon p3 = new MTPolygon(getMTApplication(), leftRightHorizontalUpOut);
@@ -351,6 +351,7 @@ public class PuzzleFactory {
 			planeNormal = new Vector3D(0,0,1);
 		}
 		
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			IMTComponent3D comp = ge.getTarget();
 			RotateEvent re = (RotateEvent)ge;
@@ -359,7 +360,7 @@ public class PuzzleFactory {
 			InputCursor c2 = re.getSecondCursor();
 			
 			switch (re.getId()) {
-			case RotateEvent.GESTURE_STARTED:{
+			case MTGestureEvent.GESTURE_STARTED:{
 				oldC1 = c1;
 				oldC2 = c2;
 				startP1 = comp.getIntersectionGlobal(Tools3D.getCameraPickRay(app, comp, c1));
@@ -367,7 +368,7 @@ public class PuzzleFactory {
 				Vector3D i2 = ToolsGeometry.getRayPlaneIntersection(Tools3D.getCameraPickRay(app, comp, c2), planeNormal, startP1);
 				lastMiddle = i1.getAdded(i2.getSubtracted(i1).scaleLocal(0.5f));
 			}break;
-			case RotateEvent.GESTURE_UPDATED:
+			case MTGestureEvent.GESTURE_UPDATED:
 				if (!oldC1.equals(c1) || !oldC2.equals(c2)){ //Because c1 and/or c2 can change if a finger with greater distance enters -> prevent jump
 					Vector3D i1 = ToolsGeometry.getRayPlaneIntersection(Tools3D.getCameraPickRay(app, comp, c1), planeNormal, startP1);
 					Vector3D i2 = ToolsGeometry.getRayPlaneIntersection(Tools3D.getCameraPickRay(app, comp, c2), planeNormal, startP1);
@@ -385,7 +386,7 @@ public class PuzzleFactory {
 				comp.translateGlobal(middleDiff);
 				lastMiddle = middle;
 				break;
-			case RotateEvent.GESTURE_ENDED:
+			case MTGestureEvent.GESTURE_ENDED:
 				break;
 			default:
 				break;

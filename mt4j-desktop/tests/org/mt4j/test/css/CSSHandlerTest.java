@@ -20,6 +20,7 @@ public class CSSHandlerTest extends TestCase{
 	private List<CSSStyle> styles = new ArrayList<CSSStyle>();
 	private CSSHandler cssh = new CSSHandler(app, styles);
 	
+	@Override
 	@Before
 	public void setUp() {
 	}

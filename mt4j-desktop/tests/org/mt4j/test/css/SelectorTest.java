@@ -20,6 +20,7 @@ public class SelectorTest extends TestCase {
 	List<CSSStyle> styles;
 	HashMap<CSSSelector, MTColor> hm = new HashMap<CSSSelector, MTColor>();
 	
+	@Override
 	@Before
 	public void setUp() {
 		pc = new CSSParserConnection("junit/selectortest.css", app);
@@ -32,6 +33,7 @@ public class SelectorTest extends TestCase {
 	}
 	
 	
+	@Override
 	protected void tearDown() {
 		//app.destroy();
 	}

@@ -163,6 +163,7 @@ public class XmlHandler {
 		       SAXParser parser = spf.newSAXParser();
 		       
 		       parser.getXMLReader().setEntityResolver(new EntityResolver(){
+					@Override
 					public InputSource resolveEntity(String arg0, String arg1) throws SAXException, IOException {
 						return new InputSource(new ByteArrayInputStream(new byte[0]));
 					}
@@ -206,6 +207,7 @@ public class XmlHandler {
 		       SAXParser parser = spf.newSAXParser();
 		       
 		       parser.getXMLReader().setEntityResolver(new EntityResolver(){
+					@Override
 					public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 //						return new InputSource(new ByteArrayInputStream(new byte[0]));
 						if (systemId.endsWith(".dtd"))

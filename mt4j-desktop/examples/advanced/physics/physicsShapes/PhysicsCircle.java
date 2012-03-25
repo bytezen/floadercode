@@ -85,6 +85,7 @@ public class PhysicsCircle extends MTEllipse implements IPhysicsComponent{
 	
 	
 	//@Override
+	@Override
 	public void rotateZGlobal(Vector3D rotationPoint, float degree) {
 		angle += degree;
 		super.rotateZGlobal(rotationPoint, degree);
@@ -94,8 +95,9 @@ public class PhysicsCircle extends MTEllipse implements IPhysicsComponent{
 		return angle;
 	}
 	
+	@Override
 	public void setCenterRotation(float angle){
-		float degreeAngle = AbstractMTApplication.degrees(angle);
+		float degreeAngle = PApplet.degrees(angle);
 		float oldAngle = this.getAngle();
 		float diff = degreeAngle-oldAngle;
 		//System.out.println("Old angle: " + oldAngle + " new angle:" + degreeAngle + " diff->" +  diff);
@@ -103,6 +105,7 @@ public class PhysicsCircle extends MTEllipse implements IPhysicsComponent{
 	}
 	
 	//@Override
+	@Override
 	protected void destroyComponent() {
 		Object o = this.getUserData("box2d");
 		if (o != null && o instanceof Body){ 
@@ -126,6 +129,7 @@ public class PhysicsCircle extends MTEllipse implements IPhysicsComponent{
 
 
 
+	@Override
 	public Body getBody() {
 		return body;
 	}

@@ -303,6 +303,7 @@ public class MTSuggestionTextArea extends MTTextArea {
 		 * org.mt4j.input.inputProcessors.IGestureEventListener#processGestureEvent
 		 * (org.mt4j.input.inputProcessors.MTGestureEvent)
 		 */
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			if (ge instanceof TapEvent) {
 				TapEvent te = (TapEvent) ge;
@@ -313,7 +314,7 @@ public class MTSuggestionTextArea extends MTTextArea {
 					float zero = suggestionBox.getVerticesLocal()[0].y;
 					float heightPerLine = suggestionBox
 							.getHeightXY(TransformSpace.LOCAL)
-							/ (float) (suggestionBox.getLineCount() + 1);
+							/ (suggestionBox.getLineCount() + 1);
 					int line = (int) ((x.y - zero) / heightPerLine);
 	
 					if (currentSuggestions.size() > line) {
@@ -346,6 +347,7 @@ public class MTSuggestionTextArea extends MTTextArea {
 		 * org.mt4j.components.StateChangeListener#stateChanged(org.mt4j.components
 		 * .StateChangeEvent)
 		 */
+		@Override
 		public void stateChanged(StateChangeEvent evt) {
 			if (evt.getState() == StateChange.COMPONENT_DESTROYED) {
 				keyboard = null;
@@ -387,6 +389,7 @@ public class MTSuggestionTextArea extends MTTextArea {
 		 * org.mt4j.input.inputProcessors.IGestureEventListener#processGestureEvent
 		 * (org.mt4j.input.inputProcessors.MTGestureEvent)
 		 */
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			if (ge instanceof TapEvent) {
 				TapEvent te = (TapEvent) ge;

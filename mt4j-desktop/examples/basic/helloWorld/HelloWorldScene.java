@@ -35,7 +35,9 @@ public class HelloWorldScene extends AbstractScene {
 
 	}
 	
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {}
 }

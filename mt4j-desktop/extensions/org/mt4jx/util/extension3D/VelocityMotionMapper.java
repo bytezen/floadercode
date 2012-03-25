@@ -17,6 +17,7 @@ public class VelocityMotionMapper implements MotionMapper {
 		this.velocityFactor = velocityFactor;
 	}
 	
+	@Override
 	public float calcCurrentValue() {
 		
 		long currentTime = System.currentTimeMillis();
@@ -25,10 +26,12 @@ public class VelocityMotionMapper implements MotionMapper {
 		
 	}
 
+	@Override
 	public void setLengthRange(float min, float max) {
 				
 	}
 
+	@Override
 	public void updateCurrentLength(float currentLength) {
 		
 		//if velocity isnt calculated til now, take the values for start and end

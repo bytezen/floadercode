@@ -71,6 +71,7 @@ extends MTRoundRectangle {
 	 * @param applet the applet
 	 * @deprecated constructor will deleted! Please , use the constructor with the PApplet instance as the first parameter.
 	 */
+	@Deprecated
 	public MTSceneWindow(final Iscene scene, float borderWidth, float borderHeight, AbstractMTApplication applet) {
 		this(applet, scene, borderWidth, borderHeight);
 	}
@@ -86,6 +87,7 @@ extends MTRoundRectangle {
 	 * @param fboHeight the fbo height
 	 * @deprecated constructor will deleted! Please , use the constructor with the PApplet instance as the first parameter.
 	 */
+	@Deprecated
 	public MTSceneWindow(final Iscene scene, float borderWidth, float borderHeight, final AbstractMTApplication applet, int fboWidth, int fboHeight) {
 		this(applet, scene, borderWidth, borderHeight, fboWidth, fboHeight);
 	}
@@ -125,6 +127,7 @@ extends MTRoundRectangle {
 		//before any other scene is added it becomes the active scene which we dont want
 		if (applet.getSceneCount() == 0){
 			applet.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					applet.addScene(sceneTexture.getScene());
 				}
@@ -135,6 +138,7 @@ extends MTRoundRectangle {
 		
 		
 		sceneTexture.addStateChangeListener(StateChange.COMPONENT_DESTROYED, new StateChangeListener() {
+			@Override
 			public void stateChanged(StateChangeEvent evt) {
 				destroy();
 			}
@@ -152,6 +156,7 @@ extends MTRoundRectangle {
 		}
 		MTImageButton closeButton = new MTImageButton(applet, closeButtonImage);
 		closeButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -176,6 +181,7 @@ extends MTRoundRectangle {
 		}
 		MTImageButton maximizeButton = new MTImageButton(applet, maximizeButtonImage);
 		maximizeButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -199,6 +205,7 @@ extends MTRoundRectangle {
 //		IAnimation closeAnim = new Animation("Window Fade", new MultiPurposeInterpolator(width, 1, 350, 0.2f, 0.5f, 1), this);
 		IAnimation closeAnim = new AniAnimation(width, 1, 350, AniAnimation.SINE_IN, this);
 		closeAnim.addAnimationListener(new IAnimationListener(){
+			@Override
 			public void processAnimationEvent(AnimationEvent ae) {
 //				float delta = ae.getAnimation().getInterpolator().getCurrentStepDelta();
 				switch (ae.getId()) {

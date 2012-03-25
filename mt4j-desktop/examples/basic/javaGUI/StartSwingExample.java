@@ -68,9 +68,11 @@ public class StartSwingExample extends JFrame {
        
         JButton e2 = new JButton("Clear");
         e2.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (instance.getCurrentScene() != null){
 					instance.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							MTComponent[] ch = instance.getCurrentScene().getCanvas().getChildren();
                             for (MTComponent mtComponent : ch) {
@@ -105,12 +107,14 @@ public class StartSwingExample extends JFrame {
 
         JMenuItem addRectItem = new JMenuItem("MTRectangle", KeyEvent.VK_T);
         addRectItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (instance.getCurrentScene() != null){
 					//If we want to modify the MT4j applet from the swing thread
 					//we should wrap the actions into an invokeLater runnable which 
 					//will be executed the next time the mt4j thread runs.
 					instance.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							MTRectangle r = new MTRectangle(instance,0,0,ToolsMath.getRandom(50, 250), ToolsMath.getRandom(50, 250));
 							r.setFillColor(new MTColor(ToolsMath.getRandom(50,255),ToolsMath.getRandom(50,255),ToolsMath.getRandom(50,255)));
@@ -127,12 +131,14 @@ public class StartSwingExample extends JFrame {
         
         JMenuItem addRoundRectItem = new JMenuItem("MTRoundRectangle", KeyEvent.VK_E);
         addRoundRectItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (instance.getCurrentScene() != null){
 					//If we want to modify the MT4j applet from the swing thread
 					//we should wrap the actions into an invokeLater runnable which 
 					//will be executed the next time the mt4j thread runs.
 					instance.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							float arc = ToolsMath.getRandom(8, 25);
 							MTRoundRectangle r = new MTRoundRectangle(instance,0,0, 0,ToolsMath.getRandom(50, 250), ToolsMath.getRandom(50, 250), arc, arc);
@@ -150,12 +156,14 @@ public class StartSwingExample extends JFrame {
         
         JMenuItem addEllItem = new JMenuItem("MTEllipse", KeyEvent.VK_E);
         addEllItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (instance.getCurrentScene() != null){
 					//If we want to modify the MT4j applet from the swing thread
 					//we should wrap the actions into an invokeLater runnable which 
 					//will be executed the next time the mt4j thread runs.
 					instance.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							MTEllipse e = new MTEllipse(instance, new Vector3D(0,0), ToolsMath.getRandom(50, 150),ToolsMath.getRandom(50, 150));
 							e.setFillColor(new MTColor(ToolsMath.getRandom(50,255),ToolsMath.getRandom(50,255),ToolsMath.getRandom(50,255)));
@@ -175,6 +183,7 @@ public class StartSwingExample extends JFrame {
         helpMenu.setMnemonic(KeyEvent.VK_H);
         JMenuItem aboutItem = new JMenuItem("About", KeyEvent.VK_A);
         aboutItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JDialog f = new SimpleAboutDialog(StartSwingExample.this);
 			    f.setVisible(true);
@@ -229,7 +238,8 @@ public class StartSwingExample extends JFrame {
 		    getContentPane().add(p2, BorderLayout.SOUTH);
 
 		    ok.addActionListener(new ActionListener() {
-		      public void actionPerformed(ActionEvent evt) {
+		      @Override
+			public void actionPerformed(ActionEvent evt) {
 		        setVisible(false);
 		      }
 		    });

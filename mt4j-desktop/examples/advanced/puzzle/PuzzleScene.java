@@ -91,6 +91,7 @@ public class PuzzleScene extends AbstractScene{
 		r.registerInputProcessor(new TapProcessor(getMTApplication()));
 		r.addGestureListener(TapProcessor.class, new DefaultButtonClickAction(r));
 		r.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -163,6 +164,7 @@ public class PuzzleScene extends AbstractScene{
 		cell.unregisterAllInputProcessors();
 		cell.registerInputProcessor(new TapProcessor(getMTApplication(), 15));
 		cell.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				switch (te.getTapID()) { 
@@ -178,14 +180,17 @@ public class PuzzleScene extends AbstractScene{
 					list.setVisible(false);
 					loadingScreen.setVisible(true);
 					registerPreDrawAction(new IPreDrawAction() {
+						@Override
 						public void processAction() {
 							getMTApplication().invokeLater(new Runnable() {
+								@Override
 								public void run() {
 									loadNewPuzzle(imageName, horizontalTiles, verticalTiles);
 									loadingScreen.setVisible(false);
 								}
 							});
 						}
+						@Override
 						public boolean isLoop() {return false;}
 					});
 					break;
@@ -207,13 +212,17 @@ public class PuzzleScene extends AbstractScene{
             final float x = ToolsMath.getRandom(0, MT4jSettings.getInstance().getWindowWidth());
             final float y = ToolsMath.getRandom(0, MT4jSettings.getInstance().getWindowHeight());
             registerPreDrawAction(new IPreDrawAction() {
-                public void processAction() {
+                @Override
+				public void processAction() {
                     getMTApplication().invokeLater(new Runnable() {
-                        public void run() {
+                        @Override
+						public void run() {
                             registerPreDrawAction(new IPreDrawAction() {
-                                public void processAction() {
+                                @Override
+								public void processAction() {
                                     getMTApplication().invokeLater(new Runnable() {
-                                        public void run() {
+                                        @Override
+										public void run() {
                                             puzzleGroup.addChild(sh);
 //											sh.tweenTranslateTo(x, y, 0, 400, 0f, 1.0f);
                                             sh.tweenTranslateTo(x, y, 0, 400, AniAnimation.CIRC_OUT, 0);
@@ -221,7 +230,8 @@ public class PuzzleScene extends AbstractScene{
                                     });
                                 }
 
-                                public boolean isLoop() {
+                                @Override
+								public boolean isLoop() {
                                     return false;
                                 }
                             });
@@ -229,7 +239,8 @@ public class PuzzleScene extends AbstractScene{
                     });
                 }
 
-                public boolean isLoop() {
+                @Override
+				public boolean isLoop() {
                     return false;
                 }
             });
@@ -238,8 +249,10 @@ public class PuzzleScene extends AbstractScene{
 	}
 	
 
+	@Override
 	public void onEnter() {	}
 	
+	@Override
 	public void onLeave() {	}
 	
 	

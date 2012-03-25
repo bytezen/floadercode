@@ -133,6 +133,7 @@ public class MTSceneTexture extends MTRectangle {
 		pa.invokeLater(new Runnable() { 
 			//Do the next frame because if MTSceneTexture is created in the first scene,
 			//addScene() will make the scene texture scene the current scene which we dont want!
+			@Override
 			public void run() {
 				//Add it to the scene if it isnt already -> we cant destroy the scene later if it isnt in the app
 				app.addScene(scene);		

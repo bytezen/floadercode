@@ -62,6 +62,7 @@ public class MTImage extends MTRectangle {
 	 * @param pApplet the applet
 	 * @deprecated constructor will be deleted! Please , use the constructor with the PApplet instance as the first parameter.
 	 */
+	@Deprecated
 	public MTImage(PImage texture, PApplet pApplet) {
 		this(pApplet, texture);
 	}
@@ -165,7 +166,7 @@ public class MTImage extends MTRectangle {
 			 */
 			protected void resize(MTPolygon referenceComp, MTComponent compToResize, float width, float height){ 
 				Vector3D centerPoint = getRefCompCenterRelParent(referenceComp);
-				compToResize.scale(1/referenceComp.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), (float)1/referenceComp.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), 1, centerPoint, TransformSpace.RELATIVE_TO_PARENT);
+				compToResize.scale(1/referenceComp.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), 1/referenceComp.getWidthXY(TransformSpace.RELATIVE_TO_PARENT), 1, centerPoint, TransformSpace.RELATIVE_TO_PARENT);
 				compToResize.scale(width, width, 1, centerPoint, TransformSpace.RELATIVE_TO_PARENT);
 			}
 			
@@ -209,6 +210,7 @@ public class MTImage extends MTRectangle {
 
 					IAnimation closeAnim = new Animation("comp Fade", new MultiPurposeInterpolator(width, 1, 300, 0.5f, 0.8f, 1), referencePoly);
 					closeAnim.addAnimationListener(new IAnimationListener(){
+						@Override
 						public void processAnimationEvent(AnimationEvent ae) {
 							switch (ae.getId()) {
 							case AnimationEvent.ANIMATION_STARTED:

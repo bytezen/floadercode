@@ -39,7 +39,7 @@ public class ParticleSystem {
 		
 		// Cycle through the ArrayList backwards b/c we are deleting
 		for (int i = particles.size()-1; i >= 0; i--) {
-			Particle p = (Particle) particles.get(i);
+			Particle p = particles.get(i);
 			p.run(g);
 			if (p.isDead()) {
 				particles.remove(i);

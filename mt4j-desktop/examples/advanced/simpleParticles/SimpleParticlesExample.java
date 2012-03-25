@@ -41,6 +41,7 @@ public class SimpleParticlesExample extends MTApplication {
 			final PImage texture = getMTApplication().loadImage(path + "particle.png");
 			
 			getCanvas().addInputListener(new IMTInputEventListener() {
+				@Override
 				public boolean processInputEvent(MTInputEvent inEvt) {
 					if (inEvt instanceof AbstractCursorInputEvt) {
 						AbstractCursorInputEvt ce = (AbstractCursorInputEvt) inEvt;
@@ -51,10 +52,12 @@ public class SimpleParticlesExample extends MTApplication {
 			});
 		}
 		
+		@Override
 		public void onEnter() {
 			getMTApplication().frameRate(60);
 		}
 		
+		@Override
 		public void onLeave() {	}
 
 	}

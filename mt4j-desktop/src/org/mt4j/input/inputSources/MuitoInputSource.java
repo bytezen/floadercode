@@ -27,6 +27,7 @@ import muito.motion.Settings;
 import muito.motion.provider.MuitoMotionTrackerPorvider;
 
 import org.mt4j.AbstractMTApplication;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.ActiveCursorPool;
 import org.mt4j.input.inputData.InputCursor;
 import org.mt4j.input.inputData.MTFingerInputEvt;
@@ -64,10 +65,11 @@ public class MuitoInputSource extends AbstractInputSource implements MotionProvi
 	/* (non-Javadoc)
 	 * @see muito.motion.MotionProviderListener#newMotionProvided(muito.motion.Motion)
 	 */
+	@Override
 	public void newMotionProvided(Motion motion) {
 		MotionEvent me = motion.getLastEvent();
 		InputCursor m = new InputCursor();
-		MTFingerInputEvt touchEvt = new MTFingerInputEvt(this, me.getXAbs(), me.getYAbs(), MTFingerInputEvt.INPUT_STARTED, m);
+		MTFingerInputEvt touchEvt = new MTFingerInputEvt(this, me.getXAbs(), me.getYAbs(), AbstractCursorInputEvt.INPUT_STARTED, m);
 		
 		long motionID = motion.getId();
 		ActiveCursorPool.getInstance().putActiveCursor(motionID, m);
@@ -81,9 +83,10 @@ public class MuitoInputSource extends AbstractInputSource implements MotionProvi
 	/* (non-Javadoc)
 	 * @see muito.motion.MotionProviderListener#providedMotionUpdated(muito.motion.Motion, muito.motion.MotionEvent)
 	 */
+	@Override
 	public void providedMotionUpdated(Motion m, MotionEvent me) {
 		InputCursor mo = ActiveCursorPool.getInstance().getActiveCursorByID(muitoIDToInputMotionID.get(m.getId()));
-		MTFingerInputEvt te = new MTFingerInputEvt(this, me.getXAbs(), me.getYAbs(), MTFingerInputEvt.INPUT_UPDATED, mo);
+		MTFingerInputEvt te = new MTFingerInputEvt(this, me.getXAbs(), me.getYAbs(), AbstractCursorInputEvt.INPUT_UPDATED, mo);
 		this.enqueueInputEvent(te);
 	}
 	
@@ -91,14 +94,15 @@ public class MuitoInputSource extends AbstractInputSource implements MotionProvi
 	/* (non-Javadoc)
 	 * @see muito.motion.MotionProviderListener#providedMotionCompleted(muito.motion.Motion)
 	 */
+	@Override
 	public void providedMotionCompleted(Motion m) {
 		long motionID = muitoIDToInputMotionID.get(m.getId());
 		InputCursor mo = ActiveCursorPool.getInstance().getActiveCursorByID(motionID);
 		MTFingerInputEvt te;
 		if (mo.getCurrentEvent() != null)
-			te = new MTFingerInputEvt(this, mo.getCurrentEvent().getX(), mo.getCurrentEvent().getY(), MTFingerInputEvt.INPUT_ENDED, mo);
+			te = new MTFingerInputEvt(this, mo.getCurrentEvent().getX(), mo.getCurrentEvent().getY(), AbstractCursorInputEvt.INPUT_ENDED, mo);
 		else
-			te = new MTFingerInputEvt(this, 0,0, MTFingerInputEvt.INPUT_ENDED, mo);
+			te = new MTFingerInputEvt(this, 0,0, AbstractCursorInputEvt.INPUT_ENDED, mo);
 		
 		this.enqueueInputEvent(te);
 		ActiveCursorPool.getInstance().removeCursor(motionID);

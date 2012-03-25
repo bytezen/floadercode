@@ -1,35 +1,14 @@
 package mtvisualizer;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import mtvisualizer.components.NanoUIComponent;
-import mtvisualizer.components.TestHEMeshComponent;
 import mtvisualizer.components.VisualComponent;
 import netP5.NetAddress;
 
 import org.mt4j.AbstractMTApplication;
-import org.mt4j.components.MTComponent;
-import org.mt4j.components.TransformSpace;
-import org.mt4j.components.clipping.Clip;
-import org.mt4j.components.visibleComponents.shapes.MTPolygon;
-import org.mt4j.components.visibleComponents.widgets.MTSlider;
-import org.mt4j.components.visibleComponents.widgets.MTTextArea;
-import org.mt4j.components.visibleComponents.widgets.buttons.MTImageButton;
-import org.mt4j.input.inputProcessors.IGestureEventListener;
-import org.mt4j.input.inputProcessors.MTGestureEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.transition.SlideTransition;
-import org.mt4j.util.MTColor;
-import org.mt4j.util.camera.MTCamera;
-import org.mt4j.util.font.FontManager;
-import org.mt4j.util.font.IFont;
 import org.mt4j.util.math.Vector3D;
-import org.mt4j.util.math.Vertex;
-
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
@@ -60,11 +39,13 @@ public class VisualScene extends AbstractScene {
 		vizComp.oscEvent(msg);
 	}
 
+	@Override
 	public void onEnter() {
 		this.getCanvas().addChild(vizComp);
 		this.getCanvas().addChild(uiComp);
 	}
 
+	@Override
 	public void onLeave() {
 		vizComp.destroy();
 		uiComp.destroy();

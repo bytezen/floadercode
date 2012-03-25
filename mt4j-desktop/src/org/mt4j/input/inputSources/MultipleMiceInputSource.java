@@ -23,6 +23,7 @@ import java.util.WeakHashMap;
 import org.mt4j.AbstractMTApplication;
 import org.mt4j.components.MTCanvas;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.ActiveCursorPool;
 import org.mt4j.input.inputData.InputCursor;
 import org.mt4j.input.inputData.MTFingerInputEvt;
@@ -234,6 +235,7 @@ public class MultipleMiceInputSource extends AbstractInputSource {
 
 		//Add scene change listener to mt app
 		this.mtApp.addSceneChangeListener(new ISceneChangeListener(){
+			@Override
 			public void processSceneChangeEvent(SceneChangeEvent sc) {
 				sceneChange(sc.getLastScene(), sc.getNewScene());
 			}
@@ -378,7 +380,7 @@ public class MultipleMiceInputSource extends AbstractInputSource {
 		}
 		
 		InputCursor m = new InputCursor();
-		MTFingerInputEvt touchEvt = new MTFingerInputEvt(this, mouseInfo.x, mouseInfo.y, MTFingerInputEvt.INPUT_STARTED, m);
+		MTFingerInputEvt touchEvt = new MTFingerInputEvt(this, mouseInfo.x, mouseInfo.y, AbstractCursorInputEvt.INPUT_STARTED, m);
 //		m.addEvent(touchEvt);
 		
 //		long motionID = m.getId();
@@ -459,7 +461,7 @@ public class MultipleMiceInputSource extends AbstractInputSource {
 
 		if (mouseInfo.isButtonPressed){
 			InputCursor m = ActiveCursorPool.getInstance().getActiveCursorByID(device);
-			MTFingerInputEvt te = new MTFingerInputEvt(this, mouseInfo.x, mouseInfo.y, MTFingerInputEvt.INPUT_UPDATED, m);
+			MTFingerInputEvt te = new MTFingerInputEvt(this, mouseInfo.x, mouseInfo.y, AbstractCursorInputEvt.INPUT_UPDATED, m);
 			//			m.addEvent(te);
 //			System.out.println("Motion update on device: #" + device+  " X:" + mouseInfo.x + " Y:" + mouseInfo.y);
 			this.enqueueInputEvent(te);
@@ -508,7 +510,7 @@ public class MultipleMiceInputSource extends AbstractInputSource {
 
 		if (mouseInfo.isButtonPressed){
 			InputCursor m = ActiveCursorPool.getInstance().getActiveCursorByID(device);
-			MTFingerInputEvt te = new MTFingerInputEvt(this, mouseInfo.x, mouseInfo.y, MTFingerInputEvt.INPUT_UPDATED, m);
+			MTFingerInputEvt te = new MTFingerInputEvt(this, mouseInfo.x, mouseInfo.y, AbstractCursorInputEvt.INPUT_UPDATED, m);
 //			m.addEvent(te);
 //			System.out.println("Motion update on device: #" + device+  " X:" + mouseInfo.x + " Y:" + mouseInfo.y);
 			this.enqueueInputEvent(te);
@@ -534,9 +536,9 @@ public class MultipleMiceInputSource extends AbstractInputSource {
 
 			MTFingerInputEvt te;
 			if (m.getCurrentEvent() != null)
-				te = new MTFingerInputEvt(this, m.getCurrentEvent().getX(), m.getCurrentEvent().getY(), MTFingerInputEvt.INPUT_ENDED, m);
+				te = new MTFingerInputEvt(this, m.getCurrentEvent().getX(), m.getCurrentEvent().getY(), AbstractCursorInputEvt.INPUT_ENDED, m);
 			else
-				te = new MTFingerInputEvt(this, 0,0, MTFingerInputEvt.INPUT_ENDED, m);
+				te = new MTFingerInputEvt(this, 0,0, AbstractCursorInputEvt.INPUT_ENDED, m);
 
 //			m.addEvent(te); //werden nicht hier geadded sondern synchroniesert mit dem PApplet thread in den analyzern, so dass immer nur 1
 			// 1 te geadded wird und dann wieder verarbeitet, dann der n�chste

@@ -9,8 +9,10 @@ public class DummyScene extends AbstractScene {
 		super(mtApplication, name);
 	}
 
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {}
 
 }

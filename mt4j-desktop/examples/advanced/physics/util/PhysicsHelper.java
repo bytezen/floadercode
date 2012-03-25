@@ -53,6 +53,7 @@ import org.mt4j.util.opengl.GLMaterial;
 import org.mt4j.util.opengl.GluTrianglulator;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import advanced.physics.physicsShapes.PhysicsRectangle;
 
 public class PhysicsHelper {
@@ -108,6 +109,7 @@ public class PhysicsHelper {
 
 //				comp.addGestureListener(DragProcessor.class, new IGestureEventListener() {
 				//@Override
+				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					DragEvent de = (DragEvent)ge;
 					try{
@@ -121,19 +123,19 @@ public class PhysicsHelper {
 						long cursorID =  de.getDragCursor().getId();
 
 						switch (de.getId()) {
-						case DragEvent.GESTURE_STARTED:
+						case MTGestureEvent.GESTURE_STARTED:
 							comp.sendToFront();
 							body.wakeUp();
 							mouseJoint = createDragJoint(theWorld, body, to.x, to.y);
 							comp.setUserData("mouseJoint" + cursorID, mouseJoint);
 							break;
-						case DragEvent.GESTURE_UPDATED:
+						case MTGestureEvent.GESTURE_UPDATED:
 							mouseJoint = (MouseJoint) comp.getUserData("mouseJoint" + cursorID);
 							if (mouseJoint != null){
 								mouseJoint.setTarget(new Vec2(to.x, to.y));
 							}
 							break;
-						case DragEvent.GESTURE_ENDED:
+						case MTGestureEvent.GESTURE_ENDED:
 							mouseJoint = (MouseJoint) comp.getUserData("mouseJoint" + cursorID);
 							if (mouseJoint != null){
 								comp.setUserData("mouseJoint" + cursorID, null);
@@ -184,6 +186,7 @@ public class PhysicsHelper {
 			//For static bodies just alter the transform of the body
 			comp.addGestureListener(DragProcessor.class, new IGestureEventListener() {
 				//@Override
+				@Override
 				public boolean processGestureEvent(MTGestureEvent ge) {
 					DragEvent de = (DragEvent)ge;
 					Vector3D dir = PhysicsHelper.scaleDown(new Vector3D(de.getTranslationVect()), worldScale);
@@ -194,12 +197,12 @@ public class PhysicsHelper {
 								new Vec2(body.getPosition().x + dir.x, body.getPosition().y + dir.y),
 								body.getAngle());
 						switch (de.getId()) {
-						case DragEvent.GESTURE_STARTED:
+						case MTGestureEvent.GESTURE_STARTED:
 							comp.sendToFront();
 							body.wakeUp();
 							break;
-						case DragEvent.GESTURE_UPDATED:
-						case DragEvent.GESTURE_ENDED:
+						case MTGestureEvent.GESTURE_UPDATED:
+						case MTGestureEvent.GESTURE_ENDED:
 						default:
 							break;
 						}
@@ -368,7 +371,7 @@ public class PhysicsHelper {
 					CircleShape circle = (CircleShape)shape;
 					float radius = circle.getRadius();
 					Vec2 c = body.getWorldLocation(circle.getLocalPosition());
-					app.ellipseMode(PApplet.CENTER);
+					app.ellipseMode(PConstants.CENTER);
 					app.ellipse(c.x, c.y, radius+2, radius+2);
 					break;
 				default:

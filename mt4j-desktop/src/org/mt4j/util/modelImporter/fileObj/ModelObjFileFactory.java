@@ -414,6 +414,7 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 	 * 
 	 * @throws FileNotFoundException the file not found exception
 	 */
+	@Override
 	public MTTriangleMesh[] loadModelImpl(PApplet pa, String filename, float creaseAngle, boolean flipTextureY, boolean flipTextureX) throws FileNotFoundException {
 		this.pa = pa;
 		this.setBasePathFromFilename(filename);
@@ -580,18 +581,18 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 		int t;
 	
 		st.getToken();
-		while (st.ttype != ObjectFileParser.TT_EOF) {
+		while (st.ttype != StreamTokenizer.TT_EOF) {
 	
 			// Print out one token for each line
 			if ((DEBUG & 16) != 0) {
 				System.out.print("Token ");
-				if (st.ttype == ObjectFileParser.TT_EOL) System.out.println("EOL");
-				else if (st.ttype == ObjectFileParser.TT_WORD)
+				if (st.ttype == StreamTokenizer.TT_EOL) System.out.println("EOL");
+				else if (st.ttype == StreamTokenizer.TT_WORD)
 					System.out.println(st.sval);
 				else System.out.println((char)st.ttype);
 			}
 	
-			if (st.ttype == ObjectFileParser.TT_WORD) {
+			if (st.ttype == StreamTokenizer.TT_WORD) {
 				if (st.sval.equals("v")) {
 					readVertex(st);
 				} else if (st.sval.equals("vn")) {
@@ -868,7 +869,7 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 		String curMat = groupMaterials.get(curGroup);
 
 		// New faces will be added to the curGroup
-		if (st.ttype != ObjectFileParser.TT_WORD) 
+		if (st.ttype != StreamTokenizer.TT_WORD) 
 			curGroup = "default";
 		else 
 			curGroup = st.sval;
@@ -898,7 +899,7 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 	 */
 	void readMaterialName(ObjectFileParser st) throws ParsingErrorException {
 		st.getToken();
-		if (st.ttype == ObjectFileParser.TT_WORD) {
+		if (st.ttype == StreamTokenizer.TT_WORD) {
 			String useMaterialName = st.sval;
 			
 			//////FIXME ADDED! added, to group by material if no groups are in obj file!
@@ -948,8 +949,8 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 		// Get name of material file (skip path)
 		do {
 			st.getToken();
-			if (st.ttype == ObjectFileParser.TT_WORD) s = st.sval;
-		} while (st.ttype != ObjectFileParser.TT_EOL);
+			if (st.ttype == StreamTokenizer.TT_WORD) s = st.sval;
+		} while (st.ttype != StreamTokenizer.TT_EOL);
 
 		materials.readMaterialFile(basePath, s);
 
@@ -963,7 +964,7 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 	 */
 	void readSmoothingGroup(ObjectFileParser st) throws ParsingErrorException {
 		st.getToken();
-		if (st.ttype != ObjectFileParser.TT_WORD) {
+		if (st.ttype != StreamTokenizer.TT_WORD) {
 			st.skipToNextLine();
 			return;
 		}
@@ -1230,6 +1231,7 @@ public class ModelObjFileFactory  extends ModelImporterFactory {
 
 
 	
+	@Override
 	public void setDebug(boolean debugNormalGenerator) {
 		this.debugNormalGenerator = debugNormalGenerator;
 	}

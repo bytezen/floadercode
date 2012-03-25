@@ -72,8 +72,8 @@ public class MTSquareMenu extends MTRectangle implements CSSStylableComponent {
 	 */
 	public MTSquareMenu(AbstractMTApplication app, Vector3D position,
 			List<MenuItem> menuItems, float size) {
-		super(app, position.x, position.y, (float) (int) Math
-						.sqrt(menuItems.size() + 1) * size, (float) (int) Math
+		super(app, position.x, position.y, (int) Math
+						.sqrt(menuItems.size() + 1) * size, (int) Math
 				.sqrt(menuItems.size() + 1) * size);
 		this.app = app;
 		this.size = size;
@@ -237,10 +237,10 @@ public class MTSquareMenu extends MTRectangle implements CSSStylableComponent {
 			if (workingCopy.width < workingCopy.height) {
 				workingCopy.resize(
 						size,
-						(int) ((float) workingCopy.height / ((float) workingCopy.width / (float) size)));
+						(int) (workingCopy.height / ((float) workingCopy.width / (float) size)));
 			} else {
 				workingCopy.resize(
-						(int) ((float) workingCopy.width / ((float) workingCopy.height / (float) size)),
+						(int) (workingCopy.width / ((float) workingCopy.height / (float) size)),
 						size);
 			}
 
@@ -299,7 +299,7 @@ public class MTSquareMenu extends MTRectangle implements CSSStylableComponent {
 			}
 		}
 
-		float spc = size / (float) maxNumberCharacters; // Space Per Character
+		float spc = size / maxNumberCharacters; // Space Per Character
 		int returnValue = (int)(-0.5 + 1.725 * spc); //Determined using Linear Regression
 		return returnValue;
 	}
@@ -463,7 +463,7 @@ public class MTSquareMenu extends MTRectangle implements CSSStylableComponent {
 			rect.setStrokeWeight(vss.getBorderWidth());
 
 			// Set Font and Position for the child MTTextAreas
-			if (((MTRectangle) c).getTexture() == null) {
+			if ((c).getTexture() == null) {
 				rect.setFillColor(vss.getBackgroundColor());
 				for (MTComponent d : c.getChildren()) {
 					if (d instanceof MTTextArea) {
@@ -563,6 +563,7 @@ public class MTSquareMenu extends MTRectangle implements CSSStylableComponent {
 		/* (non-Javadoc)
 		 * @see org.mt4j.input.inputProcessors.IGestureEventListener#processGestureEvent(org.mt4j.input.inputProcessors.MTGestureEvent)
 		 */
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			if (ge instanceof TapEvent) {
 				

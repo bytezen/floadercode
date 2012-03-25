@@ -91,7 +91,8 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
     /* (non-Javadoc)
      * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#edgeFlag(boolean)
      */
-    public void edgeFlag(boolean boundaryEdge){
+    @Override
+	public void edgeFlag(boolean boundaryEdge){
     	//even the empty implementation of this method forces the tesselator to
     	//procuce _triangle_ lists only! - no fans or strips
     }
@@ -112,6 +113,7 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
     	if (this.p instanceof AbstractMTApplication ) {
 			AbstractMTApplication mtApp = (AbstractMTApplication) this.p;
 			mtApp.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					deleteTess();
 				}
@@ -277,7 +279,8 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
        /* (non-Javadoc)
         * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#begin(int)
         */
-       public void begin(int type) {
+       @Override
+	public void begin(int type) {
     	   /*
            switch (type) {
 			case GL.GL_TRIANGLE_FAN: System.out.println("GL_TRIANGLE_FAN");	break;
@@ -307,7 +310,8 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
         * 
         * @param vertexData the vertex data
         */
-       public void vertex(Object vertexData) {
+       @Override
+	public void vertex(Object vertexData) {
 //    	   double[] dv = (double[]) vertexData;
 //    	   gl.glColor4d(dv[3], dv[4], dv[5], dv[6]);
     	   
@@ -374,7 +378,8 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
         * @param weight the weight
         * @param outData the out data
         */
-       public void combine(double[] coords, Object[] data, float[] weight, Object[] outData) {
+       @Override
+	public void combine(double[] coords, Object[] data, float[] weight, Object[] outData) {
 //           double[] vertex = new double[3];
 //           vertex[0] = coords[0];
 //           vertex[1] = coords[1];
@@ -415,7 +420,8 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
        /* (non-Javadoc)
         * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#end()
         */
-       public void end() {
+       @Override
+	public void end() {
     	   
        }
        
@@ -423,7 +429,8 @@ public class GluTrianglulator extends GLUtessellatorCallbackAdapter{
        /* (non-Javadoc)
         * @see javax.media.opengl.glu.GLUtessellatorCallbackAdapter#error(int)
         */
-       public void error(int errnum) {
+       @Override
+	public void error(int errnum) {
            System.err.println("Tessellation Error: " + glu.gluErrorString(errnum));
 //           System.exit(0);
        }

@@ -177,6 +177,7 @@ public class DepthProcessor extends AbstractCursorProcessor {
 		}
 	}
 
+	@Override
 	public void cursorUnlocked(InputCursor cursor) {
 		logger
 				.debug(this.getName()
@@ -214,6 +215,7 @@ public class DepthProcessor extends AbstractCursorProcessor {
 
 	}
 
+	@Override
 	public void cursorUpdated(InputCursor inputCursor,
 			AbstractCursorInputEvt positionEvent) {
 		IMTComponent3D comp = positionEvent.getTarget();

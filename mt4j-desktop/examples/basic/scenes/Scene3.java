@@ -54,6 +54,7 @@ public class Scene3 extends AbstractScene {
 		if (MT4jSettings.getInstance().isOpenGlMode())
 			previousSceneButton.setUseDirectGL(true);
 		previousSceneButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -76,6 +77,7 @@ public class Scene3 extends AbstractScene {
 		//Register flick gesture with the canvas to change the scene
 		getCanvas().registerInputProcessor(new FlickProcessor());
 		getCanvas().addGestureListener(FlickProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				FlickEvent e = (FlickEvent)ge;
 				if (e.getId() == MTGestureEvent.GESTURE_ENDED && e.isFlick()){
@@ -94,10 +96,12 @@ public class Scene3 extends AbstractScene {
 		});
 	}
 
+	@Override
 	public void onEnter() {
 		System.out.println("Entered scene: " +  this.getName());
 	}
 	
+	@Override
 	public void onLeave() {	
 		System.out.println("Left scene: " +  this.getName());
 	}

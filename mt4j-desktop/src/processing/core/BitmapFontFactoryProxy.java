@@ -55,6 +55,7 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 //		FontManager.getInstance().registerFontFactory("", new BitmapFontFactory());
 	//	}
 	
+	@Override
 	public IFont getCopy(IFont font) {
 		if (font instanceof BitmapFont) {
 			BitmapFont bf = (BitmapFont) font;
@@ -64,10 +65,12 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 		return null;
 	}
 	
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color) {
 		return this.createFont(pa, fontName, fontSize, color, color, true);
 	}
 
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color, boolean antiAliased) {
 		return this.createFont(pa, fontName, fontSize, color, color, antiAliased);
 	}
@@ -75,6 +78,7 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#createFont(processing.core.PApplet, java.lang.String, int, org.mt4j.util.MTColor, org.mt4j.util.MTColor)
 	 */
+	@Override
 	public IFont createFont(
 			PApplet pa, 
 			String fontFileName, 
@@ -88,6 +92,7 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#createFont(processing.core.PApplet, java.lang.String, int, org.mt4j.util.MTColor, org.mt4j.util.MTColor)
 	 */
+	@Override
 	public IFont createFont(
 			PApplet pa, 
 			String fontFileName, 
@@ -123,7 +128,7 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 //		String fontFamily = f.getFamily(); 
 		//FIXME ascent() and descent() return to small values! wheres the difference??
 		int fontMaxAscent = Math.round(p5Font.ascent()* (fontSize));
-		fontMaxAscent +=(float)fontSize/5.5f; //FIXME HACK! because the same ttf fonts seem to have bigger ascents
+		fontMaxAscent +=fontSize/5.5f; //FIXME HACK! because the same ttf fonts seem to have bigger ascents
 //		int fontMaxAscent = p5Font.lazyMetrics.getAscent();
 		int fontMaxDescent = Math.round(p5Font.descent() * fontSize);
 		/*
@@ -163,7 +168,7 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 //		int spaceIndex = p5Font.index('-');
 //		int spaceAdvancex = p5Font.width[spaceIndex];
 //		int spaceAdvancex = p5Font.getGlyph('-').width;
-		int spaceAdvancex = Math.round((p5Font.width('i') * (float) fontSize));
+		int spaceAdvancex = Math.round((p5Font.width('i') * fontSize));
 //		int spaceAdvancex = Math.round(pa.textWidth(' '));
 //		int spaceAdvancex = Math.round(p5Font.width(' ') * p5Font.size);
 		BitmapFontCharacter space = new BitmapFontCharacter(pa, dummy, " ", 0, 0, spaceAdvancex);
@@ -378,7 +383,7 @@ public class BitmapFontFactoryProxy implements IFontFactory {
 				
 //				PImage copy = new PImage(ToolsMath.nearestPowerOfTwo(charWidth + shiftAmount), ToolsMath.nearestPowerOfTwo(charHeight + shiftAmount), PImage.ARGB);
 //				
-				PImage copy = new PImage(nextPowerOfTwo(charImage.width + leftShiftAmount + 1), nextPowerOfTwo(charImage.height + topShiftAmount +1), PImage.ARGB);
+				PImage copy = new PImage(nextPowerOfTwo(charImage.width + leftShiftAmount + 1), nextPowerOfTwo(charImage.height + topShiftAmount +1), PConstants.ARGB);
 //				PImage copy = new PImage(charImage.width + leftShiftAmount + 1, charImage.height + topShiftAmount, PImage.ARGB);
 				
 				copy.copy(charImage, 0, 0, charWidth, charHeight, leftShiftAmount, topShiftAmount, charWidth, charHeight);

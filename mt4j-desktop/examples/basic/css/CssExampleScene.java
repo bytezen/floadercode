@@ -59,8 +59,10 @@ public class CssExampleScene  extends AbstractScene{
 			
 	}
 
+	@Override
 	public void onEnter() { }
 	
+	@Override
 	public void onLeave() {	}
 
 	public class gestureListener implements IGestureEventListener {
@@ -71,6 +73,7 @@ public class CssExampleScene  extends AbstractScene{
 		}
 		
 		
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			if (ge instanceof TapEvent) {
 				TapEvent te = (TapEvent) ge;

@@ -22,6 +22,7 @@ import org.mt4j.util.math.Vector3D;
 import org.mt4j.util.math.Vertex;
 import org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.MTClusterEvent;
 import org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.MTLassoSelectionEvent;
+import org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.MTSelectionEvent;
 
 import processing.core.PApplet;
 
@@ -34,6 +35,7 @@ public class LassoVisualizationAction implements IMTEventListener {
 	{
 		this.pApplet = pApplet;
 	}
+	@Override
 	public void processMTEvent(MTEvent mtEvent) {
 		
 		if(mtEvent instanceof MTLassoSelectionEvent)
@@ -41,7 +43,7 @@ public class LassoVisualizationAction implements IMTEventListener {
 			MTLassoSelectionEvent lassoEvent = (MTLassoSelectionEvent)mtEvent;
 			switch(lassoEvent.getId())
 			{
-				case MTLassoSelectionEvent.SELECTION_ENDED:
+				case MTSelectionEvent.SELECTION_ENDED:
 					if(lassoEvent.getCluster()!=null&&lassoEvent.getSelectedComps().size()>1)
 					{
 						lassoEvent.getSelectionPoly().setFillColor(new MTColor(100,150,250,50));
@@ -67,7 +69,7 @@ public class LassoVisualizationAction implements IMTEventListener {
 						
 					}
 					break;
-				case MTLassoSelectionEvent.SELECTION_UPDATED:					
+				case MTSelectionEvent.SELECTION_UPDATED:					
 					break;
 			}
 		}

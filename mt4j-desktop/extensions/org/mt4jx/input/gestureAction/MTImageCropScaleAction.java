@@ -49,6 +49,7 @@ public class MTImageCropScaleAction implements IGestureEventListener{
 			this.shape = shape;
 		}
 
+		@Override
 		public boolean processGestureEvent(MTGestureEvent ge) {
 			ScaleEvent se = (ScaleEvent)ge;
 			if (se.getId() == MTGestureEvent.GESTURE_STARTED){

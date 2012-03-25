@@ -27,34 +27,42 @@ public class DesktopPlatformUtil implements IPlatformUtil {
 		this.pg3d = ((PGraphics3D)app.getPGraphics());
 	}
 
+	@Override
 	public PGraphics getPGraphics(){
 		return app.getPGraphics();
 	}
 	
+	@Override
 	public PMatrix3D getModelView() {
 		return pg3d.modelview;
 	}
 	
+	@Override
 	public PMatrix3D getModelViewInv() {
 		return pg3d.modelviewInv;
 	}
 	
+	@Override
 	public PMatrix3D getCamera() {
 		return pg3d.camera;
 	}
 	
+	@Override
 	public float getCameraFOV() {
 		return pg3d.cameraFOV;
 	}
 
+	@Override
 	public float getCameraAspect() {
 		return pg3d.cameraAspect;
 	}
 
+	@Override
 	public float getCameraNear() {
 		return pg3d.cameraNear;
 	}
 
+	@Override
 	public float getCameraFar() {
 		return pg3d.cameraFar;
 	}
@@ -72,34 +80,41 @@ public class DesktopPlatformUtil implements IPlatformUtil {
 //    	((PGraphicsOpenGL)app.getPGraphics()).endGL();
 //    }
 	
+	@Override
 	public GL10 getGL() {
 		return app.getGL10(); //FIXME DOES THE CAST TO kronos.GL10 work!?? -> prolly not
 	}
 	
+	@Override
 	public GL11 getGL11() {
 		return app.getGL11(); 
 	}
 
+	@Override
 	public GL20 getGL20() {
 		return app.getGL20(); 
 	}
 
+	@Override
 	public GL10 beginGL() {
 		((PGraphicsOpenGL)app.getPGraphics()).beginGL();
 //		app.beginGL();
 		return app.getGL10();
 	}
     
-    public void endGL(){
+    @Override
+	public void endGL(){
     	((PGraphicsOpenGL)app.getPGraphics()).endGL();
 //    	app.endGL();
     }
     
     
-    public int getPlatform() {
+    @Override
+	public int getPlatform() {
 		return IPlatformUtil.DESKTOP;
 	}
 
+	@Override
 	public GL11Plus getGL11Plus() {
 		return app.getGL11Plus();
 	}

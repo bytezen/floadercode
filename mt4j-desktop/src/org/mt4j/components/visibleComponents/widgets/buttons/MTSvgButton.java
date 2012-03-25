@@ -181,6 +181,7 @@ public class MTSvgButton extends MTSvg implements IclickableButton{
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.interfaces.IclickableButton#setSelected(boolean)
 	 */
+	@Override
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
@@ -189,6 +190,7 @@ public class MTSvgButton extends MTSvg implements IclickableButton{
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.interfaces.IclickableButton#isSelected()
 	 */
+	@Override
 	public boolean isSelected() {
 		return this.selected;
 	}

@@ -192,10 +192,12 @@ public class FlickrScene extends AbstractScene {
 						        flickrLoader.setFotoLoadCount(5);
 						        //Define action when loader thread finished
 						        flickrLoader.addProgressFinishedListener(new IMTEventListener(){
+									@Override
 									public void processMTEvent(MTEvent mtEvent) {
 										//Add the loaded fotos in the main drawing thread to
 										//avoid threading problems
 										registerPreDrawAction(new IPreDrawAction(){
+											@Override
 											public void processAction() {
 												MTImage[] fotos = flickrLoader.getMtFotos();
                                                 for (MTImage card : fotos) {
@@ -210,6 +212,7 @@ public class FlickrScene extends AbstractScene {
 												progressBar.setVisible(false);
 											}
 											
+											@Override
 											public boolean isLoop() {
 												return false;
 											}
@@ -247,10 +250,12 @@ public class FlickrScene extends AbstractScene {
 	}
 	
 	
+	@Override
 	public void onEnter() {
 		getMTApplication().registerKeyEvent(this);
 	}
 	
+	@Override
 	public void onLeave() {	
 		getMTApplication().unregisterKeyEvent(this);
 	}

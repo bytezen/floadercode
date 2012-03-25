@@ -45,6 +45,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#startTransformList()
 	 */
+	@Override
 	public void startTransformList() throws ParseException {
 		
 	}
@@ -52,6 +53,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#matrix(float, float, float, float, float, float)
 	 */
+	@Override
 	public void matrix(float a, float b, float c, float d, float e, float f)  throws ParseException {
 		if (verbose)
 			System.out.println("Matrix: " + a + " " + b + " " + c + "\n" + d + " " + e + " " + f);
@@ -67,6 +69,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#rotate(float)
 	 */
+	@Override
 	public void rotate(float theta) throws ParseException {
 		resultMatrix = resultMatrix.mult(Matrix.getZRotationMatrix(new Vector3D(0,0,0), theta), resultMatrix);
 	}
@@ -74,6 +77,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#rotate(float, float, float)
 	 */
+	@Override
 	public void rotate(float theta, float cx, float cy)  throws ParseException {
 		resultMatrix = resultMatrix.mult(Matrix.getZRotationMatrix(new Vector3D(cx,cy,0), theta), resultMatrix);
 	}
@@ -81,6 +85,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#scale(float)
 	 */
+	@Override
 	public void scale(float sx) throws ParseException {
 		resultMatrix = resultMatrix.mult(Matrix.getScalingMatrix(sx, 1, 1), resultMatrix);
 	}
@@ -88,6 +93,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#scale(float, float)
 	 */
+	@Override
 	public void scale(float sx, float sy) throws ParseException {
 		resultMatrix = resultMatrix.mult(Matrix.getScalingMatrix(sx, sy, 1), resultMatrix);
 	}
@@ -95,6 +101,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#skewX(float)
 	 */
+	@Override
 	public void skewX(float arg0) throws ParseException {
 		resultMatrix = resultMatrix.mult(new Matrix(
                 1, 0, 0, 0,
@@ -107,6 +114,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#skewY(float)
 	 */
+	@Override
 	public void skewY(float arg0) throws ParseException {
 		resultMatrix = resultMatrix.mult(new Matrix(
 				1, (float)Math.tan(arg0), 0, 0,
@@ -120,6 +128,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#translate(float)
 	 */
+	@Override
 	public void translate(float tx) throws ParseException {
 		resultMatrix = resultMatrix.mult(Matrix.getTranslationMatrix(tx, 0, 0), resultMatrix);
 	}
@@ -127,6 +136,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#translate(float, float)
 	 */
+	@Override
 	public void translate(float tx, float ty) throws ParseException {
 		resultMatrix = resultMatrix.mult(Matrix.getTranslationMatrix(tx, ty, 0), resultMatrix);
 	}
@@ -134,6 +144,7 @@ public class CustomTransformHandler implements TransformListHandler {
 	/* (non-Javadoc)
 	 * @see org.apache.batik.parser.TransformListHandler#endTransformList()
 	 */
+	@Override
 	public void endTransformList() throws ParseException {
 		
 	}

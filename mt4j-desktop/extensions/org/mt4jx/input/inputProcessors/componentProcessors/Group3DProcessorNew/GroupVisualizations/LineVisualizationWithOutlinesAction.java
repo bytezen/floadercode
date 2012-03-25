@@ -2,27 +2,19 @@ package org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.
 
 import java.util.ArrayList;
 
-import javax.media.opengl.GL;
-
 import org.mt4j.components.MTComponent;
 import org.mt4j.components.visibleComponents.shapes.MTLine;
 import org.mt4j.components.visibleComponents.shapes.mesh.MTTriangleMesh;
 import org.mt4j.input.IMTEventListener;
 import org.mt4j.input.MTEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
-import org.mt4j.input.inputProcessors.componentProcessors.lassoProcessor.ILassoable;
 import org.mt4j.input.inputProcessors.componentProcessors.rotate3DProcessor.Cluster3DExt;
 import org.mt4j.input.inputProcessors.componentProcessors.rotate3DProcessor.IVisualizeMethodProvider;
-import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
-import org.mt4j.util.MTColor;
-import org.mt4j.util.math.Tools3D;
 import org.mt4j.util.math.Vector3D;
 import org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.MTClusterEvent;
 import org.mt4jx.util.extension3D.ComponentHelper;
-import org.mt4jx.util.extension3D.MergeHelper;
-
 import processing.core.PApplet;
-import processing.core.PImage;
+import processing.core.PConstants;
 
 public class LineVisualizationWithOutlinesAction implements IMTEventListener,IVisualizeMethodProvider {
 
@@ -34,6 +26,7 @@ public class LineVisualizationWithOutlinesAction implements IMTEventListener,IVi
 		this.pApplet = pApplet;
 		startTime = System.currentTimeMillis();
 	}
+	@Override
 	public void processMTEvent(MTEvent mtEvent) {
 		if(mtEvent instanceof MTClusterEvent)
 		{
@@ -57,6 +50,7 @@ public class LineVisualizationWithOutlinesAction implements IMTEventListener,IVi
 
 	}
 	
+	@Override
 	public void visualize(Cluster3DExt cluster)
 	{
 		
@@ -67,7 +61,7 @@ public class LineVisualizationWithOutlinesAction implements IMTEventListener,IVi
 				if(comp instanceof MTTriangleMesh)
 				{
 					MTTriangleMesh mesh = (MTTriangleMesh)comp;
-					if((long)((((double)(System.currentTimeMillis()-startTime))/500.0))%2==0)
+					if((long)((((System.currentTimeMillis()-startTime))/500.0))%2==0)
 					{
 						mesh.getMaterial().setEmission(new float[]{255.f,0.f,0.f});
 					}else
@@ -89,7 +83,7 @@ public class LineVisualizationWithOutlinesAction implements IMTEventListener,IVi
 //		gl.glEnd();
 //		Tools3D.endGL(pApplet);
 		
-		pApplet.beginShape(PApplet.LINES);
+		pApplet.beginShape(PConstants.LINES);
 		MTLine[] lines = getVisualizationLines(cluster.getChildren());
 		for(MTLine line : lines)
 		{
@@ -106,7 +100,7 @@ public class LineVisualizationWithOutlinesAction implements IMTEventListener,IVi
 				
 		for(MTComponent comp : selectedComps)
 		{
-			MTComponent mtcomp = (MTComponent)comp;
+			MTComponent mtcomp = comp;
 			
 			centerPoints.add(ComponentHelper.getCenterPointGlobal(comp));
 		}

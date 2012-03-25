@@ -90,11 +90,13 @@ public class MainDrawingScene extends AbstractScene {
         b.setNoStroke(true);
         b.translate(new Vector3D(-50,0,0));
         b.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
 //					//As we are messing with opengl here, we make sure it happens in the rendering thread
 					pa.invokeLater(new Runnable() {
+						@Override
 						public void run() {
 							sceneTexture.getFbo().clear(true, 255, 255, 255, 0, true);						
 						}
@@ -120,6 +122,7 @@ public class MainDrawingScene extends AbstractScene {
         brushButton.translate(new Vector3D(-50f, 130,0));
         brushButton.setStrokeColor(new MTColor(0,0,0));
         brushButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -132,6 +135,7 @@ public class MainDrawingScene extends AbstractScene {
         });
         
         penButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -150,6 +154,7 @@ public class MainDrawingScene extends AbstractScene {
         floppyButton.translate(new Vector3D(-50f, 260,0));
         floppyButton.setNoStroke(true);
         floppyButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -161,10 +166,12 @@ public class MainDrawingScene extends AbstractScene {
 //						}
 //					});
 					drawingScene.registerPreDrawAction(new IPreDrawAction() {
+						@Override
 						public void processAction() {
 							//drawingScene.getCanvas().drawAndUpdateCanvas(pa.g, 0);
 							pa.saveFrame();
 						}
+						@Override
 						public boolean isLoop() {
 							return false;
 						}
@@ -182,6 +189,7 @@ public class MainDrawingScene extends AbstractScene {
         colorWidget.translate(new Vector3D(0f, 135,0));
         colorWidget.setStrokeColor(new MTColor(0,0,0));
         colorWidget.addGestureListener(DragProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				if (ge.getId()== MTGestureEvent.GESTURE_ENDED){
 					if (colorWidget.isVisible()){
@@ -202,6 +210,7 @@ public class MainDrawingScene extends AbstractScene {
         colPickButton.translate(new Vector3D(-50f, 195,0));
         colPickButton.setNoStroke(true);
         colPickButton.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				TapEvent te = (TapEvent)ge;
 				if (te.isTapped()){
@@ -227,6 +236,7 @@ public class MainDrawingScene extends AbstractScene {
         slider.getKnob().setFillColor(new MTColor(70,70,70));
         slider.getKnob().setStrokeColor(new MTColor(70,70,70));
         slider.addPropertyChangeListener("value", new PropertyChangeListener() {
+			@Override
 			public void propertyChange(PropertyChangeEvent p) {
 				drawingScene.setBrushScale((Float)p.getNewValue());
 			}
@@ -249,8 +259,10 @@ public class MainDrawingScene extends AbstractScene {
         
 	}
 
+	@Override
 	public void onEnter() {}
 	
+	@Override
 	public void onLeave() {	}
 	
 	@Override

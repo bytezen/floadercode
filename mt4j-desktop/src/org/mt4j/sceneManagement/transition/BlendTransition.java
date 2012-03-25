@@ -85,6 +85,7 @@ public class BlendTransition extends AbstractTransition {
 //		anim = new Animation("Blend animation ", new MultiPurposeInterpolator(255,0, this.duration, 0, 0.7f, 1) , this);
 		anim = new AniAnimation(255,0, this.duration, AniAnimation.CIRC_OUT, this);
 		anim.addAnimationListener(new IAnimationListener(){
+			@Override
 			public void processAnimationEvent(AnimationEvent ae) {
 				float val = ae.getValue();
 				switch (ae.getId()) {
@@ -109,6 +110,7 @@ public class BlendTransition extends AbstractTransition {
 	/* (non-Javadoc)
 	 * @see org.mt4j.sceneManagement.transition.ITransition#isFinished()
 	 */
+	@Override
 	public boolean isFinished() {
 		return finished;
 	}
@@ -128,6 +130,7 @@ public class BlendTransition extends AbstractTransition {
 	/* (non-Javadoc)
 	 * @see org.mt4j.sceneManagement.transition.ITransition#setup(org.mt4j.sceneManagement.Iscene, org.mt4j.sceneManagement.Iscene)
 	 */
+	@Override
 	public void setup(Iscene lastScenee, Iscene nextScenee) {
 		this.lastScene = lastScenee;
 		this.nextScene = nextScenee;
@@ -139,6 +142,7 @@ public class BlendTransition extends AbstractTransition {
 		app.getInputManager().disableGlobalInputProcessors(nextScene);
 		
 		app.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				lastSceneWindow = new MTSceneTexture(app,0, 0, Math.round(app.width/2f), Math.round(app.height/2f), lastScene);
 				lastSceneRectangle = new MTRectangle(app,0, 0, app.width, app.height);
@@ -162,6 +166,7 @@ public class BlendTransition extends AbstractTransition {
 	}
 	
 	
+	@Override
 	public void onLeave() {
 		finished = true;
 		this.lastScene = null;

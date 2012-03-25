@@ -62,6 +62,7 @@ public class FingerTapSelectionManager extends AbstractGlobalInputProcessor impl
 	}
 	
 	
+	@Override
 	public void addSelectionListener(ISelectionListener listener) {
 		if(!(selectionListeners.contains(listener)))
 		{
@@ -69,6 +70,7 @@ public class FingerTapSelectionManager extends AbstractGlobalInputProcessor impl
 		}
 	}
 
+	@Override
 	public void fireEvent(MTEvent event) {
 		for(int i=0;i<selectionListeners.size();i++)
 		{
@@ -76,6 +78,7 @@ public class FingerTapSelectionManager extends AbstractGlobalInputProcessor impl
 		}	
 	}
 
+	@Override
 	public void removeSelectionListener(ISelectionListener listener) {
 		if(selectionListeners.contains(listener))
 		{
@@ -91,9 +94,10 @@ public class FingerTapSelectionManager extends AbstractGlobalInputProcessor impl
 	public synchronized void addClusterable(MTComponent selectable){
 		getDragSelectables().add(selectable);		
 		if (selectable instanceof MTComponent) {
-			MTComponent baseComp = (MTComponent) selectable;
+			MTComponent baseComp = selectable;
 			
 			baseComp.addStateChangeListener(StateChange.COMPONENT_DESTROYED, new StateChangeListener(){
+				@Override
 				public void stateChanged(StateChangeEvent evt) {
 					if (evt.getSource() instanceof ILassoable) {
 						ILassoable clusterAble = (ILassoable) evt.getSource();

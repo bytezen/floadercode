@@ -39,6 +39,7 @@ import org.mt4j.util.opengl.JoglGL11;
 import org.mt4j.util.opengl.JoglGL20Plus;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.opengl.PGraphicsOpenGL;
 
 
@@ -209,7 +210,7 @@ public abstract class MTApplication extends AbstractMTApplication {
 		if (MT4jSettings.getInstance().getRendererMode() == MT4jSettings.OPENGL_MODE)
 			this.size(MT4jSettings.getInstance().getWindowWidth(), MT4jSettings.getInstance().getWindowHeight(), CUSTOM_OPENGL_GRAPHICS);
 		else if (MT4jSettings.getInstance().getRendererMode() == MT4jSettings.P3D_MODE)
-			this.size(MT4jSettings.getInstance().getWindowWidth(), MT4jSettings.getInstance().getWindowHeight(), PApplet.P3D);
+			this.size(MT4jSettings.getInstance().getWindowWidth(), MT4jSettings.getInstance().getWindowHeight(), PConstants.P3D);
 		
 		//TOGGLES ALWAYS ON TOP MODE
 		//this.frame.setAlwaysOnTop(true);
@@ -295,7 +296,7 @@ public abstract class MTApplication extends AbstractMTApplication {
 	    logger.info("Maximum framerate: \"" + MT4jSettings.getInstance().getMaxFrameRate() + "\"");
 	    
 	    //FIXME TODO add in settings.txt?
-	    hint(AbstractMTApplication.DISABLE_OPENGL_ERROR_REPORT);
+	    hint(PConstants.DISABLE_OPENGL_ERROR_REPORT);
 		
 		MT4jSettings.getInstance().programStartTime = System.currentTimeMillis();
 		

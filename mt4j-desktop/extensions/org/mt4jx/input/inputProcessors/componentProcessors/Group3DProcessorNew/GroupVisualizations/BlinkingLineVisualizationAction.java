@@ -14,6 +14,7 @@ import org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.M
 import org.mt4jx.util.extension3D.ComponentHelper;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class BlinkingLineVisualizationAction implements IMTEventListener,IVisualizeMethodProvider {
 
@@ -26,6 +27,7 @@ public class BlinkingLineVisualizationAction implements IMTEventListener,IVisual
 		this.pApplet = pApplet;
 		startTime = System.currentTimeMillis();
 	}
+	@Override
 	public void processMTEvent(MTEvent mtEvent) {
 		if(mtEvent instanceof MTClusterEvent)
 		{
@@ -50,9 +52,10 @@ public class BlinkingLineVisualizationAction implements IMTEventListener,IVisual
 
 	}
 	
+	@Override
 	public void visualize(Cluster3DExt cluster)
 	{		
-		if((long)((((double)(System.currentTimeMillis()-startTime))/500.0))%2==0)
+		if((long)((((System.currentTimeMillis()-startTime))/500.0))%2==0)
 		{
 //			GL gl = Tools3D.getGL(pApplet);
 //			Tools3D.beginGL(pApplet);
@@ -66,7 +69,7 @@ public class BlinkingLineVisualizationAction implements IMTEventListener,IVisual
 //			gl.glEnd();
 //			Tools3D.endGL(pApplet);
 			
-			pApplet.beginShape(PApplet.LINES);
+			pApplet.beginShape(PConstants.LINES);
 			MTLine[] lines = getVisualizationLines(cluster.getChildren());
 			for(MTLine line : lines)
 			{
@@ -88,7 +91,7 @@ public class BlinkingLineVisualizationAction implements IMTEventListener,IVisual
 		{
 			if(comp instanceof MTComponent)
 			{
-				MTComponent mtcomp = (MTComponent)comp;
+				MTComponent mtcomp = comp;
 				
 				centerPoints.add(ComponentHelper.getCenterPointGlobal(mtcomp));
 			}

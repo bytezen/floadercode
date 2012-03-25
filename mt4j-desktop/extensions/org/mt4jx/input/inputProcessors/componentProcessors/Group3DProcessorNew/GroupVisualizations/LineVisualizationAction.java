@@ -14,6 +14,7 @@ import org.mt4jx.input.inputProcessors.componentProcessors.Group3DProcessorNew.M
 import org.mt4jx.util.extension3D.ComponentHelper;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class LineVisualizationAction implements IMTEventListener,IVisualizeMethodProvider {
 
@@ -23,6 +24,7 @@ public class LineVisualizationAction implements IMTEventListener,IVisualizeMetho
 	{
 		this.pApplet = pApplet;
 	}
+	@Override
 	public void processMTEvent(MTEvent mtEvent) {
 		if(mtEvent instanceof MTClusterEvent)
 		{
@@ -45,6 +47,7 @@ public class LineVisualizationAction implements IMTEventListener,IVisualizeMetho
 
 	}
 	
+	@Override
 	public void visualize(Cluster3DExt cluster)
 	{
 		
@@ -67,7 +70,7 @@ public class LineVisualizationAction implements IMTEventListener,IVisualizeMetho
 //		gl.glEnd();
 //		Tools3D.endGL(pApplet);
 		
-		pApplet.beginShape(PApplet.LINES);
+		pApplet.beginShape(PConstants.LINES);
 		MTLine[] lines = getVisualizationLines(cluster.getChildren());
 		MTComponent linesGroup = new MTComponent(pApplet);
 		for(MTLine line : lines)
@@ -90,7 +93,7 @@ public class LineVisualizationAction implements IMTEventListener,IVisualizeMetho
 				
 		for(MTComponent comp : selectedComps)
 		{			
-				MTComponent mtcomp = (MTComponent)comp;		
+				MTComponent mtcomp = comp;		
 							
 				ComponentHelper.getCenterPointGlobal(mtcomp);
 				centerPoints.add(ComponentHelper.getCenterPointGlobal(mtcomp));;

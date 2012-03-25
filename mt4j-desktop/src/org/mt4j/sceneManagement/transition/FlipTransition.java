@@ -97,8 +97,9 @@ public class FlipTransition extends AbstractTransition {
 		
 		
 //		anim2 = new Animation("Flip animation 2", new MultiPurposeInterpolator(0,90, this.duration/2f, 0, 0.5f, 1) , this);
-		anim2 = new AniAnimation(0, 90, (int)((float)this.duration/2f), AniAnimation.CIRC_OUT, this);
+		anim2 = new AniAnimation(0, 90, (int)(this.duration/2f), AniAnimation.CIRC_OUT, this);
 		anim2.addAnimationListener(new IAnimationListener(){
+			@Override
 			public void processAnimationEvent(AnimationEvent ae) {
 				nextSceneRectangle.rotateYGlobal(nextSceneRectangle.getCenterPointGlobal(), ae.getDelta());
 				if (ae.getId() == AnimationEvent.ANIMATION_ENDED){
@@ -108,9 +109,10 @@ public class FlipTransition extends AbstractTransition {
 //		((Animation)anim2).setResetOnFinish(true);
 		
 //        anim = new Animation("Flip animation 1", new MultiPurposeInterpolator(0,90, this.duration/2f, 0.5f, 1, 1) , this);
-		anim = new AniAnimation(0,90, (int)((float)this.duration/2f), AniAnimation.LINEAR, this);
+		anim = new AniAnimation(0,90, (int)(this.duration/2f), AniAnimation.LINEAR, this);
         anim.addAnimationListener(new IAnimationListener(){
-        	public void processAnimationEvent(AnimationEvent ae) {
+        	@Override
+			public void processAnimationEvent(AnimationEvent ae) {
         		lastSceneRectangle.rotateYGlobal(lastSceneRectangle.getCenterPointGlobal(), ae.getDelta());
         		if (ae.getId() == AnimationEvent.ANIMATION_ENDED){
 //					nextSceneWindow.setVisible(true);
@@ -128,6 +130,7 @@ public class FlipTransition extends AbstractTransition {
 	/* (non-Javadoc)
 	 * @see org.mt4j.sceneManagement.transition.ITransition#isFinished()
 	 */
+	@Override
 	public boolean isFinished() {
 		return finished;
 	}
@@ -137,6 +140,7 @@ public class FlipTransition extends AbstractTransition {
 	/* (non-Javadoc)
 	 * @see org.mt4j.sceneManagement.transition.ITransition#setup(org.mt4j.sceneManagement.Iscene, org.mt4j.sceneManagement.Iscene)
 	 */
+	@Override
 	public void setup(Iscene lastScenee, Iscene nextScenee) {
 		this.lastScene = lastScenee;
 		this.nextScene = nextScenee;
@@ -148,6 +152,7 @@ public class FlipTransition extends AbstractTransition {
 		app.getInputManager().disableGlobalInputProcessors(nextScene);
 		
 		app.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				lastSceneWindow = new MTSceneTexture(app,0, 0, lastScene);
 				nextSceneWindow = new MTSceneTexture(app,0, 0, nextScene);

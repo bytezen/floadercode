@@ -39,6 +39,7 @@ public class BitmapFontFactory implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#getCopy(org.mt4j.components.visibleComponents.font.IFont)
 	 */
+	@Override
 	public IFont getCopy(IFont font) {
 		if (proxy == null){
 			proxy = new BitmapFontFactoryProxy();
@@ -50,6 +51,7 @@ public class BitmapFontFactory implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#createFont(processing.core.PApplet, java.lang.String, int, org.mt4j.util.MTColor)
 	 */
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color) {
 		return this.createFont(pa, fontName, fontSize, color, true);
 	}
@@ -57,6 +59,7 @@ public class BitmapFontFactory implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#createFont(processing.core.PApplet, java.lang.String, int, org.mt4j.util.MTColor, boolean)
 	 */
+	@Override
 	public IFont createFont(PApplet pa, String fontName, int fontSize, MTColor color, boolean antiAliased) {
 		if (proxy == null){
 			proxy = new BitmapFontFactoryProxy();
@@ -67,6 +70,7 @@ public class BitmapFontFactory implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#createFont(processing.core.PApplet, java.lang.String, int, org.mt4j.util.MTColor, org.mt4j.util.MTColor)
 	 */
+	@Override
 	public IFont createFont(PApplet pa, String fontFileName, int fontSize, MTColor fillColor, MTColor strokeColor) {
 		return this.createFont(pa, fontFileName, fontSize, fillColor, strokeColor, true);
 	}
@@ -74,6 +78,7 @@ public class BitmapFontFactory implements IFontFactory {
 	/* (non-Javadoc)
 	 * @see org.mt4j.components.visibleComponents.font.fontFactories.IFontFactory#createFont(processing.core.PApplet, java.lang.String, int, org.mt4j.util.MTColor, org.mt4j.util.MTColor, boolean)
 	 */
+	@Override
 	public IFont createFont(PApplet pa, String fontFileName, int fontSize, MTColor fillColor, MTColor strokeColor, boolean antiAliased) {
 		if (proxy == null){
 			proxy = new BitmapFontFactoryProxy();

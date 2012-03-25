@@ -50,6 +50,7 @@ public class LassoGroupSelectionManager extends AbstractCursorProcessor implemen
 		this.selection = new LassoSelection(canvas.getRenderer(),canvas.getAttachedCamera(),this);
 	}
 	
+	@Override
 	public void addSelectionListener(ISelectionListener listener)
 	{
 		if(!(selectionListeners.contains(listener)))
@@ -58,6 +59,7 @@ public class LassoGroupSelectionManager extends AbstractCursorProcessor implemen
 		}
 	}
 	
+	@Override
 	public void removeSelectionListener(ISelectionListener listener)
 	{
 		if(selectionListeners.contains(listener))
@@ -105,7 +107,7 @@ public class LassoGroupSelectionManager extends AbstractCursorProcessor implemen
 			for(MTComponent elem : sel.getSelectedComponents())
 			{
 				
-					MTComponent comp = (MTComponent)elem;
+					MTComponent comp = elem;
 					Cluster3DExt formerCluster = null;
 					if((formerCluster=clusterManager.getClusterForComponent(comp))!=null)
 					{
@@ -123,14 +125,14 @@ public class LassoGroupSelectionManager extends AbstractCursorProcessor implemen
 			}		
 			Cluster3DExt cluster = clusterManager.createCluster(components,true);
 			this.canvas.removeChild(sel.getPolygon());			
-			this.fireEvent(new MTLassoSelectionEvent(this,MTLassoSelectionEvent.SELECTION_ENDED,sel.getSelectedComponents(),sel.getPolygon(),cluster));			
+			this.fireEvent(new MTLassoSelectionEvent(this,MTSelectionEvent.SELECTION_ENDED,sel.getSelectedComponents(),sel.getPolygon(),cluster));			
 		}else if(sel.getSelectedComponents().size()==1)
 		{
 			
 			Cluster3DExt formerCluster = null;
-			if((formerCluster=clusterManager.getClusterForComponent((MTComponent)sel.getSelectedComponents().get(0)))!=null)
+			if((formerCluster=clusterManager.getClusterForComponent(sel.getSelectedComponents().get(0)))!=null)
 			{
-				clusterManager.removeComponentFromCluster((MTComponent)sel.getSelectedComponents().get(0), formerCluster);
+				clusterManager.removeComponentFromCluster(sel.getSelectedComponents().get(0), formerCluster);
 				this.canvas.addChild(sel.getSelectedComponents().get(0));
 			}
 			this.canvas.removeChild(sel.getPolygon());
@@ -190,9 +192,10 @@ public class LassoGroupSelectionManager extends AbstractCursorProcessor implemen
 	public synchronized void addClusterable(MTComponent selectable){
 		getDragSelectables().add(selectable);		
 		if (selectable instanceof MTComponent) {
-			MTComponent baseComp = (MTComponent) selectable;
+			MTComponent baseComp = selectable;
 			
 			baseComp.addStateChangeListener(StateChange.COMPONENT_DESTROYED, new StateChangeListener(){
+				@Override
 				public void stateChanged(StateChangeEvent evt) {
 					if (evt.getSource() instanceof MTComponent) {
 						MTComponent clusterAble = (MTComponent) evt.getSource();
@@ -235,6 +238,7 @@ public class LassoGroupSelectionManager extends AbstractCursorProcessor implemen
 		return null;
 	}
 
+	@Override
 	public void fireEvent(MTEvent event) {
 		for(int i=0;i<selectionListeners.size();i++)
 		{

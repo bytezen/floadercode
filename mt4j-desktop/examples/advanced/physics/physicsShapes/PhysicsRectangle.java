@@ -150,7 +150,7 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 		this.setUserData("realBodyCenterToMeshCenter", realBodyCenterToMeshCenter);
 
 		//Move the vertices so the body position is at the center of the shape 
-		Vertex.translateVectorArray(physicsVertices, realBodyCenterToMeshCenter);
+		Vector3D.translateVectorArray(physicsVertices, realBodyCenterToMeshCenter);
 
 		//Create vertex structure for creation of decomposition polygon (use the translated vertices)
 		float xArr[] = new float[physicsVertices.length];
@@ -288,7 +288,7 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 		//System.out.println("Diff:" +  realBodyCenterToMeshCenter);
 
 		//Move the vertices so the body position is at the center of the shape 
-		Vertex.translateVectorArray(bodyVerts, realBodyCenterToMeshCenter);
+		Vector3D.translateVectorArray(bodyVerts, realBodyCenterToMeshCenter);
 		
 		//FIXME TEST
 		this.setUserData("realBodyCenterToMeshCenter", realBodyCenterToMeshCenter);
@@ -398,6 +398,7 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 	
 	
 	//@Override
+	@Override
 	public void drawComponent(PGraphics g) {
 		super.drawComponent(g);
 
@@ -421,6 +422,7 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 	}
 	
 	//@Override
+	@Override
 	public void rotateZGlobal(Vector3D rotationPoint, float degree) {
 		angle += degree;
 		super.rotateZGlobal(rotationPoint, degree);
@@ -430,8 +432,9 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 		return angle;
 	}
 	
+	@Override
 	public void setCenterRotation(float angle){
-		float degreeAngle = AbstractMTApplication.degrees(angle);
+		float degreeAngle = PApplet.degrees(angle);
 		float oldAngle = this.getAngle();
 		float diff = degreeAngle-oldAngle;
 		//System.out.println("Old angle: " + oldAngle + " new angle:" + degreeAngle + " diff->" +  diff);
@@ -439,6 +442,7 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 	}
 	
 	//@Override
+	@Override
 	protected void destroyComponent() {
 		super.destroyComponent();
 		boolean exists = false;
@@ -460,6 +464,7 @@ public class PhysicsRectangle extends MTRectangle implements IPhysicsComponent{
 
 
 
+	@Override
 	public Body getBody() {
 		return body;
 	}

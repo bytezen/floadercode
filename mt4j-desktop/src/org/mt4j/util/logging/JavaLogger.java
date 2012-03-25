@@ -15,6 +15,7 @@ public class JavaLogger implements ILogger {
 //		this.logger.addHandler(cons);
 	}
 	
+	@Override
 	public void setLevel(int level) {
 		switch (level) {
 		case OFF:
@@ -40,26 +41,32 @@ public class JavaLogger implements ILogger {
 		}
 	}
 
+	@Override
 	public void info(Object message) {
 		logger.info(message.toString());
 	}
 
+	@Override
 	public void debug(Object message) {
 		logger.info(message.toString());
 	}
 
+	@Override
 	public void warn(Object message) {
 		logger.warning(message.toString());
 	}
 
+	@Override
 	public void error(Object message) {
 		logger.severe(message.toString());
 	}
 
+	@Override
 	public ILogger createNew(String name) {
 		return new JavaLogger(name);
 	}
 
+	@Override
 	public int getLevel() {
 		Level level = this.logger.getLevel();
 		if (level.equals(Level.OFF)){

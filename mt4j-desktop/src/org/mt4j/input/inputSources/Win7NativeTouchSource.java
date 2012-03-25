@@ -22,6 +22,7 @@ import java.util.HashMap;
 import javax.swing.SwingUtilities;
 
 import org.mt4j.AbstractMTApplication;
+import org.mt4j.input.inputData.AbstractCursorInputEvt;
 import org.mt4j.input.inputData.ActiveCursorPool;
 import org.mt4j.input.inputData.InputCursor;
 import org.mt4j.input.inputData.MTFingerInputEvt;
@@ -142,6 +143,7 @@ public class Win7NativeTouchSource extends AbstractInputSource {
 		success = true;
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			@Override
 			public void run() {
 				if (isSuccessfullySetup()){
 					logger.debug("Cleaning up Win7 touch source..");
@@ -177,7 +179,7 @@ public class Win7NativeTouchSource extends AbstractInputSource {
 					
 					InputCursor c = new InputCursor();
 					long cursorID = c.getId();
-					MTWin7TouchInputEvt touchEvt = new MTWin7TouchInputEvt(this, wmTouchEvent.x, wmTouchEvent.y, wmTouchEvent.contactSizeX, wmTouchEvent.contactSizeY, MTFingerInputEvt.INPUT_STARTED, c);
+					MTWin7TouchInputEvt touchEvt = new MTWin7TouchInputEvt(this, wmTouchEvent.x, wmTouchEvent.y, wmTouchEvent.contactSizeX, wmTouchEvent.contactSizeY, AbstractCursorInputEvt.INPUT_STARTED, c);
 					int touchID = wmTouchEvent.id;
 					ActiveCursorPool.getInstance().putActiveCursor(cursorID, c);
 					touchToCursorID.put(touchID, cursorID);
@@ -192,7 +194,7 @@ public class Win7NativeTouchSource extends AbstractInputSource {
 					if (cursorID != null){
 						InputCursor c = ActiveCursorPool.getInstance().getActiveCursorByID(cursorID);
 						if (c != null){
-							MTWin7TouchInputEvt te = new MTWin7TouchInputEvt(this, wmTouchEvent.x, wmTouchEvent.y, wmTouchEvent.contactSizeX, wmTouchEvent.contactSizeY, MTFingerInputEvt.INPUT_UPDATED, c);
+							MTWin7TouchInputEvt te = new MTWin7TouchInputEvt(this, wmTouchEvent.x, wmTouchEvent.y, wmTouchEvent.contactSizeX, wmTouchEvent.contactSizeY, AbstractCursorInputEvt.INPUT_UPDATED, c);
 							this.enqueueInputEvent(te);	
 						}
 					}
@@ -205,7 +207,7 @@ public class Win7NativeTouchSource extends AbstractInputSource {
 					if (cursorID != null){
 						InputCursor c = ActiveCursorPool.getInstance().getActiveCursorByID(cursorID);
 						if (c != null){
-							MTWin7TouchInputEvt te = new MTWin7TouchInputEvt(this, wmTouchEvent.x, wmTouchEvent.y, wmTouchEvent.contactSizeX, wmTouchEvent.contactSizeY, MTFingerInputEvt.INPUT_ENDED, c);
+							MTWin7TouchInputEvt te = new MTWin7TouchInputEvt(this, wmTouchEvent.x, wmTouchEvent.y, wmTouchEvent.contactSizeX, wmTouchEvent.contactSizeY, AbstractCursorInputEvt.INPUT_ENDED, c);
 							this.enqueueInputEvent(te);
 						}
 						ActiveCursorPool.getInstance().removeCursor(cursorID);
@@ -243,11 +245,12 @@ public class Win7NativeTouchSource extends AbstractInputSource {
 		//Invokelater because of some crash issue 
 		//-> maybe we need to wait a frame until windows is informed of the window name change
 		SwingUtilities.invokeLater(new Runnable() { 
+			@Override
 			public void run() {
 				int awtCanvasHandle = 0;
 				try {
 //					//TODO also search for window class?
-					awtCanvasHandle = (int)findWindow(tmpTitle, canvasClassName);
+					awtCanvasHandle = findWindow(tmpTitle, canvasClassName);
 					setSunAwtCanvasHandle(awtCanvasHandle);
 				} catch (Exception e) {
 					System.err.println(e.getMessage());

@@ -81,6 +81,7 @@ public class Model3dsFileFactory extends ModelImporterFactory{
 	 * 
 	 * @throws FileNotFoundException the file not found exception
 	 */
+	@Override
 	public MTTriangleMesh[] loadModelImpl(PApplet pa, String pathToModel, float creaseAngle, boolean flipTextureY, boolean flipTextureX) throws FileNotFoundException{
 		long timeA = System.currentTimeMillis();
 		this.pa = pa;
@@ -448,6 +449,7 @@ public class Model3dsFileFactory extends ModelImporterFactory{
 	private boolean flipY = true;
 
 
+	@Override
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 		if (debug)
