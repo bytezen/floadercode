@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="lib/oscP5.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/oscP5/src"/>
 	<classpathentry kind="lib" path="lib/peasycam.jar" sourcepath="/PeasyCam/src"/>
 	<classpathentry kind="lib" path="lib/quickhull3d.jar"/>
-	<classpathentry kind="lib" path="lib/Ani_floader_namespace.jar"/>
+	<classpathentry kind="lib" path="lib/Ani_floader_namespace.jar" sourcepath="/Ani/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

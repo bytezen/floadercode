@@ -72,6 +72,7 @@ public class TearsForDearsVisual implements IVisual{
 	float maxRotateCombine = .4f;
 	float rotateCrazy = 0;
 	float maxRotateCrazy = 1;
+	float rotateY;
 
 	PApplet app;
 	
@@ -100,7 +101,12 @@ public class TearsForDearsVisual implements IVisual{
 		cam = new PeasyCam(app, initDistance);
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
+
 		reset();
+	}
+	public void keyPressed(int keyCode)
+	{
+		System.out.println(keyCode);
 	}
 
 	void createDots() {
@@ -179,21 +185,6 @@ public class TearsForDearsVisual implements IVisual{
 
 	}
 	
-	public void popMesh(int popAmount)
-	{
-		Iterator <HE_Face> fItr;
-		HE_Face f;
-		HE_Selection selection;
-		for (int j = 0; j < numCols; j++)
-			for (int k = 0; k < numRows; k++) {
-				selection = new HE_Selection(meshes[j][k]);
-				for(int i = 0;i<meshes[j][k].numberOfFaces()/2;i++)
-				{
-					selection.add(meshes[j][k].getFacesAsArray()[i]);
-				}
-				meshes[j][k].modifySelected(new HEM_VertexExpand().setDistance(popAmount), selection);
-			}
-	}
 	
 	public void lattice()
 	{
@@ -266,10 +257,6 @@ public class TearsForDearsVisual implements IVisual{
 			if(note == 0 && vel > 0)
 			{
 				reset();
-			} else if (msg.get(0).intValue() == 1 && msg.get(1).intValue() != 0) {
-				popMesh(50);
-			} else if(msg.get(0).intValue() == 2 && msg.get(1).intValue() != 0) {
-				popMesh(-50);
 			} else if(msg.get(0).intValue() == 3 && msg.get(1).intValue() != 0){
 				addLattice = true;
 			} else if(msg.get(0).intValue() == 4 && msg.get(1).intValue() != 0) {
@@ -300,14 +287,15 @@ public class TearsForDearsVisual implements IVisual{
 			//CTRL 5 Rotate crazy amount
 			if (msg.get(0).intValue() == 5) {
 				rotateCrazy = ((float) msg.get(1).intValue() / 127.0f) * maxRotateCrazy - (maxRotateCrazy/2);				
-			} else 
-			//CTRL 6 cam distance
-			if (msg.get(0).intValue() == 6) {
-				cam.setDistance(((float) msg.get(1).intValue() / 127.0f) * (maxDistance-minDistance) + minDistance) ;				
-			}
+			}  
 		}
 		}
 
+	}
+
+	@Override
+	public void camEffect(float amount) {
+		cam.setDistance(amount * maxDistance);
 	}
 
 }

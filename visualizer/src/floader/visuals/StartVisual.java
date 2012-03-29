@@ -2,8 +2,10 @@ package floader.visuals;
 
 import floader.looksgood.ani.Ani;
 import floader.visuals.flyingobjects.FlyingObjectsVisual;
+import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.imagineyourgarden.ImagineYourGardenVisual;
+import floader.visuals.percentages.Percentages;
 import floader.visuals.tearsfordears.TearsForDearsVisual;
 import oscP5.OscMessage;
 import oscP5.OscP5;
@@ -12,7 +14,7 @@ import processing.core.PGraphics;
 
 public class StartVisual extends PApplet {
 
-	ImagineYourGardenVisual viz;
+	IVisual viz;
 	OscP5 oscP5;
 	
 	public static final int OSC_PORT = 7400;
@@ -23,7 +25,11 @@ public class StartVisual extends PApplet {
 		oscP5 = new OscP5(this, OSC_PORT);
 		Ani.init(this);
 		Ani.setDefaultEasing(Ani.LINEAR);
-		viz= new ImagineYourGardenVisual(this);
+		//viz= new Percentages(this);
+		//viz = new TearsForDearsVisual(this);
+		//viz = new ImagineYourGardenVisual(this);
+		//viz = new HangOnVisual(this);
+		viz = new AvanteHangOnVisual(this);
 		viz.setup();
 		
 	}
@@ -32,6 +38,12 @@ public class StartVisual extends PApplet {
 	{
 		background(0,0,0);
 		viz.draw();
+	}
+	
+	public void keyPressed()
+	{
+		viz.keyPressed(this.keyCode);
+		viz.camEffect((float)mouseX/(float)width);
 	}
 	
 	public static void main(String args[]) {

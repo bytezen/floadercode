@@ -52,6 +52,7 @@ public class ImagineYourGardenVisual implements IVisual {
 	float rotDuration = 4;
 	float origRotDuration = rotDuration;
 	float maxRotDuration = 1;
+	float rotateY;
 	
 	float zoomAmt = -(cylHeight-10000)/2;
 	float origZoomDuration = 10;
@@ -102,11 +103,18 @@ public class ImagineYourGardenVisual implements IVisual {
 		zoomAni.repeat();
 		zoomAni.start();
 	}
+	
+	public void keyPressed(int keyCode)
+	{
+		System.out.println(keyCode);
+	}
 
 	@Override
 	public void draw() {
+		//app.background(255,255,255);
 		cam.feed();
 		app.lights();
+		//System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] + ", " + cam.getLookAt()[2]);
 		
 		totalTwistAmt += twistAmt;
 		if (reset) {
@@ -187,6 +195,13 @@ public class ImagineYourGardenVisual implements IVisual {
 	void createMeshes() {
 		createMesh(0, 210, 30);
 		createMesh(1, 200, 30);
+	}
+
+	@Override
+	public void camEffect(float amount) {
+		float delta = rotateY - (amount * 360);
+		cam.rotateY(PApplet.radians(delta));
+		rotateY -= delta;
 	}
 
 }

@@ -44,7 +44,11 @@ public class FlyingObjectsVisual implements IVisual {
 		this.app = app;
 		cam = new PeasyCam(app, 500);
 	}
-
+	public void keyPressed(int keyCode)
+	{
+		System.out.println(keyCode);
+	}
+	
 	public void setup() {
 		
 		cam.setMinimumDistance(100);
@@ -173,6 +177,11 @@ public class FlyingObjectsVisual implements IVisual {
 				layerGroup.effectEnableScale((float) ctrlVal / 127.0f);
 			}
 		}
+	}
+	@Override
+	public void camEffect(float amount) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

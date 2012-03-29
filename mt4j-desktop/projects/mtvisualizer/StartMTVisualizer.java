@@ -9,10 +9,7 @@ import oscP5.OscP5;
 public class StartMTVisualizer extends MTApplication {
 	private static final long serialVersionUID = 1L;
 
-	public static final int SCENE_CHANGE = 0;
-	public static final int OSC_PORT = 7400;
-	public static final String OSC_REMOTE_ADDR = "localhost";
-	public static final int OSC_REMOTE_PORT = 7500;
+	
 	NetAddress remoteAddress;
 	VisualScene currentScene;
 	VisualScene newScene;
@@ -20,7 +17,7 @@ public class StartMTVisualizer extends MTApplication {
 	OscP5 oscP5;
 	String[] sceneList = { floader.visuals.flyingobjects.FlyingObjectsVisual.class.getName(), 
 			floader.visuals.tearsfordears.TearsForDearsVisual.class.getName(),
-			floader.visuals.hangon.HangOnVisual.class.getName(),
+			floader.visuals.hangon.AvanteHangOnVisual.class.getName(),
 			floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName()
 	};
 	int currentSceneIndex;
@@ -28,20 +25,22 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void startUp() {
 		//this.frameRate = 30;
-		oscP5 = new OscP5(this, OSC_PORT);
-		remoteAddress = new NetAddress(OSC_REMOTE_ADDR, OSC_REMOTE_PORT);
+		oscP5 = new OscP5(this, MTVisualizerConstants.OSC_PORT);
+		remoteAddress = new NetAddress(MTVisualizerConstants.OSC_REMOTE_ADDR, MTVisualizerConstants.OSC_REMOTE_PORT);
 
 		floader.looksgood.ani.Ani.init(this);
 		floader.looksgood.ani.Ani.setDefaultEasing(floader.looksgood.ani.AniConstants.LINEAR);
-		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[3]);
+		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[2]);
 		addScene(currentScene);
+		
 	}
 
 	public void oscEvent(OscMessage msg) {
-		if (msg.checkAddrPattern("/mtn/note") && msg.get(2).intValue() == SCENE_CHANGE) {
+		if (msg.checkAddrPattern("/mtn/note") && msg.get(2).intValue() == MTVisualizerConstants.SCENE_CHANGE) {
 			int note = msg.get(0).intValue();
 			int vel = msg.get(1).intValue();
 				if (vel > 0 && note < sceneList.length) {
+					System.out.println(note);
 					newScene = new VisualScene(this, oscP5, remoteAddress, sceneList[note]);
 					currentScene = newScene;
 					this.changeScene(newScene);

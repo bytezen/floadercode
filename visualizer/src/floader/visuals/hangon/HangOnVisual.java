@@ -78,6 +78,11 @@ public class HangOnVisual implements IVisual {
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
 	}
+	
+	public void keyPressed(int keyCode)
+	{
+		System.out.println(keyCode);
+	}
 
 	void createSpheres() {
 		HEC_Creator creator;
@@ -103,6 +108,7 @@ public class HangOnVisual implements IVisual {
 
 	@Override
 	public void draw() {
+		app.background(0,0,0);
 		app.lights();
 		cam.feed();
 		
@@ -259,5 +265,11 @@ public class HangOnVisual implements IVisual {
 			yRates[i] = app.random(4) - 2;
 			xRates[i] = app.random(4) - 2;
 		}
+	}
+
+	@Override
+	public void camEffect(float amount) {
+		cam.setDistance(amount * maxDistance);
+		
 	}
 }

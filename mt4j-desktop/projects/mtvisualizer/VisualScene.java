@@ -1,5 +1,6 @@
 package mtvisualizer;
 
+import mtvisualizer.components.EffectBoxUIComponent;
 import mtvisualizer.components.NanoUIComponent;
 import mtvisualizer.components.VisualComponent;
 import netP5.NetAddress;
@@ -16,7 +17,8 @@ public class VisualScene extends AbstractScene {
 
 	AbstractMTApplication app;
 	VisualComponent vizComp;
-	NanoUIComponent uiComp;
+	//NanoUIComponent uiComp;
+	EffectBoxUIComponent uiComp;
 	OscP5 oscP5;
 	NetAddress remoteAddress;
 	SlideTransition slideLeftTransition;
@@ -30,9 +32,9 @@ public class VisualScene extends AbstractScene {
 		this.setTransition(new SlideTransition(app, 800, true));
 		
 		vizComp = new VisualComponent(app, visualName);
-		//TODO make this relative to screen width
 		vizComp.translate(new Vector3D(app.width/2, app.height/2, 0, 1));
-		uiComp = new NanoUIComponent(app, oscP5, remoteAddress);
+		//uiComp = new NanoUIComponent(app, oscP5, remoteAddress);
+		uiComp = new EffectBoxUIComponent(app, oscP5, remoteAddress);
 	}
 
 	public void oscEvent(OscMessage msg) {

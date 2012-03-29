@@ -40,7 +40,7 @@ public class VisualComponent extends AbstractVisibleComponent {
 				return new FlyingObjectsVisual(app);
 			} else if (name.equals(floader.visuals.tearsfordears.TearsForDearsVisual.class.getName())) {
 				return new TearsForDearsVisual(app);
-			} else if (name.equals(floader.visuals.hangon.HangOnVisual.class.getName())) {
+			} else if (name.equals(floader.visuals.hangon.AvanteHangOnVisual.class.getName())) {
 				return new HangOnVisual(app);
 			} else if (name.equals(floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName())) {
 				return new ImagineYourGardenVisual(app);
