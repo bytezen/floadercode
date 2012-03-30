@@ -11,16 +11,20 @@ public class StartMTVisualizer extends MTApplication {
 
 	
 	NetAddress remoteAddress;
-	VisualScene currentScene;
-	VisualScene newScene;
+	VisualizationScene currentScene;
+	VisualizationScene newScene;
 	boolean changeScene;
 	OscP5 oscP5;
 	String[] sceneList = { floader.visuals.flyingobjects.FlyingObjectsVisual.class.getName(), 
 			floader.visuals.tearsfordears.TearsForDearsVisual.class.getName(),
 			floader.visuals.hangon.AvanteHangOnVisual.class.getName(),
-			floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName()
+			floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName(),
+			floader.visuals.flyingobjects.LeakierPhysicsVisual.class.getName(),
+			floader.visuals.kalimba.KalimbaVisual.class.getName(),
+			floader.visuals.percentages.Percentages.class.getName()
 	};
-	int currentSceneIndex;
+	//Update this to start with a different scene
+	int currentSceneIndex = 0;
 	
 	@Override
 	public void startUp() {
@@ -30,9 +34,8 @@ public class StartMTVisualizer extends MTApplication {
 
 		floader.looksgood.ani.Ani.init(this);
 		floader.looksgood.ani.Ani.setDefaultEasing(floader.looksgood.ani.AniConstants.LINEAR);
-		currentScene = new VisualScene(this, oscP5, remoteAddress, sceneList[2]);
-		addScene(currentScene);
-		
+		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
+		addScene(currentScene);	
 	}
 
 	public void oscEvent(OscMessage msg) {
@@ -41,7 +44,7 @@ public class StartMTVisualizer extends MTApplication {
 			int vel = msg.get(1).intValue();
 				if (vel > 0 && note < sceneList.length) {
 					System.out.println(note);
-					newScene = new VisualScene(this, oscP5, remoteAddress, sceneList[note]);
+					newScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[note]);
 					currentScene = newScene;
 					this.changeScene(newScene);
 			} else {
@@ -56,20 +59,10 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void keyPressed()
 	{
-		VisualScene newScene;
-		if(keyCode == 50)
-		{
-			System.out.println("change scene to: " + sceneList[0]);
-			newScene = new VisualScene(this,oscP5, remoteAddress, sceneList[0]);
-			currentScene = newScene;
-			this.changeScene(newScene);
-		} else if(keyCode == 51)
-		{
-			System.out.println("change scene to: " + sceneList[1]);
-			newScene = new VisualScene(this,oscP5, remoteAddress, sceneList[1]);
-			currentScene = newScene;
-			this.changeScene(newScene);
-		}
+		currentSceneIndex++;
+		if(currentSceneIndex >= sceneList.length)currentSceneIndex = 0;
+		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
+		this.changeScene(currentScene);
 	}
 	
 	public static void main(String[] args) {

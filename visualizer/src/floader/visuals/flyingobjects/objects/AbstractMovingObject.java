@@ -1,4 +1,4 @@
-package floader.visuals.flyingobjects;
+package floader.visuals.flyingobjects.objects;
 
 import java.util.Iterator;
 
@@ -130,6 +130,10 @@ public abstract class AbstractMovingObject {
 	{
 		effectScale = _effectScale;
 	}
+	
+	
+	public abstract void tapEffect(int EventType, boolean isTapDown);
+	public abstract void dragEffect(int EventType, float amount);
 	
 	
 }

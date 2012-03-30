@@ -199,8 +199,14 @@ public class Percentages implements IVisual {
 	}
 
 	@Override
-	public void camEffect(float amount) {
+	public void dragEvent(int eventType, float amount) {
 
-		cam.setDistance(camMaxDistance* amount);
+		if(eventType ==0)cam.setDistance(camMaxDistance* amount);
+	}
+
+	@Override
+	public void tapEvent(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+		
 	}
 }

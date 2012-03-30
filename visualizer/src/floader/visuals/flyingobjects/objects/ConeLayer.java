@@ -1,4 +1,4 @@
-package floader.visuals.flyingobjects;
+package floader.visuals.flyingobjects.objects;
 
 import java.util.Iterator;
 
@@ -24,11 +24,11 @@ import wblut.geom.tree.*;
 import processing.opengl.*;
 import peasy.*;
 
-public class SendConeLayer extends AbstractMovingObject {
+public class ConeLayer extends AbstractMovingObject {
 
 	HE_Mesh cone;
 
-	public SendConeLayer(int _distanceScale, float _duration, int _yOffset, int _xOffset, PApplet _sketch, WB_Render _render) {
+	public ConeLayer(int _distanceScale, float _duration, int _yOffset, int _xOffset, PApplet _sketch, WB_Render _render) {
 		super(_distanceScale, _duration, _yOffset, _xOffset, _sketch, _render);
 
 		//rotationTween = new Tween("rotation", 0f, 2 * PConstants.PI, 213);
@@ -68,6 +68,18 @@ public class SendConeLayer extends AbstractMovingObject {
 		
 		app.noStroke();
 		render.drawFaces(cone);
+	}
+
+	@Override
+	public void tapEffect(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragEffect(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

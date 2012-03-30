@@ -1,17 +1,14 @@
 package floader.visuals.flyingobjects;
 
-import java.util.ArrayList;
-
-
+import floader.visuals.flyingobjects.objects.AbstractMovingObject;
 
 public class LayerGroup {
 
 	AbstractMovingObject[] layers;
 	
-	
-	public LayerGroup()
+	public LayerGroup(final int size)
 	{
-		layers = new AbstractMovingObject[FlyingObjectsVisual.LAYER_SIZE];
+		layers = new AbstractMovingObject[size];
 	}
 	
 	public void addLayer(AbstractMovingObject layer, int index)
@@ -50,6 +47,22 @@ public class LayerGroup {
 		for(int i=0;i<layers.length;i++)
 		{
 			layers[i].effectEnableScale(effectScale);
+		}
+	}
+	
+	public void tapEffect(int eventType, boolean isTapDown)
+	{
+		for(int i=0;i<layers.length;i++)
+		{
+			layers[i].tapEffect(eventType, isTapDown);
+		}
+	}
+	
+	public void dragEffect(int eventType, float amount)
+	{
+		for(int i=0;i<layers.length;i++)
+		{
+			layers[i].dragEffect(eventType, amount);
 		}
 	}
 

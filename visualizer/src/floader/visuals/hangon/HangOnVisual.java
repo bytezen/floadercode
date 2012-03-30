@@ -268,8 +268,14 @@ public class HangOnVisual implements IVisual {
 	}
 
 	@Override
-	public void camEffect(float amount) {
-		cam.setDistance(amount * maxDistance);
+	public void dragEvent(int eventType, float amount) {
+		if (eventType == 0 || eventType == 2) cam.setDistance(amount * maxDistance);
+		
+	}
+
+	@Override
+	public void tapEvent(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
 		
 	}
 }

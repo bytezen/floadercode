@@ -4,6 +4,9 @@ import java.io.*;
 
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
+import floader.visuals.flyingobjects.objects.ConeLayer;
+import floader.visuals.flyingobjects.objects.CylinderLayer;
+import floader.visuals.flyingobjects.objects.SphereLayer;
 
 
 
@@ -55,24 +58,24 @@ public class FlyingObjectsVisual implements IVisual {
 		cam.setMaximumDistance(500);
 		cam.setDistance(400);
 		render = new WB_Render(app);
-		layerGroup = new LayerGroup();
+		layerGroup = new LayerGroup(LAYER_SIZE);
 		
 		//turn off touch rotation
 		//cam.setActive(false);
 		
-		layerGroup.addLayer(new SendCylinderLayer(4, baseDuration, 0, 0, app, render), 0);
-		layerGroup.addLayer(new SendCylinderLayer(4, baseDuration, 0, 0, app, render), 1);
-		layerGroup.addLayer(new SendCylinderLayer(4, baseDuration, 0, 0, app, render), 2);
-		layerGroup.addLayer(new SendCylinderLayer(4, baseDuration, 0, 0, app, render), 3);
+		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 0);
+		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 1);
+		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 2);
+		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 3);
 
-		layerGroup.addLayer(new SendSphereLayer(2, baseDuration, -100, 0, app, render), 4);
-		layerGroup.addLayer(new SendSphereLayer(2, baseDuration, -100, 0, app, render), 5);
+		layerGroup.addLayer(new SphereLayer(2, baseDuration, -100, 0, app, render), 4);
+		layerGroup.addLayer(new SphereLayer(2, baseDuration, -100, 0, app, render), 5);
 
-		layerGroup.addLayer(new SendConeLayer(6, baseDuration, -200, -200, app, render), 6);
-		layerGroup.addLayer(new SendConeLayer(6, baseDuration, -200, -100, app, render), 7);
-		layerGroup.addLayer(new SendConeLayer(6, baseDuration, -200, 0, app, render), 8);
-		layerGroup.addLayer(new SendConeLayer(6, baseDuration, -200, 100, app, render), 9);
-		layerGroup.addLayer(new SendConeLayer(6, baseDuration, -200, 200, app, render), 10);
+		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, -200, app, render), 6);
+		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, -100, app, render), 7);
+		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, 0, app, render), 8);
+		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, 100, app, render), 9);
+		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, 200, app, render), 10);
 	}
 
 	public void draw() {
@@ -179,7 +182,12 @@ public class FlyingObjectsVisual implements IVisual {
 		}
 	}
 	@Override
-	public void camEffect(float amount) {
+	public void dragEvent(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
 		
 	}

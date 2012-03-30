@@ -1,6 +1,7 @@
-package floader.visuals.flyingobjects;
+package floader.visuals.flyingobjects.objects;
 
 import java.util.Iterator;
+
 
 
 import processing.core.*;
@@ -24,12 +25,12 @@ import wblut.geom.tree.*;
 import processing.opengl.*;
 import peasy.*;
 
-public class SendSphereLayer extends AbstractMovingObject {
+public class SphereLayer extends AbstractMovingObject {
 
 	HE_Mesh sphere;
 	HEC_Sphere sphCreator;
 	
-	public SendSphereLayer(int _distanceScale, float _duration, int _yOffset, int _xOffset, PApplet _sketch, WB_Render _render) {
+	public SphereLayer(int _distanceScale, float _duration, int _yOffset, int _xOffset, PApplet _sketch, WB_Render _render) {
 		super(_distanceScale, _duration, _yOffset, _xOffset, _sketch, _render);
 
 		//TODO retween
@@ -81,5 +82,17 @@ public class SendSphereLayer extends AbstractMovingObject {
 			app.translate(-200, 0, 0);
 			render.drawFaces(sphere);
 		app.popMatrix();
+	}
+
+	@Override
+	public void tapEffect(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragEffect(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
 	}
 }

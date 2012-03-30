@@ -20,6 +20,8 @@ import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProces
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
+import floader.visuals.IVisual;
+
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
@@ -45,15 +47,17 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 	float buttonInnerWidth;
 	float buttonPadding = 30;
 
+	IVisual viz;
 	OscMessage msg;
 
-	public EffectBoxUIComponent(PApplet app, OscP5 oscP5, NetAddress remoteAddress) {
+	public EffectBoxUIComponent(PApplet app, OscP5 oscP5, NetAddress remoteAddress, IVisual viz) {
 		super(app);
 		this.app = app;
+		this.viz = viz;
 		this.oscP5 = oscP5;
 		this.remoteAddress = remoteAddress;
-		effectBoxOuterWidth = app.width/2;
-		effectBoxOuterHeight = app.height - 200; //Leave room for buttons
+		effectBoxOuterWidth = app.width / 2;
+		effectBoxOuterHeight = app.height - 200; // Leave room for buttons
 		effectBoxInnerWidth = effectBoxOuterWidth - effectBoxPadding;
 		effectBoxInnerHeight = effectBoxOuterHeight - effectBoxPadding;
 		effectBoxXPos = effectBoxPadding / 2;
@@ -85,11 +89,10 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 		PImage buttonImg = app.createImage((int) width, (int) height, PConstants.RGB);
 		buttonImg.loadPixels();
 		for (int i = 0; i < buttonImg.pixels.length; i++) {
-			buttonImg.pixels[i] = app.color(0, 90, 102);
+			buttonImg.pixels[i] = app.color(0, 90, 60,100);
 		}
 
 		MTImageButton b = new MTImageButton(app, buttonImg);
-		b.setFillColor(new MTColor(200, 100, 200, 200));
 		b.setStrokeColor(new MTColor(255, 255, 255, 200));
 		b.translate(new Vector3D(x, y, 0));
 		addChild(b);
@@ -113,8 +116,9 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 
 		effectBox.unregisterAllInputProcessors();
 		effectBox.setGestureAllowance(DragProcessor.class, true);
-		//effectBox.setGe
+		// effectBox.setGe
 		effectBox.registerInputProcessor(new DragProcessor(app));
+		effectBox.registerInputProcessor(new TapProcessor(app));
 		effectBox.removeAllGestureEventListeners();
 		this.addChild(effectBox);
 		effectBox.addGestureListener(DragProcessor.class, new IGestureEventListener() {
@@ -122,6 +126,7 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 			@Override
 			public boolean processGestureEvent(MTGestureEvent ge) {
 				DragEvent de = (DragEvent) ge;
+
 
 				MTRectangle target = (MTRectangle) de.getTarget();
 				float width = target.getWidthXY(TransformSpace.RELATIVE_TO_PARENT);
@@ -146,27 +151,40 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 				return true;
 			}
 		});
+		
+		effectBox.addGestureListener(TapProcessor.class, new IGestureEventListener() {
+			@Override
+			public boolean processGestureEvent(MTGestureEvent ge) {
+				TapEvent te = (TapEvent) ge;
+				viz.tapEvent(index, te.isTapDown());
+				return true;
+			}
+		});
 	}
 
 	public void effectBoxEvent(int index, float x, float y) {
 
+	
 		if (x < 0)
 			x = 0;
-		if (x > 127)
-			x = 127;
+		if (x > 1)
+			x = 1;
 		msg = new OscMessage(MTVisualizerConstants.OSC_CTRL_PATH);
 		msg.add((index * 2));
 		msg.add(x);
+		
 		oscP5.send(msg, remoteAddress);
-
+		viz.dragEvent(index * 2,x);
+		
 		if (y < 0)
 			y = 0;
-		if (y > 127)
-			y = 127;
+		if (y > 1)
+			y = 1;
 		msg = new OscMessage(MTVisualizerConstants.OSC_CTRL_PATH);
 		msg.add((index * 2) + 1);
 		msg.add(y);
 		oscP5.send(msg, remoteAddress);
+		viz.dragEvent(((index * 2) + 1), y);
 
 	}
 
@@ -175,13 +193,11 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 			msg = new OscMessage(MTVisualizerConstants.OSC_NOTE_PATH);
 			msg.add(index);
 			msg.add(1);
-			// System.out.println("Tap down " + index);
 			oscP5.send(msg, remoteAddress);
 		} else if (te.isTapped()) {
 			msg = new OscMessage(MTVisualizerConstants.OSC_NOTE_PATH);
 			msg.add(index);
 			msg.add(0);
-			// System.out.println("Tap up " + index);
 			oscP5.send(msg, remoteAddress);
 		}
 	}

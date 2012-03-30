@@ -13,7 +13,6 @@ import oscP5.*;
 import wblut.hemesh.core.*;
 import wblut.core.processing.*;
 
-
 @SuppressWarnings("serial")
 public class ImagineYourGardenVisual implements IVisual {
 
@@ -47,19 +46,17 @@ public class ImagineYourGardenVisual implements IVisual {
 	boolean rotateXDir = true;;
 	boolean randomizeDir = true;
 	float cylHeight = 25000;
-	
-	
+
 	float rotDuration = 4;
 	float origRotDuration = rotDuration;
 	float maxRotDuration = 1;
 	float rotateY;
-	
-	float zoomAmt = -(cylHeight-10000)/2;
+
+	float zoomAmt = -(cylHeight - 10000) / 2;
 	float origZoomDuration = 10;
 	float minZoomDuration = 2;
 	float maxZoomDuration = 20;
 
-	
 	boolean reset = false;
 	boolean change = false;
 	boolean twistBoost;
@@ -80,12 +77,11 @@ public class ImagineYourGardenVisual implements IVisual {
 	PApplet app;
 	Ani rotateAni;
 	Ani zoomAni;
-	
-	public ImagineYourGardenVisual(PApplet app)
-	{
+
+	public ImagineYourGardenVisual(PApplet app) {
 		this.app = app;
 	}
-	
+
 	@Override
 	public void setup() {
 		cam = new PeasyCam(app, 100);
@@ -99,31 +95,31 @@ public class ImagineYourGardenVisual implements IVisual {
 		rotateAni = new Ani(this, rotDuration, "rotateXAmt", 360);
 		rotateAni.repeat();
 		rotateAni.start();
-		zoomAni = new Ani(this, origZoomDuration, "zoomAmt", (cylHeight-12000)/2);
+		zoomAni = new Ani(this, origZoomDuration, "zoomAmt", (cylHeight - 12000) / 2);
 		zoomAni.repeat();
 		zoomAni.start();
 	}
-	
-	public void keyPressed(int keyCode)
-	{
+
+	public void keyPressed(int keyCode) {
 		System.out.println(keyCode);
 	}
 
 	@Override
 	public void draw() {
-		//app.background(255,255,255);
+		// app.background(255,255,255);
 		cam.feed();
 		app.lights();
-		//System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] + ", " + cam.getLookAt()[2]);
-		
+		// System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] +
+		// ", " + cam.getLookAt()[2]);
+
 		totalTwistAmt += twistAmt;
 		if (reset) {
 			createMeshes();
 			reset = false;
 			totalTwistAmt = 0;
 		}
-		
-		app.translate(0,0,zoomAmt);
+
+		app.translate(0, 0, zoomAmt);
 		app.rotateZ(PApplet.radians(rotateXAmt));
 		drawMesh(0);
 		drawMesh(1);
@@ -134,7 +130,7 @@ public class ImagineYourGardenVisual implements IVisual {
 			app.fill(outerR, outerG, outerB, outerAlpha * alphaMult);
 		else
 			app.fill(innerR, innerG, innerB, innerAlpha * alphaMult);
-		
+
 		meshes[meshIndex].modify(new HEM_Twist().setAngleFactor((twistAmt)).setTwistAxis(new WB_Line(new WB_Point3d(0, 0, 0), new WB_Vector3d(0, 0, 1))));
 		meshRenderer.drawFaces(meshes[meshIndex]);
 	}
@@ -163,45 +159,50 @@ public class ImagineYourGardenVisual implements IVisual {
 			} else if (msg.get(0).intValue() == 5) {
 				cameraX = (int) (msg.get(1).intValue() / 127.0 * maxCameraX);
 			} else if (msg.get(0).intValue() == 6) {
-				rotDuration = (msg.get(1).intValue() / 127.0f * (float)maxRotDuration);
+				rotDuration = (msg.get(1).intValue() / 127.0f * (float) maxRotDuration);
 			}
 		} else if (msg.checkAddrPattern("/mtn/note")) {
-			//RESET
+			// RESET
 			if (msg.get(0).intValue() == 0 && msg.get(1).intValue() != 0) {
 				reset();
 			}
 		} else if (msg.checkAddrPattern("/mtn/param")) {
 			if (msg.get(0).intValue() == 7) {
-				//Alpha blend multiplier for lowpass filter
-				alphaMult = (float)(msg.get(1).intValue() / 127.0);
+				// Alpha blend multiplier for lowpass filter
+				alphaMult = (float) (msg.get(1).intValue() / 127.0);
 			}
 		}
 	}
-	
-/*	public void keyPressed()
-	{
-		if(key == 'x')
-			reset();
-	}*/
 
-	void reset()
-	{
+	/*
+	 * public void keyPressed() { if(key == 'x') reset(); }
+	 */
+
+	void reset() {
 		reset = true;
 		alphaMult = 1;
 		rotateAni.setDuration(origRotDuration);
-		
+
 	}
-	
+
 	void createMeshes() {
 		createMesh(0, 210, 30);
 		createMesh(1, 200, 30);
 	}
 
 	@Override
-	public void camEffect(float amount) {
-		float delta = rotateY - (amount * 360);
-		cam.rotateY(PApplet.radians(delta));
-		rotateY -= delta;
+	public void dragEvent(int eventType, float amount) {
+		if (eventType == 0 || eventType == 2) {
+			float delta = rotateY - (amount * 180);
+			cam.rotateY(PApplet.radians(delta));
+			rotateY -= delta;
+		}
+	}
+
+	@Override
+	public void tapEvent(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
