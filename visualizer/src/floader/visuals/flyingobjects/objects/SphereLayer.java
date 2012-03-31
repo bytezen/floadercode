@@ -38,7 +38,7 @@ public class SphereLayer extends AbstractMovingObject {
 		//rotationTween = new Tween("rotation", 0f, 2 * PConstants.PI, 213);
 		effectExtrudeDistanceBase = 0;
 		effectTwistXBase = 10f;
-		effectScaleBase = 20;
+		effectScaleBase = 2;
 		
 	}
 
@@ -85,13 +85,19 @@ public class SphereLayer extends AbstractMovingObject {
 	}
 
 	@Override
-	public void tapEffect(int eventType, boolean isTapDown) {
+	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void dragEffect(int eventType, float amount) {
+	public void dragEvent(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noteEvent(int note, int vel, int chan) {
 		// TODO Auto-generated method stub
 		
 	}

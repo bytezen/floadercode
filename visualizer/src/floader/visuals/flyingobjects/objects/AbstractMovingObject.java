@@ -123,17 +123,19 @@ public abstract class AbstractMovingObject {
 	protected void applyScale(HE_Mesh mesh)
 	{
 		//Add one so we don't end up with a scale of 0
-		mesh.scale((effectScale * effectScaleBase) + 1);
+		mesh.scale((effectScale * effectScaleBase) + 1, 1, 1);
 	}
 	
-	public void effectEnableScale(float _effectScale)
+	public void effectEnableScale(float effectScale)
 	{
-		effectScale = _effectScale;
+		this.effectScale = effectScale;
 	}
 	
 	
-	public abstract void tapEffect(int EventType, boolean isTapDown);
-	public abstract void dragEffect(int EventType, float amount);
+	public abstract void tapEvent(int EventType, boolean isTapDown);
+	public abstract void dragEvent(int EventType, float amount);
+	public abstract void noteEvent(int note, int vel, int chan);
+	
 	
 	
 }

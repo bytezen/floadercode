@@ -35,7 +35,7 @@ public class ConeLayer extends AbstractMovingObject {
 		
 		effectExtrudeDistanceBase = 20;
 		effectTwistXBase = 10f;
-		effectScaleBase = 10;
+		effectScaleBase = 2;
 	}
 
 	public void play() {
@@ -71,13 +71,19 @@ public class ConeLayer extends AbstractMovingObject {
 	}
 
 	@Override
-	public void tapEffect(int eventType, boolean isTapDown) {
+	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void dragEffect(int eventType, float amount) {
+	public void dragEvent(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noteEvent(int note, int vel, int chan) {
 		// TODO Auto-generated method stub
 		
 	}

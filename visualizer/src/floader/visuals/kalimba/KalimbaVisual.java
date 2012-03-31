@@ -127,15 +127,6 @@ public class KalimbaVisual implements IVisual {
 
 	}
 
-	public void oscEvent(OscMessage msg) {
-
-	}
-
-	@Override
-	public void keyPressed(int keyCode) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
@@ -149,6 +140,18 @@ public class KalimbaVisual implements IVisual {
 			buttons[k][j] = 1;
 			counter[k][j] = 20;
 		}
+	}
+
+	@Override
+	public void noteEvent(int note, int velocity, int channel) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

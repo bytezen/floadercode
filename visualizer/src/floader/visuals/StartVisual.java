@@ -26,12 +26,13 @@ public class StartVisual extends PApplet {
 		oscP5 = new OscP5(this, OSC_PORT);
 		Ani.init(this);
 		Ani.setDefaultEasing(Ani.LINEAR);
-		viz= new Percentages(this);
+		//viz = new FlyingObjectsVisual(this);
+		//viz = new Percentages(this);
 		//viz = new TearsForDearsVisual(this);
 		//viz = new ImagineYourGardenVisual(this);
 		//viz = new HangOnVisual(this);
 		//viz = new AvanteHangOnVisual(this);
-		//viz = new LeakierPhysicsVisual(this);
+		viz = new LeakierPhysicsVisual(this);
 		//viz = new KalimbaVisual(this);
 		viz.setup();
 		
@@ -45,9 +46,10 @@ public class StartVisual extends PApplet {
 	
 	public void keyPressed()
 	{
-		viz.keyPressed(this.keyCode);
+		//viz.keyPressed(this.keyCode);
 		//viz.dragEvent((float)mouseX/(float)width);
 		viz.tapEvent(0,true);
+		//viz.noteEvent(0, 127, 1);
 	}
 	
 	public static void main(String args[]) {
@@ -55,8 +57,13 @@ public class StartVisual extends PApplet {
 	}
 	
 	public void oscEvent(OscMessage msg) {
-		
-		viz.oscEvent(msg);
+		if(msg.checkAddrPattern(VisualConstants.OSC_CTRL_PATH))
+		{
+			viz.ctrlEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg.get(2).intValue());
+		} else if(msg.checkAddrPattern(VisualConstants.OSC_NOTE_PATH))
+		{
+			viz.noteEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg.get(2).intValue());
+		}
 	}
 	
 }

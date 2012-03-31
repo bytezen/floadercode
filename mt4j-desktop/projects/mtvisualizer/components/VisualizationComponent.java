@@ -33,10 +33,6 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 		viz.draw();
 	}
 
-	public void oscEvent(OscMessage msg) {
-		viz.oscEvent(msg);
-	}
-	
 	public IVisual getIVisual()
 	{
 		return viz;

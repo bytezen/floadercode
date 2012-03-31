@@ -21,6 +21,7 @@ import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 import floader.visuals.IVisual;
+import floader.visuals.VisualConstants;
 
 import oscP5.OscMessage;
 import oscP5.OscP5;
@@ -169,7 +170,7 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 			x = 0;
 		if (x > 1)
 			x = 1;
-		msg = new OscMessage(MTVisualizerConstants.OSC_CTRL_PATH);
+		msg = new OscMessage(VisualConstants.OSC_CTRL_PATH);
 		msg.add((index * 2));
 		msg.add(x);
 		
@@ -180,7 +181,7 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 			y = 0;
 		if (y > 1)
 			y = 1;
-		msg = new OscMessage(MTVisualizerConstants.OSC_CTRL_PATH);
+		msg = new OscMessage(VisualConstants.OSC_CTRL_PATH);
 		msg.add((index * 2) + 1);
 		msg.add(y);
 		oscP5.send(msg, remoteAddress);
@@ -190,12 +191,12 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 
 	public void buttonEvent(int index, TapEvent te) {
 		if (te.isTapDown()) {
-			msg = new OscMessage(MTVisualizerConstants.OSC_NOTE_PATH);
+			msg = new OscMessage(VisualConstants.OSC_NOTE_PATH);
 			msg.add(index);
 			msg.add(1);
 			oscP5.send(msg, remoteAddress);
 		} else if (te.isTapped()) {
-			msg = new OscMessage(MTVisualizerConstants.OSC_NOTE_PATH);
+			msg = new OscMessage(VisualConstants.OSC_NOTE_PATH);
 			msg.add(index);
 			msg.add(0);
 			oscP5.send(msg, remoteAddress);

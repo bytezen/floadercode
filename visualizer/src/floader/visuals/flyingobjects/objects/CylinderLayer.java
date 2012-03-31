@@ -37,7 +37,7 @@ public class CylinderLayer extends AbstractMovingObject {
 				
 		effectExtrudeDistanceBase = 10;
 		effectTwistXBase = 1f;
-		effectScaleBase = 40;
+		effectScaleBase = 2;
 	}
 
 	public void play() {
@@ -85,13 +85,19 @@ public class CylinderLayer extends AbstractMovingObject {
 	}
 
 	@Override
-	public void tapEffect(int eventType, boolean isTapDown) {
+	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void dragEffect(int eventType, float amount) {
+	public void dragEvent(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noteEvent(int note, int vel, int chan) {
 		// TODO Auto-generated method stub
 		
 	}

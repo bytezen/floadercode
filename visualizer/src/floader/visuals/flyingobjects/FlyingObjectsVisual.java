@@ -1,14 +1,16 @@
 package floader.visuals.flyingobjects;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
+import floader.looksgood.ani.Ani;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
+import floader.visuals.flyingobjects.objects.AbstractMovingObject;
 import floader.visuals.flyingobjects.objects.ConeLayer;
 import floader.visuals.flyingobjects.objects.CylinderLayer;
 import floader.visuals.flyingobjects.objects.SphereLayer;
-
-
 
 import processing.core.*;
 import wblut.geom.core.*;
@@ -36,82 +38,66 @@ public class FlyingObjectsVisual implements IVisual {
 
 	WB_Render render;
 	PeasyCam cam;
-	LayerGroup layerGroup;
+	MasterLayer masterLayer;
+	LinkedList<AbstractMovingObject> cylinderGroup;
+	LinkedList<AbstractMovingObject> sphereGroup;
+	LinkedList<AbstractMovingObject> coneGroup;
 	PApplet app;
+	float scaleAmt;
+	Ani scaleAni;
 
-	
-	public static final int LAYER_SIZE = 11;
 	private float baseDuration = 10;
 
 	public FlyingObjectsVisual(PApplet app) {
 		this.app = app;
 		cam = new PeasyCam(app, 500);
 	}
-	public void keyPressed(int keyCode)
-	{
-		System.out.println(keyCode);
-	}
-	
+
 	public void setup() {
+
+		scaleAmt = 1;
+		scaleAni = new Ani(this, .4f, "scaleAmt", 0);
+		scaleAni.pause();
+		scaleAmt = 0;
 		
 		cam.setMinimumDistance(100);
 		cam.setMaximumDistance(500);
 		cam.setDistance(400);
 		render = new WB_Render(app);
-		layerGroup = new LayerGroup(LAYER_SIZE);
-		
-		//turn off touch rotation
-		//cam.setActive(false);
-		
-		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 0);
-		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 1);
-		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 2);
-		layerGroup.addLayer(new CylinderLayer(4, baseDuration, 0, 0, app, render), 3);
+		masterLayer = new MasterLayer();
 
-		layerGroup.addLayer(new SphereLayer(2, baseDuration, -100, 0, app, render), 4);
-		layerGroup.addLayer(new SphereLayer(2, baseDuration, -100, 0, app, render), 5);
+		cylinderGroup = new LinkedList<AbstractMovingObject>();
+		cylinderGroup.add(new CylinderLayer(4, baseDuration, 0, 0, app, render));
+		cylinderGroup.add(new CylinderLayer(4, baseDuration, 0, 0, app, render));
+		cylinderGroup.add(new CylinderLayer(4, baseDuration, 0, 0, app, render));
+		cylinderGroup.add(new CylinderLayer(4, baseDuration, 0, 0, app, render));
+		cylinderGroup.add(new CylinderLayer(4, baseDuration, 0, 0, app, render));
+		cylinderGroup.add(new CylinderLayer(4, baseDuration, 0, 0, app, render));
+		masterLayer.addGroup(cylinderGroup);
 
-		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, -200, app, render), 6);
-		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, -100, app, render), 7);
-		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, 0, app, render), 8);
-		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, 100, app, render), 9);
-		layerGroup.addLayer(new ConeLayer(6, baseDuration, -200, 200, app, render), 10);
+		sphereGroup = new LinkedList<AbstractMovingObject>();
+		sphereGroup.add(new SphereLayer(2, baseDuration, -100, 0, app, render));
+		sphereGroup.add(new SphereLayer(2, baseDuration, -100, 0, app, render));
+		sphereGroup.add(new SphereLayer(2, baseDuration, -100, 0, app, render));
+		sphereGroup.add(new SphereLayer(2, baseDuration, -100, 0, app, render));
+		sphereGroup.add(new SphereLayer(2, baseDuration, -100, 0, app, render));
+		sphereGroup.add(new SphereLayer(2, baseDuration, -100, 0, app, render));
+		masterLayer.addGroup(sphereGroup);
+
+		coneGroup = new LinkedList<AbstractMovingObject>();
+		coneGroup.add(new ConeLayer(6, baseDuration, -200, -200, app, render));
+		coneGroup.add(new ConeLayer(6, baseDuration, -200, -100, app, render));
+		coneGroup.add(new ConeLayer(6, baseDuration, -200, 0, app, render));
+		coneGroup.add(new ConeLayer(6, baseDuration, -200, 100, app, render));
+		coneGroup.add(new ConeLayer(6, baseDuration, -200, 200, app, render));
+		masterLayer.addGroup(coneGroup);
 	}
 
 	public void draw() {
 		app.lights();
 		cam.feed();
-		for (int i = 0; i < layerGroup.getLayerCount(); i++) {
-			if (layerGroup.getLayer(i).isPlaying())
-				layerGroup.getLayer(i).draw();
-		}
-	}
-
-	public void keyPressed() {
-
-		if (app.keyCode == 49) {
-			if (!layerGroup.getLayer(0).isPlaying())
-				layerGroup.getLayer(0).play();
-		} else if (app.keyCode == 50) {
-
-			/*
-			 * CameraState state = cam.getState(); // get a serializable
-			 * settings // object for current state
-			 * 
-			 * FileOutputStream f_out; ObjectOutputStream obj_out; try { f_out =
-			 * new FileOutputStream("data\\camState" + camCounter); obj_out =
-			 * new ObjectOutputStream(f_out); // Write object out to disk
-			 * obj_out.writeObject(state); } catch (IOException e) { // TODO
-			 * Auto-generated catch block e.printStackTrace(); } camCounter++;
-			 */
-
-		}
-	}
-
-	public void keyReleased() {
-		for (int i = 0; i < layerGroup.getLayerCount(); i++) {
-			layerGroup.getLayer(i).stop();
-		}
+		masterLayer.drawPlayingLayers();
+		masterLayer.effectEnableScale(scaleAmt);
 	}
 
 	void loadCamState(int index) {
@@ -140,56 +126,63 @@ public class FlyingObjectsVisual implements IVisual {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		/*
+		 * CameraState state = cam.getState(); // get a serializable settings //
+		 * object for current state
+		 * 
+		 * FileOutputStream f_out; ObjectOutputStream obj_out; try { f_out = new
+		 * FileOutputStream("data\\camState" + camCounter); obj_out = new
+		 * ObjectOutputStream(f_out); // Write object out to disk
+		 * obj_out.writeObject(state); } catch (IOException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } camCounter++;
+		 */
+
 	}
 
-	public void oscEvent(OscMessage msg) {
-
-		if (msg.checkAddrPattern("/mtn/note")) {
-			int note = msg.get(0).intValue();
-			int vel = msg.get(1).intValue();
-			int chan = msg.get(2).intValue();
-
-			if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
-				// Escape if incoming note is higher than max number of layers
-				if (note < LAYER_SIZE) {
-					if (vel > 0) {
-						layerGroup.getLayer(note).play();
-					} else if (vel == 0) {
-						layerGroup.getLayer(note).stop();
-					}
-				}
-			} else if (chan == VisualConstants.CAM_EVENT_CHANNEL) {
-				if (vel > 0)
-					loadCamState(note);
-			}
-		} else if (msg.checkAddrPattern("/mtn/ctrl")) {
-			int ctrlNum = msg.get(0).intValue();
-			int ctrlVal = msg.get(1).intValue();
-			
-			// Extrude
-			if (ctrlNum == 1) {
-				// layerGroup.effectEnableExtrude((float)ctrlVal / 127.0f);
-			}
-			// Twist
-			else if (ctrlNum == 2) {
-				layerGroup.effectEnableTwistX((float) ctrlVal / 127.0f);
-				
-			}
-			// Scale
-			else if (ctrlNum == 3) {
-				layerGroup.effectEnableScale((float) ctrlVal / 127.0f);
-			}
-		}
-	}
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		// TODO Auto-generated method stub
-		
+		// Twist
+		if (eventType == 2 || eventType == 0) {
+			masterLayer.effectEnableTwistX(amount);
+		}
 	}
+
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-		// TODO Auto-generated method stub
-		
+
+		if (isTapDown) {
+			scaleAmt = 1;
+			scaleAni.start();
+		}
+	}
+
+	@Override
+	public void noteEvent(int note, int vel, int chan) {
+		if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
+			if (note == 0 && vel > 0) {
+				// Remove the last element from the list, put it first and play
+				// it
+				cylinderGroup.push(cylinderGroup.removeLast());
+				cylinderGroup.peekFirst().play();
+				
+			} else if (note == 1 && vel > 0) {
+				sphereGroup.push(sphereGroup.removeLast());
+				sphereGroup.peekFirst().play();
+			} else if (note == 2 && vel > 0) {
+
+				coneGroup.push(coneGroup.removeLast());
+				coneGroup.peekFirst().play();
+			}
+		} else if (chan == VisualConstants.CAM_EVENT_CHANNEL) {
+			if (vel > 0)
+				loadCamState(note);
+		}
+	}
+
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
+
 	}
 
 }

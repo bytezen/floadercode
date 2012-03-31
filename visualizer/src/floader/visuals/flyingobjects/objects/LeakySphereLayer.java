@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import floader.looksgood.ani.Ani;
 import floader.looksgood.ani.AniConstants;
+import floader.visuals.VisualConstants;
 
 import processing.core.*;
 import wblut.geom.core.*;
@@ -22,10 +23,13 @@ public class LeakySphereLayer extends AbstractMovingObject {
 	HEC_Sphere sphCreator;
 	int seed = 1;
 	int initRadius = 2;
-	int tapRadius = 80;
+	float noise = 0;
+	float maxNoise = .2f;
+	int tapRadius = 10;
 	int radius;
 	Ani radiusAni;
 	Ani rotateAni;
+	Ani noiseAni;
 	float rotate;
 	float rotateDuration = 10;
 	float maxRotateDuration = 9;
@@ -45,6 +49,10 @@ public class LeakySphereLayer extends AbstractMovingObject {
 
 		rotateAni = new Ani(this, 10, "rotate", 360);
 		rotateAni.repeat();
+		
+		noise = maxNoise;
+		noiseAni = new Ani(this, .5f, "noise", 0);
+		noise = 0;
 
 		radius = initRadius;
 	}
@@ -72,7 +80,9 @@ public class LeakySphereLayer extends AbstractMovingObject {
 		// Extrude
 		HE_Selection selection = getRandomSelection(seed, 12, sphere);
 		sphere.modifySelected(new HEM_Extrude().setDistance(400), selection);
-		// sphere.modify(new HEM_Noise().setDistance(2));
+		
+		//Noise
+		sphere.modify(new HEM_Noise().setDistance(noise));
 
 		// Rotate to timeline
 		sphere.rotateAboutAxis(PApplet.radians(rotate), sphere.getVerticesAsPoint()[0], sphere.getVerticesAsPoint()[1]);
@@ -87,13 +97,25 @@ public class LeakySphereLayer extends AbstractMovingObject {
 	}
 
 	@Override
-	public void tapEffect(int eventType, boolean isTapDown) {
-		if (isTapDown)
-			radiusAni.start();
+	public void tapEvent(int eventType, boolean isTapDown) {
+		noise = maxNoise;
+		noiseAni.start();
 	}
 
 	@Override
-	public void dragEffect(int eventType, float amount) {
+	public void dragEvent(int eventType, float amount) {
 		if (eventType == 0 || eventType == 2) rotateAni.setDuration((amount * maxRotateDuration) + 1f);
 	}
+	
+	public void noteEvent(int note, int vel, int chan)
+	{
+		if(chan == VisualConstants.OBJECT_EVENT_CHANNEL)
+		{
+			if(note == 0 && vel > 0)
+			{
+				radiusAni.start();
+			}
+		}
+	}
+	
 }

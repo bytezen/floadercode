@@ -151,10 +151,6 @@ public class AvanteHangOnVisual implements IVisual {
 	 * }
 	 */
 
-	public void oscEvent(OscMessage msg) {
-		
-	}
-
 	// Events
 	void splode() {
 		// stopAnimation();
@@ -200,6 +196,18 @@ public class AvanteHangOnVisual implements IVisual {
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noteEvent(int note, int velocity, int channel) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -276,51 +276,6 @@ public class TearsForDearsVisual implements IVisual {
 	 * !rotate; } else if(key == 'x') { reset(); } else if(key == '9') {
 	 * cam.rotateZ(radians(90)); } }
 	 */
-	public void oscEvent(OscMessage msg) {
-		if (msg.checkAddrPattern("/mtn/note")) {
-
-			int note = msg.get(0).intValue();
-			int vel = msg.get(1).intValue();
-			int chan = msg.get(2).intValue();
-
-			if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
-				// RESET
-				if (note == 0 && vel > 0) {
-					reset();
-				} else if (msg.get(0).intValue() == 3 && msg.get(1).intValue() != 0) {
-					addLattice = true;
-				} else if (msg.get(0).intValue() == 4 && msg.get(1).intValue() != 0) {
-					scroll = true;
-				} else if (msg.get(0).intValue() == 5 && msg.get(1).intValue() != 0) {
-					scroll = false;
-				} else if (msg.get(0).intValue() == 6 && msg.get(1).intValue() != 0) {
-					cam.rotateZ(PApplet.radians(90));
-				}
-			} else if (msg.checkAddrPattern("/mtn/ctrl")) {
-				// CTRL 1 Rotate individual amount
-				if (msg.get(0).intValue() == 1) {
-					rotateIndividual = ((float) msg.get(1).intValue() / 127.0f) * maxRotateIndividual - (maxRotateIndividual / 2);
-				} else
-				// CTRL 2 Rotate cam Z amount
-				if (msg.get(0).intValue() == 2) {
-					rotateZ = ((float) msg.get(1).intValue() / 127.0f) * maxRotateZ - (maxRotateZ / 2);
-				} else
-				// CTRL 3 Rotate forward amount
-				if (msg.get(0).intValue() == 3) {
-					rotateForward = ((float) msg.get(1).intValue() / 127.0f) * maxRotateForward - (maxRotateForward / 2);
-				} else
-				// CTRL 4 Rotate combine amount
-				if (msg.get(0).intValue() == 4) {
-					rotateCombine = ((float) msg.get(1).intValue() / 127.0f) * maxRotateCombine - (maxRotateCombine / 2);
-				} else
-				// CTRL 5 Rotate crazy amount
-				if (msg.get(0).intValue() == 5) {
-					rotateCrazy = ((float) msg.get(1).intValue() / 127.0f) * maxRotateCrazy - (maxRotateCrazy / 2);
-				}
-			}
-		}
-
-	}
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
@@ -341,8 +296,49 @@ public class TearsForDearsVisual implements IVisual {
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-		// TODO Auto-generated method stub
-System.out.println(eventType);
+
+	}
+
+	@Override
+	public void noteEvent(int note, int vel, int chan) {
+		if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
+			if (note == 0 && vel > 0) {
+				reset();
+			} else if (note == 3 && vel != 0) {
+				addLattice = true;
+			} else if (note == 4 && vel != 0) {
+				scroll = true;
+			} else if (note == 5 && vel != 0) {
+				scroll = false;
+			} else if (note == 6 && vel != 0) {
+				cam.rotateZ(PApplet.radians(90));
+			}
+		}  
+	}
+
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
+			// CTRL 1 Rotate individual amount
+			if (num == 1) {
+				rotateIndividual = ((float) val / 127.0f) * maxRotateIndividual - (maxRotateIndividual / 2);
+			} else
+			// CTRL 2 Rotate cam Z amount
+			if (num == 2) {
+				rotateZ = ((float) val / 127.0f) * maxRotateZ - (maxRotateZ / 2);
+			} else
+			// CTRL 3 Rotate forward amount
+			if (num == 3) {
+				rotateForward = ((float) val / 127.0f) * maxRotateForward - (maxRotateForward / 2);
+			} else
+			// CTRL 4 Rotate combine amount
+			if (num == 4) {
+				rotateCombine = ((float) val / 127.0f) * maxRotateCombine - (maxRotateCombine / 2);
+			} else
+			// CTRL 5 Rotate crazy amount
+			if (num == 5) {
+				rotateCrazy = ((float) val / 127.0f) * maxRotateCrazy - (maxRotateCrazy / 2);
+			}
+
 	}
 
 }

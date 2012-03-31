@@ -10,6 +10,9 @@ import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.transition.SlideTransition;
 import org.mt4j.util.math.Vector3D;
+
+import floader.visuals.IVisual;
+import floader.visuals.VisualConstants;
 import oscP5.OscMessage;
 import oscP5.OscP5;
 
@@ -38,7 +41,13 @@ public class VisualizationScene extends AbstractScene {
 	}
 
 	public void oscEvent(OscMessage msg) {
-		vizComp.oscEvent(msg);
+		if(msg.checkAddrPattern(VisualConstants.OSC_CTRL_PATH))
+		{
+			vizComp.getIVisual().ctrlEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg.get(2).intValue());
+		} else if(msg.checkAddrPattern(VisualConstants.OSC_NOTE_PATH))
+		{
+			vizComp.getIVisual().noteEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg.get(2).intValue());
+		}
 	}
 
 	@Override
@@ -51,5 +60,10 @@ public class VisualizationScene extends AbstractScene {
 	public void onLeave() {
 		vizComp.destroy();
 		uiComp.destroy();
+	}
+	
+	public IVisual getIVisual()
+	{
+		return vizComp.getIVisual();
 	}
 }

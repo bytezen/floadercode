@@ -161,17 +161,34 @@ public class Percentages implements IVisual {
 
 	}
 
-	public void oscEvent(OscMessage msg) {
 
-		if (msg.checkAddrPattern("/mtn/ctrl")) {
+	@Override
+	public void dragEvent(int eventType, float amount) {
+
+		if(eventType ==0)cam.setDistance(camMaxDistance* amount);
+	}
+
+	@Override
+	public void tapEvent(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noteEvent(int note, int velocity, int channel) {
+			speedAni.start();
+	}
+
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
 			// Speed
-			if (msg.get(0).intValue() == 2) {
-				speed = (float) msg.get(1).intValue() / 10.0f;
-			} else if (msg.get(0).intValue() == 3) {
+			if (num == 2) {
+				speed = (float) val / 10.0f;
+			} else if (num == 3) {
 				meshes[0].modify(new HEM_Smooth());
 			} else
 			// Vertex Expand
-			if (msg.get(0).intValue() == 6) {
+			if (num == 6) {
 				// Vertex Expansion
 				HE_Selection selection = new HE_Selection(meshes[0]);
 				Iterator<HE_Face> fItr = meshes[0].fItr();
@@ -183,30 +200,11 @@ public class Percentages implements IVisual {
 					}
 				}
 				meshes[0].modifySelected(new HEM_VertexExpand().setDistance(app.random(10, 400)), selection);
-			} else if (msg.get(0).intValue() == 7) {
+			} else if (num == 7) {
 				reset = true;
-			} else if (msg.get(0).intValue() == 8) {
+			} else if (num == 8) {
 				randomizeDir = !randomizeDir;
 			}
-		} else if(msg.checkAddrPattern("/mtn/note"))
-		{
-			int note = msg.get(0).intValue();
-			int vel = msg.get(1).intValue();
-			int chan = msg.get(2).intValue();
-			
-			speedAni.start();
-		}
-	}
-
-	@Override
-	public void dragEvent(int eventType, float amount) {
-
-		if(eventType ==0)cam.setDistance(camMaxDistance* amount);
-	}
-
-	@Override
-	public void tapEvent(int eventType, boolean isTapDown) {
-		// TODO Auto-generated method stub
 		
 	}
 }

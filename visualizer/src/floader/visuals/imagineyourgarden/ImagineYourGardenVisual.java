@@ -142,42 +142,6 @@ public class ImagineYourGardenVisual implements IVisual {
 		meshes[meshIndex].modify(new HEM_Lattice().setDepth(4).setWidth(40).setThresholdAngle(PApplet.radians(45)).setFuse(true));
 	}
 
-	public void oscEvent(OscMessage msg) {
-
-		if (msg.checkAddrPattern("/mtn/ctrl")) {
-			// Twist Amount
-			if (msg.get(0).intValue() == 1) {
-				twistAmt = (float) ((msg.get(1).intValue() / 127.0 * maxTwistAmt));
-			}
-			// Color 1
-			else if (msg.get(0).intValue() == 2) {
-				innerAlpha = (int) (msg.get(1).intValue() / 127.0 * 255);
-			} else if (msg.get(0).intValue() == 3) {
-				outerAlpha = (int) (msg.get(1).intValue() / 127.0 * 255);
-			} else if (msg.get(0).intValue() == 4) {
-				cameraY = (int) (msg.get(1).intValue() / 127.0 * maxCameraY);
-			} else if (msg.get(0).intValue() == 5) {
-				cameraX = (int) (msg.get(1).intValue() / 127.0 * maxCameraX);
-			} else if (msg.get(0).intValue() == 6) {
-				rotDuration = (msg.get(1).intValue() / 127.0f * (float) maxRotDuration);
-			}
-		} else if (msg.checkAddrPattern("/mtn/note")) {
-			// RESET
-			if (msg.get(0).intValue() == 0 && msg.get(1).intValue() != 0) {
-				reset();
-			}
-		} else if (msg.checkAddrPattern("/mtn/param")) {
-			if (msg.get(0).intValue() == 7) {
-				// Alpha blend multiplier for lowpass filter
-				alphaMult = (float) (msg.get(1).intValue() / 127.0);
-			}
-		}
-	}
-
-	/*
-	 * public void keyPressed() { if(key == 'x') reset(); }
-	 */
-
 	void reset() {
 		reset = true;
 		alphaMult = 1;
@@ -203,6 +167,38 @@ public class ImagineYourGardenVisual implements IVisual {
 	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void noteEvent(int note, int velocity, int channel) {
+
+		// RESET
+		if (note == 0 && velocity != 0) {
+			reset();
+		}
+
+	}
+
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
+		
+			// Twist Amount
+			if (num == 1) {
+				twistAmt = (float) ((val / 127.0 * maxTwistAmt));
+			}
+			// Color 1
+			else if (num == 2) {
+				innerAlpha = (int) (val / 127.0 * 255);
+			} else if (num == 3) {
+				outerAlpha = (int) (val / 127.0 * 255);
+			} else if (num == 4) {
+				cameraY = (int) (val / 127.0 * maxCameraY);
+			} else if (num == 5) {
+				cameraX = (int) (val / 127.0 * maxCameraX);
+			} else if (num == 6) {
+				rotDuration = (val / 127.0f * (float) maxRotDuration);
+			}
+		
 	}
 
 }

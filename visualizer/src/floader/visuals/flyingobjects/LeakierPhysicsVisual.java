@@ -1,9 +1,11 @@
 package floader.visuals.flyingobjects;
 
 import java.io.*;
+import java.util.LinkedList;
 
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
+import floader.visuals.flyingobjects.objects.AbstractMovingObject;
 import floader.visuals.flyingobjects.objects.CylinderLayer;
 import floader.visuals.flyingobjects.objects.LeakySphereLayer;
 
@@ -35,12 +37,11 @@ public class LeakierPhysicsVisual implements IVisual {
 
 	WB_Render render;
 	PeasyCam cam;
-	LayerGroup layerGroup;
+	MasterLayer masterLayer;
+	LinkedList<AbstractMovingObject> sphereGroup;
 	PApplet app;
 	int maxDistance = 1000;
 
-	
-	public static final int LAYER_SIZE = 2;
 	private float baseDuration = 100;
 
 	public LeakierPhysicsVisual(PApplet app) {
@@ -49,7 +50,7 @@ public class LeakierPhysicsVisual implements IVisual {
 	}
 	public void keyPressed(int keyCode)
 	{
-		layerGroup.tapEffect(0, true);
+		masterLayer.tapEffect(0, true);
 	}
 	
 	public void setup() {
@@ -58,33 +59,39 @@ public class LeakierPhysicsVisual implements IVisual {
 		cam.setMaximumDistance(maxDistance);
 		cam.setDistance(88.9);
 		render = new WB_Render(app);
-		layerGroup = new LayerGroup(LAYER_SIZE);
-		layerGroup.addLayer(new LeakySphereLayer(0, baseDuration, 58, 78, app, render), 0);
-		layerGroup.addLayer(new LeakySphereLayer(0, baseDuration, -58, -78, app, render), 1);
-		layerGroup.getLayer(0).play();
-		//layerGroup.getLayer(1).play();
+		masterLayer = new MasterLayer();
+		
+		sphereGroup = new LinkedList<AbstractMovingObject>();
+		sphereGroup.add(new LeakySphereLayer(0, baseDuration, 58, 78, app, render));
+		sphereGroup.get(0).play();
+		//sphereGroup.add(new LeakySphereLayer(0, baseDuration, -58, -78, app, render));
+		masterLayer.addGroup(sphereGroup);
 	}
 
 	public void draw() {
 		cam.feed();
-		for (int i = 0; i < layerGroup.getLayerCount(); i++) {
-			if (layerGroup.getLayer(i).isPlaying())
-				layerGroup.getLayer(i).draw();
-		}
+		masterLayer.drawPlayingLayers();
 		
 	}
 
-	public void oscEvent(OscMessage msg) {
-		
-	}
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		layerGroup.dragEffect(eventType, amount);
+		masterLayer.dragEffect(eventType, amount);
 	}
 	
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-		layerGroup.tapEffect(eventType, isTapDown);
+		masterLayer.tapEffect(eventType, isTapDown);
+	}
+	@Override
+	public void noteEvent(int note, int velocity, int channel) {
+		//System.out.println("note received in leaky viz");
+		sphereGroup.get(0).noteEvent(0, 127, VisualConstants.OBJECT_EVENT_CHANNEL);
+	}
+	@Override
+	public void ctrlEvent(int num, int val, int chan) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
