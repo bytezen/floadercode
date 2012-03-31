@@ -3,6 +3,7 @@ package floader.visuals.flyingobjects;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.locks.Lock;
 
 import floader.looksgood.ani.Ani;
 import floader.visuals.IVisual;
@@ -51,6 +52,7 @@ public class FlyingObjectsVisual implements IVisual {
 	public FlyingObjectsVisual(PApplet app) {
 		this.app = app;
 		cam = new PeasyCam(app, 500);
+
 	}
 
 	public void setup() {
@@ -59,7 +61,7 @@ public class FlyingObjectsVisual implements IVisual {
 		scaleAni = new Ani(this, .4f, "scaleAmt", 0);
 		scaleAni.pause();
 		scaleAmt = 0;
-		
+
 		cam.setMinimumDistance(100);
 		cam.setMaximumDistance(500);
 		cam.setDistance(400);
@@ -93,11 +95,16 @@ public class FlyingObjectsVisual implements IVisual {
 		masterLayer.addGroup(coneGroup);
 	}
 
+	private Object lock = new Object();
+
 	public void draw() {
 		app.lights();
 		cam.feed();
-		masterLayer.drawPlayingLayers();
-		masterLayer.effectEnableScale(scaleAmt);
+
+		synchronized (lock) {
+			masterLayer.drawPlayingLayers();
+			masterLayer.effectEnableScale(scaleAmt);
+		}
 	}
 
 	void loadCamState(int index) {
@@ -163,17 +170,22 @@ public class FlyingObjectsVisual implements IVisual {
 			if (note == 0 && vel > 0) {
 				// Remove the last element from the list, put it first and play
 				// it
-				cylinderGroup.push(cylinderGroup.removeLast());
-				cylinderGroup.peekFirst().play();
-				
+				synchronized (lock) {
+					cylinderGroup.push(cylinderGroup.removeLast());
+					cylinderGroup.peekFirst().play();
+				}
 			} else if (note == 1 && vel > 0) {
-				sphereGroup.push(sphereGroup.removeLast());
-				sphereGroup.peekFirst().play();
+				synchronized (lock) {
+					sphereGroup.push(sphereGroup.removeLast());
+					sphereGroup.peekFirst().play();
+				}
 			} else if (note == 2 && vel > 0) {
-
-				coneGroup.push(coneGroup.removeLast());
-				coneGroup.peekFirst().play();
+				synchronized (lock) {
+					coneGroup.push(coneGroup.removeLast());
+					coneGroup.peekFirst().play();
+				}
 			}
+
 		} else if (chan == VisualConstants.CAM_EVENT_CHANNEL) {
 			if (vel > 0)
 				loadCamState(note);

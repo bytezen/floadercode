@@ -4,7 +4,9 @@ import java.util.Iterator;
 
 import oscP5.OscMessage;
 
+import floader.looksgood.ani.Ani;
 import floader.visuals.IVisual;
+import floader.visuals.VisualConstants;
 
 import wblut.hemesh.modifiers.*;
 import wblut.hemesh.core.*;
@@ -14,6 +16,7 @@ import wblut.geom.*;
 import wblut.geom.core.WB_Plane;
 import wblut.geom.core.WB_Point3d;
 import wblut.geom.core.WB_Vector3d;
+import wblut.core.math.WB_Parameter;
 import wblut.core.processing.*;
 import peasy.*;
 import processing.core.PApplet;
@@ -23,7 +26,7 @@ public class AvanteHangOnVisual implements IVisual {
 
 	float multiplier = 1;
 
-	int numSpheres = 20;
+	int numSpheres = 10;
 	WB_Render meshRenderer;
 	HE_Mesh[] spheres;
 	int[] sphereColors;
@@ -36,7 +39,7 @@ public class AvanteHangOnVisual implements IVisual {
 	float[] xSpins;
 
 	int startingRadius = 500;
-	int radiusIncrement = 40;
+	int radiusIncrement = 10;
 	int sphereCount = 0;
 	int counter = 90;
 	int sphereCounter = 0;
@@ -44,13 +47,25 @@ public class AvanteHangOnVisual implements IVisual {
 	float cap = -50;
 	float maxCap = 10;
 	float minDistance = 1;
-	float maxDistance = 1700;
+	float maxDistance = 2000;
 	float distance = 0;
 	double lookX;
 	double lookY;
 	double lookZ;
 	boolean animateColors = false;
 	boolean changeColors = false;
+	boolean lights = false;
+	boolean isTapped = false;
+	float r;
+	float g;
+	float b;
+
+	Ani noiseAni;
+	float noise = 0;
+	float maxNoise = 100;
+	Ani skewAni;
+	float skew = 0;
+	float maxSkew = -2;
 
 	PeasyCam cam;
 	PApplet app;
@@ -72,10 +87,17 @@ public class AvanteHangOnVisual implements IVisual {
 		xSpins = new float[numSpheres];
 
 		createSpheres();
+
+		// TODO put back to min distance
 		cam = new PeasyCam(app, minDistance);
 		distance = minDistance;
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
+
+		noise = maxNoise;
+		noiseAni = new Ani(this, .4f, "noise", 0);
+		noiseAni.pause();
+		noise = 0;
 	}
 
 	void createSpheres() {
@@ -88,7 +110,8 @@ public class AvanteHangOnVisual implements IVisual {
 
 			// Lattice & Cap
 			// TODO figure out way to incorporate lattice in a performant way
-			//spheres[i].modify(new HEM_Lattice().setDepth(1).setWidth(5).setThresholdAngle(PApplet.radians(90)).setFuse(true));
+			// spheres[i].modify(new
+			// HEM_Lattice().setDepth(1).setWidth(5).setThresholdAngle(PApplet.radians(90)).setFuse(true));
 			spheres[i].modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, -25, 0), new WB_Vector3d(0, 1, 0))));
 			spheres[i].modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, 25, 0), new WB_Vector3d(0, -1, 0))));
 
@@ -106,19 +129,14 @@ public class AvanteHangOnVisual implements IVisual {
 			sphereCount++;
 		}
 		initSpinRates();
-
-	}
-	
-	public void keyPressed(int keyCode)
-	{
-		System.out.println(keyCode);
 	}
 
 	@Override
 	public void draw() {
-		app.background(0,0,0);
+		app.background(r, g, b);
 		app.noStroke();
-		app.lights();
+		if (lights)
+			app.lights();
 		cam.feed();
 
 		for (int i = 0; i < numSpheres; i++) {
@@ -127,11 +145,11 @@ public class AvanteHangOnVisual implements IVisual {
 			zSpins[i] += zRates[i] * multiplier;
 			ySpins[i] += yRates[i] * multiplier;
 			xSpins[i] += xRates[i] * multiplier;
-			
+
 			app.rotateZ(PApplet.radians(zSpins[i]));
 			app.rotateY(PApplet.radians(ySpins[i]));
 			app.rotateX(PApplet.radians(xSpins[i]));
-			
+
 			app.fill(sphereColors[i]);
 			drawSphere(i);
 
@@ -139,8 +157,9 @@ public class AvanteHangOnVisual implements IVisual {
 		}
 	}
 
-	void drawSphere(int sphereNum) {
-		meshRenderer.drawFaces(spheres[sphereNum]);
+	void drawSphere(int index) {
+		spheres[index].modify(new HEM_Noise().setDistance(noise));
+		meshRenderer.drawFaces(spheres[index]);
 	}
 
 	/*
@@ -190,25 +209,48 @@ public class AvanteHangOnVisual implements IVisual {
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		cam.setDistance(amount * maxDistance);
+
+		/*
+		 * for (int i = 0; i < numSpheres; i++) spheres[i].modify(new
+		 * HEM_Skew().setSkewDirection(1, 0, 0).setGroundPlane(new WB_Plane(1,
+		 * 0, 0, 0, 0, 200)).setSkewFactor(amount * -20)); isTapped = false;
+		 */
+
+		if (eventType == 0 || eventType == 2) {
+			r = (1-amount) * 110;
+			g = (1-amount) * 150;
+			b = (1-amount) * 132;
+		}
 		
+
 	}
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-		// TODO Auto-generated method stub
-		
+
+		if (isTapDown) {
+			cam.setDistance(minDistance, 0);
+			lights = false;
+		} else {
+			cam.setDistance(maxDistance, 0);
+			lights = true;
+		}
+
 	}
 
 	@Override
 	public void noteEvent(int note, int velocity, int channel) {
-		// TODO Auto-generated method stub
-		
+
+		if (cam.getDistance() > (minDistance + 10)) {
+			createSpheres();
+			if (velocity > 0 && channel == VisualConstants.OBJECT_EVENT_CHANNEL)
+				noiseAni.start();
+		}
 	}
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -69,7 +69,7 @@ public class ImagineYourGardenVisual implements IVisual {
 	int maxCameraX = 360;
 
 	float twistAmt = 0;
-	float maxTwistAmt = 0.2f;
+	float maxTwistAmt = 1f;
 	int maxColor = 255;
 
 	float totalTwistAmt = 0;
@@ -108,15 +108,15 @@ public class ImagineYourGardenVisual implements IVisual {
 	public void draw() {
 		// app.background(255,255,255);
 		cam.feed();
-		app.lights();
+		//app.lights();
 		// System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] +
 		// ", " + cam.getLookAt()[2]);
 
 		totalTwistAmt += twistAmt;
 		if (reset) {
-			createMeshes();
+			//createMeshes();
 			reset = false;
-			totalTwistAmt = 0;
+			twistAmt = 0;
 		}
 
 		app.translate(0, 0, zoomAmt);
@@ -139,14 +139,14 @@ public class ImagineYourGardenVisual implements IVisual {
 		HEC_Creator creator = new HEC_Cylinder().setRadius(radius).setHeight(cylHeight).setFacets(15).setSteps(steps);
 		meshes[meshIndex] = new HE_Mesh(creator);
 		// Lattice
-		meshes[meshIndex].modify(new HEM_Lattice().setDepth(4).setWidth(40).setThresholdAngle(PApplet.radians(45)).setFuse(true));
+		meshes[meshIndex].modify(new HEM_Lattice().setDepth(1).setWidth(40).setThresholdAngle(PApplet.radians(45)));
 	}
 
 	void reset() {
 		reset = true;
 		alphaMult = 1;
 		rotateAni.setDuration(origRotDuration);
-
+		createMeshes();
 	}
 
 	void createMeshes() {
@@ -166,7 +166,9 @@ public class ImagineYourGardenVisual implements IVisual {
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
-
+		if(isTapDown)twistAmt = maxTwistAmt;
+		else if(!isTapDown){reset();twistAmt=0;}
+		
 	}
 
 	@Override
@@ -181,20 +183,11 @@ public class ImagineYourGardenVisual implements IVisual {
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
-		
-			// Twist Amount
-			if (num == 1) {
-				twistAmt = (float) ((val / 127.0 * maxTwistAmt));
-			}
 			// Color 1
-			else if (num == 2) {
+			 if (num == 2) {
 				innerAlpha = (int) (val / 127.0 * 255);
 			} else if (num == 3) {
 				outerAlpha = (int) (val / 127.0 * 255);
-			} else if (num == 4) {
-				cameraY = (int) (val / 127.0 * maxCameraY);
-			} else if (num == 5) {
-				cameraX = (int) (val / 127.0 * maxCameraX);
 			} else if (num == 6) {
 				rotDuration = (val / 127.0f * (float) maxRotDuration);
 			}

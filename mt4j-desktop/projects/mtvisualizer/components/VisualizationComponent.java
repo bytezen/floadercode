@@ -6,6 +6,7 @@ import org.mt4j.components.visibleComponents.AbstractVisibleComponent;
 import floader.visuals.*;
 import floader.visuals.flyingobjects.FlyingObjectsVisual;
 import floader.visuals.flyingobjects.LeakierPhysicsVisual;
+import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.imagineyourgarden.ImagineYourGardenVisual;
 import floader.visuals.kalimba.KalimbaVisual;
@@ -45,7 +46,7 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 			} else if (name.equals(floader.visuals.tearsfordears.TearsForDearsVisual.class.getName())) {
 				return new TearsForDearsVisual(app);
 			} else if (name.equals(floader.visuals.hangon.AvanteHangOnVisual.class.getName())) {
-				return new HangOnVisual(app);
+				return new AvanteHangOnVisual(app);
 			} else if (name.equals(floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName())) {
 				return new ImagineYourGardenVisual(app);
 			} else if (name.equals(floader.visuals.flyingobjects.LeakierPhysicsVisual.class.getName())) {

@@ -24,7 +24,7 @@ public class StartMTVisualizer extends MTApplication {
 			floader.visuals.percentages.Percentages.class.getName()
 	};
 	//Update this to start with a different scene
-	int currentSceneIndex = 4;
+	int currentSceneIndex = 0;
 	
 	@Override
 	public void startUp() {
@@ -58,12 +58,12 @@ public class StartMTVisualizer extends MTApplication {
 	
 	@Override
 	public void keyPressed()
-	{/*
-		currentSceneIndex++;
+	{
+		/*currentSceneIndex++;
 		if(currentSceneIndex >= sceneList.length)currentSceneIndex = 0;
 		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
 		this.changeScene(currentScene);*/
-		currentScene.getIVisual().noteEvent(0, 127, 1);
+		//currentScene.getIVisual().noteEvent(0, 127, 1);
 	}
 	
 	public static void main(String[] args) {

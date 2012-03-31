@@ -26,13 +26,13 @@ public class StartVisual extends PApplet {
 		oscP5 = new OscP5(this, OSC_PORT);
 		Ani.init(this);
 		Ani.setDefaultEasing(Ani.LINEAR);
-		//viz = new FlyingObjectsVisual(this);
+		viz = new FlyingObjectsVisual(this);
 		//viz = new Percentages(this);
 		//viz = new TearsForDearsVisual(this);
 		//viz = new ImagineYourGardenVisual(this);
 		//viz = new HangOnVisual(this);
 		//viz = new AvanteHangOnVisual(this);
-		viz = new LeakierPhysicsVisual(this);
+		//viz = new LeakierPhysicsVisual(this);
 		//viz = new KalimbaVisual(this);
 		viz.setup();
 		
@@ -47,9 +47,15 @@ public class StartVisual extends PApplet {
 	public void keyPressed()
 	{
 		//viz.keyPressed(this.keyCode);
-		//viz.dragEvent((float)mouseX/(float)width);
-		viz.tapEvent(0,true);
+		//viz.dragEvent(0,(float)mouseX/(float)width);
+		viz.noteEvent(0, 127, 1);
+		//viz.tapEvent(0,true);
 		//viz.noteEvent(0, 127, 1);
+	}
+	
+	public void keyReleased()
+	{
+		viz.tapEvent(0,false);
 	}
 	
 	public static void main(String args[]) {

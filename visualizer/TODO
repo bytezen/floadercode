@@ -4,3 +4,5 @@
 	-fix hang on
 -super! http://www.k2g2.org/blog:bit.craft:superdupershape_explorer
 -cam effect for flyingobjects
+-q's for joel
+	-public interface WB_Parameter<T> {
