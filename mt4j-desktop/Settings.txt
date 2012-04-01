@@ -15,7 +15,7 @@ Display=1
 #Framerate maximum
 MaximumFrameRate=60
 #Vertical_sync:'true' or 'false'
-Vertical_sync=false
+Vertical_sync=true
 #Enables multiple mice use (windows, some linux)
 MultiMiceEnabled=false
 #Anti aliasing multisampling - '0' disables it - 2,4,8 determines the quality of the a.a.

@@ -175,7 +175,7 @@ public class Percentages implements IVisual {
 	}
 
 	@Override
-	public void noteEvent(int note, int velocity, int channel) {
+	public void noteObjEvent(int note, int velocity) {
 			speedAni.start();
 	}
 
@@ -205,6 +205,12 @@ public class Percentages implements IVisual {
 			} else if (num == 8) {
 				randomizeDir = !randomizeDir;
 			}
+		
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		// TODO Auto-generated method stub
 		
 	}
 }

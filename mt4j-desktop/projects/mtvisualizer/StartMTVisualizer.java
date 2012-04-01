@@ -21,10 +21,11 @@ public class StartMTVisualizer extends MTApplication {
 			floader.visuals.imagineyourgarden.ImagineYourGardenVisual.class.getName(),
 			floader.visuals.flyingobjects.LeakierPhysicsVisual.class.getName(),
 			floader.visuals.kalimba.KalimbaVisual.class.getName(),
-			floader.visuals.percentages.Percentages.class.getName()
+			floader.visuals.percentages.Percentages.class.getName(),
+			"imagine kalimbas"
 	};
 	//Update this to start with a different scene
-	int currentSceneIndex = 0;
+	int currentSceneIndex = 7;
 	
 	@Override
 	public void startUp() {

@@ -49,7 +49,7 @@ public class LeakySphereLayer extends AbstractMovingObject {
 
 		rotateAni = new Ani(this, 10, "rotate", 360);
 		rotateAni.repeat();
-		
+
 		noise = maxNoise;
 		noiseAni = new Ani(this, .5f, "noise", 0);
 		noise = 0;
@@ -80,8 +80,8 @@ public class LeakySphereLayer extends AbstractMovingObject {
 		// Extrude
 		HE_Selection selection = getRandomSelection(seed, 12, sphere);
 		sphere.modifySelected(new HEM_Extrude().setDistance(400), selection);
-		
-		//Noise
+
+		// Noise
 		sphere.modify(new HEM_Noise().setDistance(noise));
 
 		// Rotate to timeline
@@ -98,24 +98,22 @@ public class LeakySphereLayer extends AbstractMovingObject {
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-		noise = maxNoise;
-		noiseAni.start();
+		if (isTapDown) {
+			noise = maxNoise;
+			noiseAni.start();
+		}
 	}
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		if (eventType == 0 || eventType == 2) rotateAni.setDuration((amount * maxRotateDuration) + 1f);
+		if (eventType == 0 || eventType == 2)
+			rotateAni.setDuration((amount * maxRotateDuration) + 1f);
 	}
-	
-	public void noteEvent(int note, int vel, int chan)
-	{
-		if(chan == VisualConstants.OBJECT_EVENT_CHANNEL)
-		{
-			if(note == 0 && vel > 0)
-			{
-				radiusAni.start();
-			}
+
+	public void noteEvent(int note, int vel) {
+		if (note == 0 && vel > 0) {
+			radiusAni.start();
 		}
 	}
-	
+
 }

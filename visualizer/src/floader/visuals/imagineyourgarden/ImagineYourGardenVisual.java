@@ -1,6 +1,7 @@
 package floader.visuals.imagineyourgarden;
 
 import floader.looksgood.ani.Ani;
+import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import peasy.PeasyCam;
 import processing.core.PApplet;
@@ -14,14 +15,13 @@ import wblut.hemesh.core.*;
 import wblut.core.processing.*;
 
 @SuppressWarnings("serial")
-public class ImagineYourGardenVisual implements IVisual {
+public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 
 	// Meshes
 	HE_Mesh[] meshes;
 	int numMeshes = 2;
 	WB_Render meshRenderer;
-	PeasyCam cam;
-
+	
 	// Cylinder colors
 	int outerAlpha = 255;
 	int innerAlpha = 180;
@@ -80,6 +80,7 @@ public class ImagineYourGardenVisual implements IVisual {
 
 	public ImagineYourGardenVisual(PApplet app) {
 		this.app = app;
+		camStatePath = "data\\imagineyourgarden\\camState";
 	}
 
 	@Override
@@ -87,6 +88,7 @@ public class ImagineYourGardenVisual implements IVisual {
 		cam = new PeasyCam(app, 100);
 		cam.setMinimumDistance(100);
 		cam.setMaximumDistance(600);
+		cam.setActive(false);
 		meshRenderer = new WB_Render(app);
 		meshes = new HE_Mesh[numMeshes];
 		app.colorMode(PApplet.RGB, 255, 255, 255, 255);
@@ -98,10 +100,6 @@ public class ImagineYourGardenVisual implements IVisual {
 		zoomAni = new Ani(this, origZoomDuration, "zoomAmt", (cylHeight - 12000) / 2);
 		zoomAni.repeat();
 		zoomAni.start();
-	}
-
-	public void keyPressed(int keyCode) {
-		System.out.println(keyCode);
 	}
 
 	@Override
@@ -156,29 +154,33 @@ public class ImagineYourGardenVisual implements IVisual {
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		if (eventType == 0 || eventType == 2) {
+		/*if (eventType == 0 || eventType == 2) {
 			float delta = rotateY - (amount * 180);
 			cam.rotateY(PApplet.radians(delta));
 			rotateY -= delta;
-		}
+		}*/
 	}
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
-		if(isTapDown)twistAmt = maxTwistAmt;
-		else if(!isTapDown){reset();twistAmt=0;}
+		/*if(isTapDown)twistAmt = maxTwistAmt;
+		else if(!isTapDown){reset();twistAmt=0;}*/
 		
 	}
 
 	@Override
-	public void noteEvent(int note, int velocity, int channel) {
-
-		// RESET
-		if (note == 0 && velocity != 0) {
+	public void noteObjEvent(int note, int velocity) {
+		if(note == 4 && velocity > 0)
+		{
+			twistAmt = maxTwistAmt;
+		} else if(note == 4 && velocity == 0)
+		{
+			twistAmt = 0;
+		} else if(note == 5 && velocity > 0)
+		{
 			reset();
 		}
-
 	}
 
 	@Override
@@ -191,7 +193,13 @@ public class ImagineYourGardenVisual implements IVisual {
 			} else if (num == 6) {
 				rotDuration = (val / 127.0f * (float) maxRotDuration);
 			}
-		
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		//writeCamState();
+		if(vel>0)
+			loadCamState(note);
 	}
 
 }

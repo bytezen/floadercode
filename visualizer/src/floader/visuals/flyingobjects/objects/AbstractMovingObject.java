@@ -134,7 +134,7 @@ public abstract class AbstractMovingObject {
 	
 	public abstract void tapEvent(int EventType, boolean isTapDown);
 	public abstract void dragEvent(int EventType, float amount);
-	public abstract void noteEvent(int note, int vel, int chan);
+	public abstract void noteEvent(int note, int vel);
 	
 	
 	

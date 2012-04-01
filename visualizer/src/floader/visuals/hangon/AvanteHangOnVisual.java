@@ -5,6 +5,7 @@ import java.util.Iterator;
 import oscP5.OscMessage;
 
 import floader.looksgood.ani.Ani;
+import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 
@@ -22,7 +23,7 @@ import peasy.*;
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
-public class AvanteHangOnVisual implements IVisual {
+public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 
 	float multiplier = 1;
 
@@ -54,24 +55,29 @@ public class AvanteHangOnVisual implements IVisual {
 	double lookZ;
 	boolean animateColors = false;
 	boolean changeColors = false;
-	boolean lights = false;
 	boolean isTapped = false;
 	float r;
 	float g;
 	float b;
+	Object lock;
 
 	Ani noiseAni;
 	float noise = 0;
 	float maxNoise = 100;
+	float initNoiseDuration = .4f;
 	Ani skewAni;
 	float skew = 0;
 	float maxSkew = -2;
+	
+	boolean lights = false;
 
-	PeasyCam cam;
 	PApplet app;
-
+	
+	
 	public AvanteHangOnVisual(PApplet app) {
 		this.app = app;
+		lock = new Object();
+		camStatePath = "data\\avantehangon\\camState";
 	}
 
 	@Override
@@ -93,9 +99,10 @@ public class AvanteHangOnVisual implements IVisual {
 		distance = minDistance;
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
+		cam.setActive(false);
 
 		noise = maxNoise;
-		noiseAni = new Ani(this, .4f, "noise", 0);
+		noiseAni = new Ani(this, initNoiseDuration, "noise", 0);
 		noiseAni.pause();
 		noise = 0;
 	}
@@ -139,21 +146,23 @@ public class AvanteHangOnVisual implements IVisual {
 			app.lights();
 		cam.feed();
 
-		for (int i = 0; i < numSpheres; i++) {
-			app.pushMatrix();
+		synchronized (lock) {
+			for (int i = 0; i < numSpheres; i++) {
+				app.pushMatrix();
 
-			zSpins[i] += zRates[i] * multiplier;
-			ySpins[i] += yRates[i] * multiplier;
-			xSpins[i] += xRates[i] * multiplier;
+				zSpins[i] += zRates[i] * multiplier;
+				ySpins[i] += yRates[i] * multiplier;
+				xSpins[i] += xRates[i] * multiplier;
 
-			app.rotateZ(PApplet.radians(zSpins[i]));
-			app.rotateY(PApplet.radians(ySpins[i]));
-			app.rotateX(PApplet.radians(xSpins[i]));
+				app.rotateZ(PApplet.radians(zSpins[i]));
+				app.rotateY(PApplet.radians(ySpins[i]));
+				app.rotateX(PApplet.radians(xSpins[i]));
 
-			app.fill(sphereColors[i]);
-			drawSphere(i);
+				app.fill(sphereColors[i]);
+				drawSphere(i);
 
-			app.popMatrix();
+				app.popMatrix();
+			}
 		}
 	}
 
@@ -217,34 +226,45 @@ public class AvanteHangOnVisual implements IVisual {
 		 */
 
 		if (eventType == 0 || eventType == 2) {
-			r = (1-amount) * 110;
-			g = (1-amount) * 150;
-			b = (1-amount) * 132;
+			r = (1 - amount) * 110;
+			g = (1 - amount) * 150;
+			b = (1 - amount) * 132;
 		}
-		
 
 	}
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
 
-		if (isTapDown) {
+		/*if (isTapDown) {
 			cam.setDistance(minDistance, 0);
 			lights = false;
 		} else {
 			cam.setDistance(maxDistance, 0);
 			lights = true;
-		}
+		}*/
 
 	}
 
 	@Override
-	public void noteEvent(int note, int velocity, int channel) {
+	public void noteObjEvent(int note, int vel) {
 
-		if (cam.getDistance() > (minDistance + 10)) {
-			createSpheres();
-			if (velocity > 0 && channel == VisualConstants.OBJECT_EVENT_CHANNEL)
+		if(lights)
+		{
+			if (note == 0 && vel >0) {
+				synchronized (lock) {
+					createSpheres();
+				}
+				noiseAni.setDuration(initNoiseDuration);
 				noiseAni.start();
+			} else if(note == 1 && vel >1)
+			{
+				synchronized (lock) {
+					createSpheres();
+				}
+				noiseAni.setDuration(2.2f);
+				noiseAni.start();
+			}
 		}
 	}
 
@@ -252,5 +272,13 @@ public class AvanteHangOnVisual implements IVisual {
 	public void ctrlEvent(int num, int val, int chan) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		if(note>0)lights=true;
+		if(vel>0)
+			loadCamState(note);
+		//writeCamState();
 	}
 }

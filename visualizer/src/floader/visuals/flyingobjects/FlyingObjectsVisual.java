@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.concurrent.locks.Lock;
 
 import floader.looksgood.ani.Ani;
+import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 import floader.visuals.flyingobjects.objects.AbstractMovingObject;
@@ -35,10 +36,9 @@ import processing.opengl.*;
 import peasy.*;
 import oscP5.*;
 
-public class FlyingObjectsVisual implements IVisual {
+public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 
 	WB_Render render;
-	PeasyCam cam;
 	MasterLayer masterLayer;
 	LinkedList<AbstractMovingObject> cylinderGroup;
 	LinkedList<AbstractMovingObject> sphereGroup;
@@ -52,6 +52,7 @@ public class FlyingObjectsVisual implements IVisual {
 	public FlyingObjectsVisual(PApplet app) {
 		this.app = app;
 		cam = new PeasyCam(app, 500);
+		camStatePath = "data\\flyingobjects\\camState";
 
 	}
 
@@ -65,6 +66,7 @@ public class FlyingObjectsVisual implements IVisual {
 		cam.setMinimumDistance(100);
 		cam.setMaximumDistance(500);
 		cam.setDistance(400);
+		cam.setActive(false);
 		render = new WB_Render(app);
 		masterLayer = new MasterLayer();
 
@@ -107,51 +109,13 @@ public class FlyingObjectsVisual implements IVisual {
 		}
 	}
 
-	void loadCamState(int index) {
-		// Read from disk using FileInputStream
-		FileInputStream f_in;
-		try {
-			f_in = new FileInputStream("data\\camState" + index);
-			// Read object using ObjectInputStream
-			ObjectInputStream obj_in = new ObjectInputStream(f_in);
-
-			// Read an object
-			Object obj = obj_in.readObject();
-
-			if (obj instanceof CameraState) {
-				// Cast object to a Vector
-				CameraState state = (CameraState) obj;
-				cam.setState(state);
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		/*
-		 * CameraState state = cam.getState(); // get a serializable settings //
-		 * object for current state
-		 * 
-		 * FileOutputStream f_out; ObjectOutputStream obj_out; try { f_out = new
-		 * FileOutputStream("data\\camState" + camCounter); obj_out = new
-		 * ObjectOutputStream(f_out); // Write object out to disk
-		 * obj_out.writeObject(state); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); } camCounter++;
-		 */
-
-	}
+	
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
 		// Twist
 		if (eventType == 2 || eventType == 0) {
-			masterLayer.effectEnableTwistX(amount);
+			masterLayer.effectEnableTwistX(1-amount);
 		}
 	}
 
@@ -165,9 +129,8 @@ public class FlyingObjectsVisual implements IVisual {
 	}
 
 	@Override
-	public void noteEvent(int note, int vel, int chan) {
-		if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
-			if (note == 0 && vel > 0) {
+	public void noteObjEvent(int note, int vel) {
+		if (note == 0 && vel > 0) {
 				// Remove the last element from the list, put it first and play
 				// it
 				synchronized (lock) {
@@ -185,16 +148,17 @@ public class FlyingObjectsVisual implements IVisual {
 					coneGroup.peekFirst().play();
 				}
 			}
-
-		} else if (chan == VisualConstants.CAM_EVENT_CHANNEL) {
-			if (vel > 0)
-				loadCamState(note);
-		}
 	}
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
 
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		if (vel > 0)
+			loadCamState(note);
 	}
 
 }

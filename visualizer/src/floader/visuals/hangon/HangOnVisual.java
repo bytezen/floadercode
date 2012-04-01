@@ -208,7 +208,7 @@ public class HangOnVisual implements IVisual {
 	}
 
 	@Override
-	public void noteEvent(int note, int velocity, int channel) {
+	public void noteObjEvent(int note, int velocity) {
 		//System.out.println(msg.get(0).intValue());
 		if (note == 1 && velocity > 1) {
 			initSpinRates();
@@ -275,6 +275,12 @@ public class HangOnVisual implements IVisual {
 				// look Z
 				lookZ = ((double) val / 127.0 * app.height);
 			}
+		
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		// TODO Auto-generated method stub
 		
 	}
 }

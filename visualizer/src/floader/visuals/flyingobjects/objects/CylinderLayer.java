@@ -97,7 +97,7 @@ public class CylinderLayer extends AbstractMovingObject {
 	}
 
 	@Override
-	public void noteEvent(int note, int vel, int chan) {
+	public void noteEvent(int note, int vel) {
 		// TODO Auto-generated method stub
 		
 	}

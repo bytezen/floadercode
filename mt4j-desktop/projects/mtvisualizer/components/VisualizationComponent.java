@@ -1,6 +1,5 @@
 package mtvisualizer.components;
 
-
 import org.mt4j.components.visibleComponents.AbstractVisibleComponent;
 
 import floader.visuals.*;
@@ -27,6 +26,8 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 		this.app = app;
 		viz = VisualFactory.getVisual(app, visualName);
 		viz.setup();
+
+		// tears + leaky
 	}
 
 	@Override
@@ -34,11 +35,10 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 		viz.draw();
 	}
 
-	public IVisual getIVisual()
-	{
+	public IVisual getIVisual() {
 		return viz;
 	}
-	
+
 	public static class VisualFactory {
 		public static IVisual getVisual(PApplet app, String name) {
 			if (name.equals(floader.visuals.flyingobjects.FlyingObjectsVisual.class.getName())) {
@@ -55,14 +55,13 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 				return new KalimbaVisual(app);
 			} else if (name.equals(floader.visuals.percentages.Percentages.class.getName())) {
 				return new Percentages(app);
+			} else if (name.equals("imagine kalimbas")) {
+				return new MultiVizContainer(VisualFactory.getVisual(app, KalimbaVisual.class.getName()), VisualFactory.getVisual(app, ImagineYourGardenVisual.class.getName()));
 			} else {
 				System.err.println("Error: undefined visual named: " + name);
 				return null;
 			}
-			
-			
-			
-			
+
 		}
 	}
 }

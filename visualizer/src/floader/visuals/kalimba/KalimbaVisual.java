@@ -2,6 +2,7 @@ package floader.visuals.kalimba;
 
 import java.util.Iterator;
 
+import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 
 import wblut.hemesh.modifiers.*;
@@ -14,7 +15,7 @@ import wblut.hemesh.core.*;
 import wblut.core.processing.*;
 
 @SuppressWarnings("serial")
-public class KalimbaVisual implements IVisual {
+public class KalimbaVisual extends AbstractVisual implements IVisual {
 	// Meshes
 	HE_Mesh[][] meshes;
 	WB_Render meshRenderer;
@@ -42,15 +43,14 @@ public class KalimbaVisual implements IVisual {
 	int[][] counter;
 	float ax, ay;
 	boolean clock = false;
-	
+
 	PApplet app;
-	PeasyCam cam;
-	
-	public KalimbaVisual(PApplet app)
-	{
+
+	public KalimbaVisual(PApplet app) {
 		this.app = app;
+		camStatePath = "data\\kalimba\\camState";
 	}
-	
+
 	public void setup() {
 		meshRenderer = new WB_Render(app);
 		meshes = new HE_Mesh[numCols][numRows];
@@ -58,10 +58,11 @@ public class KalimbaVisual implements IVisual {
 		buttons = new int[numCols][numRows];
 		app.noStroke();
 		createDots();
-		
+
 		cam = new PeasyCam(app, 0);
 		cam.setMaximumDistance(1000);
 		cam.setDistance(600);
+		cam.setActive(false);
 	}
 
 	void createDots() {
@@ -73,12 +74,12 @@ public class KalimbaVisual implements IVisual {
 
 	void createDot(int col, int row) {
 		HEC_Creator creator;
-		float x=0;
-		float y=0;
-		x = col * (meshPadding) - ((col+1) * meshPadding/2);
-		
-		//x = (col) * (500 / (numCols+1));
-		y = (row) * (500 / (numRows+1));
+		float x = 0;
+		float y = 0;
+		x = col * (meshPadding) - ((col + 1) * meshPadding / 2);
+
+		// x = (col) * (500 / (numCols+1));
+		y = (row) * (500 / (numRows + 1));
 		creator = new HEC_Sphere().setRadius(6).setUFacets(7).setVFacets(7).setCenter(x, y, 0);
 		meshes[col][row] = new HE_Mesh(creator);
 
@@ -89,7 +90,7 @@ public class KalimbaVisual implements IVisual {
 		app.rotateX(app.random(0, rotateAmount));
 		app.rotateY(app.random(0, rotateAmount));
 		app.lights();
-		
+
 		HE_Selection selection;
 		Iterator<HE_Face> fItr;
 		HE_Face f;
@@ -127,31 +128,48 @@ public class KalimbaVisual implements IVisual {
 
 	}
 
-
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		if(eventType == 0 || eventType == 2)rotateAmount = rotateMax - (rotateMax * amount);
+		if (eventType == 0 || eventType == 2)
+			rotateAmount = rotateMax - (rotateMax * amount);
 	}
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
 		for (int j = 0; j < numRows; j++)
 			for (int k = 0; k < numCols; k++) {
-			buttons[k][j] = 1;
-			counter[k][j] = 20;
-		}
+				buttons[k][j] = 1;
+				counter[k][j] = 20;
+			}
 	}
 
 	@Override
-	public void noteEvent(int note, int velocity, int channel) {
-		// TODO Auto-generated method stub
-		
+	public void noteObjEvent(int note, int velocity) {
+		if (note == 1 && velocity > 0) {
+			for (int j = 0; j < numRows; j++)
+				for (int k = 0; k < numCols; k++) {
+					buttons[k][j] = 1;
+					counter[k][j] = 20;
+				}
+			rotateAmount = rotateMax;
+		} else if(note == 1 && velocity == 0)
+		{
+			rotateAmount = 0;
+		}
+
 	}
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		if (vel > 0)
+			loadCamState(note);
+
 	}
 
 }

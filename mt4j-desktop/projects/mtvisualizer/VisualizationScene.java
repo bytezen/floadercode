@@ -44,9 +44,11 @@ public class VisualizationScene extends AbstractScene {
 		if(msg.checkAddrPattern(VisualConstants.OSC_CTRL_PATH))
 		{
 			vizComp.getIVisual().ctrlEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg.get(2).intValue());
-		} else if(msg.checkAddrPattern(VisualConstants.OSC_NOTE_PATH))
-		{
-			vizComp.getIVisual().noteEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg.get(2).intValue());
+		}else if (msg.checkAddrPattern(VisualConstants.OSC_NOTE_PATH)) {
+			if (msg.get(2).intValue() == VisualConstants.OBJECT_EVENT_CHANNEL)
+				vizComp.getIVisual().noteObjEvent(msg.get(0).intValue(), msg.get(1).intValue());
+			else if (msg.get(2).intValue() == VisualConstants.CAM_EVENT_CHANNEL)
+				vizComp.getIVisual().noteCamEvent(msg.get(0).intValue(), msg.get(1).intValue());
 		}
 	}
 
@@ -54,6 +56,7 @@ public class VisualizationScene extends AbstractScene {
 	public void onEnter() {
 		this.getCanvas().addChild(vizComp);
 		this.getCanvas().addChild(uiComp);
+		
 	}
 
 	@Override

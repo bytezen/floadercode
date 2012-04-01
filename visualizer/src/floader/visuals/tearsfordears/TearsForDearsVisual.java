@@ -2,12 +2,14 @@ package floader.visuals.tearsfordears;
 
 import java.util.Iterator;
 
+import floader.looksgood.ani.Ani;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 import wblut.hemesh.modifiers.*;
 import wblut.hemesh.creators.*;
 import wblut.hemesh.*;
 import wblut.geom.*;
+import wblut.geom.core.WB_Line;
 import oscP5.*;
 import peasy.*;
 import processing.core.PApplet;
@@ -60,7 +62,7 @@ public class TearsForDearsVisual implements IVisual {
 	CameraState camState;
 	float minDistance = 400;
 	float initDistance = 700;
-	float maxDistance = 1700;
+	float maxDistance = 1500;
 
 	float rotateZ = 0;
 	float maxRotateZ = .4f;
@@ -157,20 +159,19 @@ public class TearsForDearsVisual implements IVisual {
 		shapeB[20] = 191;
 		shapeB[21] = 195;
 
+		
 		buttons = new int[numCols][numRows];
 
 		app.noStroke();
 		cam = new PeasyCam(app, initDistance);
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
-
+		//cam.setActive(false);
+		
 		reset();
 	}
-
-	public void keyPressed(int keyCode) {
-		System.out.println(keyCode);
-	}
-
+	
+	
 	void createDots() {
 		for (int j = 0; j < numCols; j++)
 			for (int k = 0; k < numRows; k++) {
@@ -201,15 +202,9 @@ public class TearsForDearsVisual implements IVisual {
 	public void draw() {
 		app.lights();
 		cam.feed();
-
-		if (addLattice) {
-			addLattice = false;
-			lattice();
-		}
-
+		cam.setActive(false);
 		cam.rotateZ(rotateZ);
 
-		// pushMatrix();
 		if (scroll) {
 			if (totalYPan >= 300) {
 				totalYPan = 0;
@@ -225,7 +220,6 @@ public class TearsForDearsVisual implements IVisual {
 				app.colorMode(PConstants.RGB, 255, 255, 255, 255);
 				shapecolor = app.color(shapeR[j], shapeG[j], shapeB[j], shapeTransparency[j][k]);
 				app.fill(shapecolor);
-
 				// Rotate and combine
 				meshes[j][k].rotateAboutAxis(rotateCombine, numCols / 2 * 150, numRows / 2 * 150, 0, numCols / 2 * 150, numRows / 2 * 150, 1);
 				// Crazy flying rotate
@@ -234,11 +228,11 @@ public class TearsForDearsVisual implements IVisual {
 				meshes[j][k].rotateAboutAxis(rotateIndividual, j * 150, k * 150, 0, j * 150, k * 150, 1);
 				// Rotate forward
 				meshes[j][k].rotateAboutAxis(rotateForward, meshes[j][k].getVerticesAsPoint()[0], meshes[j][k].getVerticesAsPoint()[1]);
-
+	
 				meshRenderer.drawFaces(meshes[j][k]);
-				meshRenderer.drawEdges(meshes[j][k]);
+				//meshRenderer.drawEdges(meshes[j][k]);
 			}
-		// popMatrix();
+
 
 	}
 
@@ -280,14 +274,10 @@ public class TearsForDearsVisual implements IVisual {
 	@Override
 	public void dragEvent(int eventType, float amount) {
 		switch (eventType) {
-		case 0:
-			cam.setDistance((1-amount) * maxDistance);
-			break;
-		//Right box X
 		case 2:
 			rotateIndividual = (1 - amount) * maxRotateIndividual - (maxRotateIndividual / 2);
 			break;
-		//Right box Y
+		// Right box Y
 		case 3:
 			rotateZ = (1 - amount) * maxRotateZ - (maxRotateZ / 2);
 			break;
@@ -296,49 +286,60 @@ public class TearsForDearsVisual implements IVisual {
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-
+/*		if(eventType == 0 && isTapDown)
+			scroll = !scroll;*/
 	}
 
 	@Override
-	public void noteEvent(int note, int vel, int chan) {
-		if (chan == VisualConstants.OBJECT_EVENT_CHANNEL) {
-			if (note == 0 && vel > 0) {
-				reset();
-			} else if (note == 3 && vel != 0) {
-				addLattice = true;
-			} else if (note == 4 && vel != 0) {
-				scroll = true;
-			} else if (note == 5 && vel != 0) {
-				scroll = false;
-			} else if (note == 6 && vel != 0) {
-				cam.rotateZ(PApplet.radians(90));
-			}
-		}  
+	public void noteObjEvent(int note, int vel) {
+		
+			if (note == 0 && vel != 0) {
+				rotateForward = .03f;
+			} else if(note==0 && vel == 0)
+				rotateForward = -.03f;
 	}
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
-			// CTRL 1 Rotate individual amount
-			if (num == 1) {
-				rotateIndividual = ((float) val / 127.0f) * maxRotateIndividual - (maxRotateIndividual / 2);
-			} else
-			// CTRL 2 Rotate cam Z amount
-			if (num == 2) {
-				rotateZ = ((float) val / 127.0f) * maxRotateZ - (maxRotateZ / 2);
-			} else
-			// CTRL 3 Rotate forward amount
-			if (num == 3) {
-				rotateForward = ((float) val / 127.0f) * maxRotateForward - (maxRotateForward / 2);
-			} else
-			// CTRL 4 Rotate combine amount
-			if (num == 4) {
-				rotateCombine = ((float) val / 127.0f) * maxRotateCombine - (maxRotateCombine / 2);
-			} else
-			// CTRL 5 Rotate crazy amount
-			if (num == 5) {
-				rotateCrazy = ((float) val / 127.0f) * maxRotateCrazy - (maxRotateCrazy / 2);
-			}
+		// CTRL 1 Rotate individual amount
+		if (num == 1) {
+			rotateIndividual = ((float) val / 127.0f) * maxRotateIndividual - (maxRotateIndividual / 2);
+		} else
+		// CTRL 2 Rotate cam Z amount
+		if (num == 2) {
+			rotateZ = ((float) val / 127.0f) * maxRotateZ - (maxRotateZ / 2);
+		} else
+		// CTRL 3 Rotate forward amount
+		if (num == 3) {
+			rotateForward = ((float) val / 127.0f) * maxRotateForward - (maxRotateForward / 2);
+		} else
+		// CTRL 4 Rotate combine amount
+		if (num == 4) {
+			rotateCombine = ((float) val / 127.0f) * maxRotateCombine - (maxRotateCombine / 2);
+		} else
+		// CTRL 5 Rotate crazy amount
+		if (num == 5) {
+			rotateCrazy = ((float) val / 127.0f) * maxRotateCrazy - (maxRotateCrazy / 2);
+		}
 
+	}
+
+	@Override
+	public void noteCamEvent(int note, int vel) {
+		if (vel > 0) {
+			switch (note) {
+			case 0:
+				cam.setDistance(minDistance);
+				break;
+			case 1:
+				cam.setDistance(maxDistance);
+				break;
+			case 2:
+				cam.setDistance((minDistance + maxDistance) / 2);
+				break;
+			}
+		}
+		
 	}
 
 }
