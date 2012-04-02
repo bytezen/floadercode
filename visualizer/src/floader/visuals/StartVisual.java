@@ -26,9 +26,9 @@ public class StartVisual extends PApplet {
 		Ani.init(this);
 		Ani.setDefaultEasing(Ani.LINEAR);
 		//viz = new FlyingObjectsVisual(this);
-		// viz = new Percentages(this);
+		 viz = new Percentages(this);
 		//viz = new TearsForDearsVisual(this);
-		viz = new ImagineYourGardenVisual(this);
+		//viz = new ImagineYourGardenVisual(this);
 		// viz = new HangOnVisual(this);
 		// viz = new AvanteHangOnVisual(this);
 		 //viz = new LeakierPhysicsVisual(this);
@@ -47,8 +47,8 @@ public class StartVisual extends PApplet {
 		// viz.dragEvent(0,(float)mouseX/(float)width);
 		// viz.noteObjEvent(0, 127, 1);
 		//viz.tapEvent(0,true);
-		viz.noteCamEvent(9, 1);
-		// viz.noteEvent(0, 127, 1);
+		//viz.noteCamEvent(9, 1);
+		 viz.noteObjEvent(6, 127);
 	}
 
 	public void keyReleased() {

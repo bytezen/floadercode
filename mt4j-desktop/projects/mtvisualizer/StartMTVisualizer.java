@@ -22,10 +22,10 @@ public class StartMTVisualizer extends MTApplication {
 			floader.visuals.flyingobjects.LeakierPhysicsVisual.class.getName(),
 			floader.visuals.kalimba.KalimbaVisual.class.getName(),
 			floader.visuals.percentages.Percentages.class.getName(),
-			"imagine kalimbas"
+			"imagine kalimbas"	
 	};
 	//Update this to start with a different scene
-	int currentSceneIndex = 7;
+	int currentSceneIndex = 5;
 	
 	@Override
 	public void startUp() {
@@ -44,12 +44,12 @@ public class StartMTVisualizer extends MTApplication {
 			int note = msg.get(0).intValue();
 			int vel = msg.get(1).intValue();
 				if (vel > 0 && note < sceneList.length) {
-					System.out.println(note);
+					//Stop drawing the current scene before setting up the new scene OR ELSE
+					currentScene.setVizDraw(false);
 					newScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[note]);
 					currentScene = newScene;
 					this.changeScene(newScene);
 			} else {
-				
 				currentScene.oscEvent(msg);
 			}
 		} else {
@@ -60,10 +60,10 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void keyPressed()
 	{
-		/*currentSceneIndex++;
+		currentSceneIndex++;
 		if(currentSceneIndex >= sceneList.length)currentSceneIndex = 0;
 		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
-		this.changeScene(currentScene);*/
+		this.changeScene(currentScene);
 		//currentScene.getIVisual().noteEvent(0, 127, 1);
 	}
 	

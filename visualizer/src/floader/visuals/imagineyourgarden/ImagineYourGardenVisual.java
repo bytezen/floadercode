@@ -180,6 +180,10 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 		} else if(note == 5 && velocity > 0)
 		{
 			reset();
+		} else if(note == 6 && velocity > 0)
+		{
+			rotateAni.setDuration(10);
+			zoomAni.setDuration(100);
 		}
 	}
 

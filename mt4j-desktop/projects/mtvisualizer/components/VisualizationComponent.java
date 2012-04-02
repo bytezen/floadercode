@@ -20,10 +20,12 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 
 	IVisual viz;
 	PApplet app;
+	public boolean draw = false;
 
 	public VisualizationComponent(PApplet app, String visualName) {
 		super(app);
 		this.app = app;
+
 		viz = VisualFactory.getVisual(app, visualName);
 		viz.setup();
 
@@ -32,7 +34,9 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 
 	@Override
 	public void drawComponent(PGraphics g) {
-		viz.draw();
+
+		if(draw){viz.draw();}
+
 	}
 
 	public IVisual getIVisual() {

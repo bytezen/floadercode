@@ -36,7 +36,6 @@ public class VisualizationScene extends AbstractScene {
 		
 		vizComp = new VisualizationComponent(app, visualName);
 		vizComp.translate(new Vector3D(app.width/2, app.height/2, 0, 1));
-		//uiComp = new NanoUIComponent(app, oscP5, remoteAddress);
 		uiComp = new EffectBoxUIComponent(app, oscP5, remoteAddress, vizComp.getIVisual());
 	}
 
@@ -51,16 +50,23 @@ public class VisualizationScene extends AbstractScene {
 				vizComp.getIVisual().noteCamEvent(msg.get(0).intValue(), msg.get(1).intValue());
 		}
 	}
+	
+	public void setVizDraw(boolean draw)
+	{
+		vizComp.draw = draw;
+	}
 
 	@Override
 	public void onEnter() {
 		this.getCanvas().addChild(vizComp);
+		vizComp.draw = true;
 		this.getCanvas().addChild(uiComp);
 		
 	}
 
 	@Override
 	public void onLeave() {
+		vizComp.draw = false;
 		vizComp.destroy();
 		uiComp.destroy();
 	}
