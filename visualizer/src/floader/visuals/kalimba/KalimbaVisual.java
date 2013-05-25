@@ -168,8 +168,7 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 	@Override
 	public void noteCamEvent(int note, int vel) {
 		if (vel > 0)
-			loadCamState(note);
-
+			loadCamState(note, 100);
 	}
 
 }

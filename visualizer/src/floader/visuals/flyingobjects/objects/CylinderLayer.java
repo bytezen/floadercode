@@ -50,7 +50,7 @@ public class CylinderLayer extends AbstractMovingObject {
 
 	public void draw() {
 		HEC_Cylinder cylCreator = new HEC_Cylinder();
-		cylCreator.setHeight(4000).setRadius(20).setFacets(5).setSteps(7);
+		cylCreator.setHeight(4000).setRadius(20).setFacets(7).setSteps(12);
 		cylinder = new HE_Mesh(cylCreator);
 
 		// Rotate once

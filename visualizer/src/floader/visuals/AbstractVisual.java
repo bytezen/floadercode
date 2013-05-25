@@ -16,6 +16,10 @@ public class AbstractVisual {
 	protected int camCounter = 0;
 	
 	protected void loadCamState(int index) {
+		loadCamState(index, 300);
+	}
+	
+	protected void loadCamState(int index, int time) {
 		// Read from disk using FileInputStream
 		FileInputStream f_in;
 		try {
@@ -29,7 +33,7 @@ public class AbstractVisual {
 			if (obj instanceof CameraState) {
 				// Cast object to a Vector
 				CameraState state = (CameraState) obj;
-				cam.setState(state);
+				cam.setState(state, time);
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

@@ -17,11 +17,12 @@ import wblut.core.processing.*;
 @SuppressWarnings("serial")
 public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 
+	private Object lock = new Object();
 	// Meshes
 	HE_Mesh[] meshes;
 	int numMeshes = 2;
 	WB_Render meshRenderer;
-	
+
 	// Cylinder colors
 	int outerAlpha = 255;
 	int innerAlpha = 180;
@@ -106,21 +107,26 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 	public void draw() {
 		// app.background(255,255,255);
 		cam.feed();
-		//app.lights();
+		app.noStroke();
+		// app.lights();
 		// System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] +
 		// ", " + cam.getLookAt()[2]);
 
 		totalTwistAmt += twistAmt;
 		if (reset) {
-			//createMeshes();
-			reset = false;
+			createMeshes();
+			alphaMult = 1;
+			rotateAni.setDuration(origRotDuration);
 			twistAmt = 0;
+			reset = false;
 		}
 
 		app.translate(0, 0, zoomAmt);
 		app.rotateZ(PApplet.radians(rotateXAmt));
-		drawMesh(0);
-		drawMesh(1);
+		synchronized (lock) {
+			drawMesh(0);
+			drawMesh(1);
+		}
 	}
 
 	void drawMesh(int meshIndex) {
@@ -140,13 +146,6 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 		meshes[meshIndex].modify(new HEM_Lattice().setDepth(1).setWidth(40).setThresholdAngle(PApplet.radians(45)));
 	}
 
-	void reset() {
-		reset = true;
-		alphaMult = 1;
-		rotateAni.setDuration(origRotDuration);
-		createMeshes();
-	}
-
 	void createMeshes() {
 		createMesh(0, 210, 30);
 		createMesh(1, 200, 30);
@@ -154,55 +153,63 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		/*if (eventType == 0 || eventType == 2) {
-			float delta = rotateY - (amount * 180);
-			cam.rotateY(PApplet.radians(delta));
-			rotateY -= delta;
-		}*/
+		/*
+		 * if (eventType == 0 || eventType == 2) { float delta = rotateY -
+		 * (amount * 180); cam.rotateY(PApplet.radians(delta)); rotateY -=
+		 * delta; }
+		 */
 	}
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
 		// TODO Auto-generated method stub
-		/*if(isTapDown)twistAmt = maxTwistAmt;
-		else if(!isTapDown){reset();twistAmt=0;}*/
-		
+		/*
+		 * if(isTapDown)twistAmt = maxTwistAmt; else
+		 * if(!isTapDown){reset();twistAmt=0;}
+		 */
+
 	}
 
 	@Override
 	public void noteObjEvent(int note, int velocity) {
-		if(note == 4 && velocity > 0)
-		{
-			twistAmt = maxTwistAmt;
-		} else if(note == 4 && velocity == 0)
-		{
-			twistAmt = 0;
-		} else if(note == 5 && velocity > 0)
-		{
-			reset();
-		} else if(note == 6 && velocity > 0)
-		{
+
+		if (note == 4 && velocity > 0) {
+			synchronized (lock) {
+				twistAmt = maxTwistAmt;
+			}
+		} else if (note == 4 && velocity == 0) {
+			synchronized (lock) {
+				twistAmt = 0;
+			}
+		} else if (note == 5 && velocity > 0) {
+			reset = true;
+		} else if (note == 6 && velocity > 0) {
+			rotateAni.setDuration(rotDuration);
+		} else if (note == 7 && velocity > 0) {
+			zoomAni.setDuration(origZoomDuration);
+		} else if (note == 8 && velocity > 0) {
 			rotateAni.setDuration(10);
+		} else if (note == 9 && velocity > 0) {
 			zoomAni.setDuration(100);
 		}
 	}
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
-			// Color 1
-			 if (num == 2) {
-				innerAlpha = (int) (val / 127.0 * 255);
-			} else if (num == 3) {
-				outerAlpha = (int) (val / 127.0 * 255);
-			} else if (num == 6) {
-				rotDuration = (val / 127.0f * (float) maxRotDuration);
-			}
+		// Color 1
+		if (num == 2) {
+			innerAlpha = (int) (val / 127.0 * 255);
+		} else if (num == 3) {
+			outerAlpha = (int) (val / 127.0 * 255);
+		} else if (num == 6) {
+			rotDuration = (val / 127.0f * (float) maxRotDuration);
+		}
 	}
 
 	@Override
 	public void noteCamEvent(int note, int vel) {
-		//writeCamState();
-		if(vel>0)
+		// writeCamState();
+		if (vel > 0)
 			loadCamState(note);
 	}
 

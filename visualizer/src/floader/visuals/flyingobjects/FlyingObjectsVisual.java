@@ -121,11 +121,11 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-
+/*
 		if (isTapDown) {
 			scaleAmt = 1;
 			scaleAni.start();
-		}
+		}*/
 	}
 
 	@Override

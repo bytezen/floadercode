@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import floader.looksgood.ani.Ani;
 import floader.looksgood.ani.easing.*;
+import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 
 import wblut.hemesh.modifiers.*;
@@ -17,7 +18,7 @@ import peasy.*;
 import processing.core.PApplet;
 
 @SuppressWarnings("serial")
-public class Percentages implements IVisual {
+public class Percentages extends AbstractVisual implements IVisual {
 
 	// Meshes
 	HE_Mesh[] meshes;
@@ -50,10 +51,10 @@ public class Percentages implements IVisual {
 	float zoom;
 	float speed;
 	boolean reset = false;
-	PeasyCam cam;
-	float camMaxDistance = 1000;
+	float maxDistance = 1000;
 	PApplet app;
 	Ani speedAni;
+	boolean vertexExpand = false;
 
 	public Percentages(PApplet app) {
 		this.app = app;
@@ -62,17 +63,18 @@ public class Percentages implements IVisual {
 	public void setup() {
 		meshRenderer = new WB_Render(app);
 		meshes = new HE_Mesh[numMeshes];
-		speedAni = new Ani(this, .4f, "speed", 3);
+		speedAni = new Ani(this, .4f, "speed", 2);
 		speedAni.pause();
+		camStatePath = "data\\percentages\\camState";
+		
+		
+		
 		
 		createMeshes();
 		cam = new PeasyCam(app, 0);
 		cam.setDistance(0);
-		cam.setMaximumDistance(camMaxDistance);
-		/*
-		 * beginCamera(); camera(); //-680 Z depth translate(-width/2,
-		 * -height/2, -80); endCamera();
-		 */
+		//cam.setActive(false);
+		cam.setMaximumDistance(maxDistance);
 	}
 
 	void createMeshes() {
@@ -82,21 +84,16 @@ public class Percentages implements IVisual {
 		createMesh(3, 1800, 10, 10, false);
 	}
 	
-	public void keyPressed(int keyCode)
-	{
-		//cam.setDistance(zoom);
-	}
-	
-
 	public void draw() {
-		app.background(255,255,255);
+		//app.background(255,255,255);
 		app.noStroke();
 		
 		cam.feed();
 		
 		if (reset) {
 			createMeshes();
-			reset = !reset;
+			speed = 2;
+			reset = false;
 		}
 		
 		if (rotateXDir)
@@ -114,6 +111,21 @@ public class Percentages implements IVisual {
 		app.camera();
 		app.translate(-app.width / 2, -app.height / 2, (zoom) * 20 - 750);
 		app.endCamera();*/
+		
+		if(vertexExpand)
+		{
+			HE_Selection selection = new HE_Selection(meshes[0]);
+			Iterator<HE_Face> fItr = meshes[0].fItr();
+			HE_Face f;
+			while (fItr.hasNext()) {
+				f = fItr.next();
+				if (app.random(100) < 2) {
+					selection.add(f);
+				}
+			}
+			meshes[0].modifySelected(new HEM_VertexExpand().setDistance(app.random(10, 400)), selection);
+			vertexExpand = false;
+		}
 
 		app.pushMatrix();
 		app.rotateX(PApplet.radians(rotateXAmt));
@@ -165,7 +177,6 @@ public class Percentages implements IVisual {
 	@Override
 	public void dragEvent(int eventType, float amount) {
 
-		if(eventType ==0)cam.setDistance(camMaxDistance* amount);
 	}
 
 	@Override
@@ -175,42 +186,38 @@ public class Percentages implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int velocity) {
+	public void noteObjEvent(int note, int vel) {
+			
+		if(note == 0 && vel > 0)
+		{
+			cam.setDistance(maxDistance, 20000);
+		} else if(note == 1 && vel > 0)
+		{
+			cam.setDistance(0);
+			speedAni.setEnd(2);
 			speedAni.start();
+		} else if(note == 2 && vel > 0)
+		{
+			speedAni.setEnd(10);
+			speedAni.start();
+		} else if(note == 3 && vel > 0)
+		{
+			vertexExpand = true;
+		} else if(note == 4 && vel > 0)
+		{
+			reset = true;
+		}
 	}
 
 	@Override
 	public void ctrlEvent(int num, int val, int chan) {
-			// Speed
-			if (num == 2) {
-				speed = (float) val / 10.0f;
-			} else if (num == 3) {
-				meshes[0].modify(new HEM_Smooth());
-			} else
-			// Vertex Expand
-			if (num == 6) {
-				// Vertex Expansion
-				HE_Selection selection = new HE_Selection(meshes[0]);
-				Iterator<HE_Face> fItr = meshes[0].fItr();
-				HE_Face f;
-				while (fItr.hasNext()) {
-					f = fItr.next();
-					if (app.random(100) < 2) {
-						selection.add(f);
-					}
-				}
-				meshes[0].modifySelected(new HEM_VertexExpand().setDistance(app.random(10, 400)), selection);
-			} else if (num == 7) {
-				reset = true;
-			} else if (num == 8) {
-				randomizeDir = !randomizeDir;
-			}
 		
 	}
 
 	@Override
 	public void noteCamEvent(int note, int vel) {
-		// TODO Auto-generated method stub
+		if (vel > 0)
+			loadCamState(note);
 		
 	}
 }

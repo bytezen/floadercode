@@ -23,7 +23,7 @@ public class HangOnVisual implements IVisual {
 
 	float multiplier = 1;
 
-	int numSpheres = 20;
+	int numSpheres = 40;
 	WB_Render meshRenderer;
 	HE_Mesh[] spheres;
 	int[] sphereColors;
@@ -76,6 +76,7 @@ public class HangOnVisual implements IVisual {
 		distance = minDistance;
 		cam.setMinimumDistance(minDistance);
 		cam.setMaximumDistance(maxDistance);
+	
 	}
 
 	public void keyPressed(int keyCode) {
@@ -92,10 +93,8 @@ public class HangOnVisual implements IVisual {
 
 			// Lattice & Cap
 			if (i > 0) {
-				// TODO figure out way to incorporate lattice in a performant
-				// way
-				// spheres[i].modify(new
-				// HEM_Lattice().setDepth(1).setWidth(5).setThresholdAngle(PApplet.radians(90)).setFuse(true));
+				// TODO figure out way to incorporate lattice in a performant way
+				spheres[i].modify(new HEM_Lattice().setDepth(1).setWidth(5).setThresholdAngle(PApplet.radians(90)).setFuse(true));
 				spheres[i].modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, -25, 0), new WB_Vector3d(0, 1, 0))));
 				spheres[i].modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, 25, 0), new WB_Vector3d(0, -1, 0))));
 			}

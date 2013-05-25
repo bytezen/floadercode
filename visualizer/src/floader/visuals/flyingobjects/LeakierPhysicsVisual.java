@@ -47,6 +47,7 @@ public class LeakierPhysicsVisual extends AbstractVisual implements IVisual {
 		this.app = app;
 		cam = new PeasyCam(app, 500);
 		camStatePath = "data\\leakyphysics\\camState";
+		app.hint(PApplet.DISABLE_DEPTH_TEST);
 	}
 
 	public void keyPressed(int keyCode) {
