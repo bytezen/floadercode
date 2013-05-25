@@ -22,10 +22,13 @@ public class StartMTVisualizer extends MTApplication {
 			floader.visuals.flyingobjects.LeakierPhysicsVisual.class.getName(),
 			floader.visuals.kalimba.KalimbaVisual.class.getName(),
 			floader.visuals.percentages.Percentages.class.getName(),
-			"imagine kalimbas"	
+			"imagine kalimbas", 
+			floader.visuals.particles.ParticleVisual.class.getName(),
+			floader.visuals.particles.ParticleMirrorVisual.class.getName(),
+			"test"
 	};
 	//Update this to start with a different scene
-	int currentSceneIndex = 5;
+	int currentSceneIndex = 0;
 	
 	@Override
 	public void startUp() {
@@ -36,7 +39,7 @@ public class StartMTVisualizer extends MTApplication {
 		floader.looksgood.ani.Ani.init(this);
 		floader.looksgood.ani.Ani.setDefaultEasing(floader.looksgood.ani.AniConstants.LINEAR);
 		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
-		addScene(currentScene);	
+		addScene(currentScene);
 	}
 
 	public void oscEvent(OscMessage msg) {
@@ -60,10 +63,10 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void keyPressed()
 	{
-		currentSceneIndex++;
+		/*currentSceneIndex++;
 		if(currentSceneIndex >= sceneList.length)currentSceneIndex = 0;
 		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
-		this.changeScene(currentScene);
+		this.changeScene(currentScene);*/
 		//currentScene.getIVisual().noteEvent(0, 127, 1);
 	}
 	

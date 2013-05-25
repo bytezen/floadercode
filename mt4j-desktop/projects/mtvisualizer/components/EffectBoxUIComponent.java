@@ -47,6 +47,7 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 	float buttonOuterWidth;
 	float buttonInnerWidth;
 	float buttonPadding = 30;
+	int numButtons = 6;
 
 	IVisual viz;
 	OscMessage msg;
@@ -64,7 +65,8 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 		effectBoxXPos = effectBoxPadding / 2;
 		effectBoxYPos = effectBoxPadding / 2;
 
-		buttonOuterWidth = app.width / 5;
+		
+		buttonOuterWidth = app.width / numButtons;
 		buttonInnerWidth = buttonOuterWidth - buttonPadding;
 
 		addEffectBox(0);
@@ -81,7 +83,7 @@ public class EffectBoxUIComponent extends AbstractVisibleComponent {
 
 		float buttonHeight = 130;
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < numButtons; i++) {
 			addButton(i, (i * buttonOuterWidth) + buttonPadding / 2, effectBoxOuterHeight + buttonPadding, buttonInnerWidth, buttonHeight);
 		}
 	}

@@ -9,6 +9,8 @@ import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.imagineyourgarden.ImagineYourGardenVisual;
 import floader.visuals.kalimba.KalimbaVisual;
+import floader.visuals.particles.ParticleMirrorVisual;
+import floader.visuals.particles.ParticleVisual;
 import floader.visuals.percentages.Percentages;
 import floader.visuals.tearsfordears.TearsForDearsVisual;
 
@@ -34,8 +36,10 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 
 	@Override
 	public void drawComponent(PGraphics g) {
-
-		if(draw){viz.draw();}
+		
+		if (draw) {
+			viz.draw();
+		}
 
 	}
 
@@ -59,9 +63,15 @@ public class VisualizationComponent extends AbstractVisibleComponent {
 				return new KalimbaVisual(app);
 			} else if (name.equals(floader.visuals.percentages.Percentages.class.getName())) {
 				return new Percentages(app);
-			} else if (name.equals("imagine kalimbas")) {
-				return new MultiVizContainer(VisualFactory.getVisual(app, KalimbaVisual.class.getName()), VisualFactory.getVisual(app, ImagineYourGardenVisual.class.getName()));
-			} else {
+			} else if (name.equals(floader.visuals.particles.ParticleVisual.class.getName())) {
+				return new ParticleVisual(app);
+			}else if (name.equals("imagine kalimbas")) {
+				return new MultiVizContainer( VisualFactory.getVisual(app, ImagineYourGardenVisual.class.getName()), VisualFactory.getVisual(app, floader.visuals.kalimba.KalimbaVisual.class.getName()));
+			} else if (name.equals(floader.visuals.particles.ParticleMirrorVisual.class.getName())) {
+				return new floader.visuals.particles.ParticleMirrorVisual(app);
+			} else if (name.equals("test")) {
+				return new MultiVizContainer( VisualFactory.getVisual(app, ParticleMirrorVisual.class.getName()), VisualFactory.getVisual(app, FlyingObjectsVisual.class.getName()));
+			}	else {
 				System.err.println("Error: undefined visual named: " + name);
 				return null;
 			}

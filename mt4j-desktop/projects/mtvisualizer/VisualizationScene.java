@@ -1,7 +1,6 @@
 package mtvisualizer;
 
 import mtvisualizer.components.EffectBoxUIComponent;
-import mtvisualizer.components.NanoUIComponent;
 import mtvisualizer.components.VisualizationComponent;
 import netP5.NetAddress;
 
@@ -9,6 +8,7 @@ import org.mt4j.AbstractMTApplication;
 import org.mt4j.input.inputProcessors.globalProcessors.CursorTracer;
 import org.mt4j.sceneManagement.AbstractScene;
 import org.mt4j.sceneManagement.transition.SlideTransition;
+import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
 import floader.visuals.IVisual;
@@ -37,6 +37,8 @@ public class VisualizationScene extends AbstractScene {
 		vizComp = new VisualizationComponent(app, visualName);
 		vizComp.translate(new Vector3D(app.width/2, app.height/2, 0, 1));
 		uiComp = new EffectBoxUIComponent(app, oscP5, remoteAddress, vizComp.getIVisual());
+		//this.setClearColor(new MTColor(200f,0f,0f,20f));
+		
 	}
 
 	public void oscEvent(OscMessage msg) {
@@ -49,6 +51,8 @@ public class VisualizationScene extends AbstractScene {
 			else if (msg.get(2).intValue() == VisualConstants.CAM_EVENT_CHANNEL)
 				vizComp.getIVisual().noteCamEvent(msg.get(0).intValue(), msg.get(1).intValue());
 		}
+		
+		
 	}
 	
 	public void setVizDraw(boolean draw)

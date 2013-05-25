@@ -51,11 +51,11 @@
 	<classpathentry kind="lib" path="lib/javolution-5.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/apfloat.jar"/>
 	<classpathentry kind="lib" path="lib/quickhull3d.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/floader visualizer"/>
 	<classpathentry kind="lib" path="lib/core.jar"/>
 	<classpathentry kind="lib" path="lib/oscP5.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/oscP5/src"/>
 	<classpathentry kind="lib" path="lib/tuio/tuio4j.jar"/>
 	<classpathentry kind="lib" path="lib/tuio/tuio4jinput.jar"/>
 	<classpathentry kind="lib" path="lib/Ani_floader_namespace.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/floader visualizer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
