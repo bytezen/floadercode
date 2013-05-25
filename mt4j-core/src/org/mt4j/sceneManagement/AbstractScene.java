@@ -173,21 +173,18 @@ public abstract class AbstractScene implements Iscene {
 	
 
 	protected void clear(PGraphics graphics){
-		if (MT4jSettings.getInstance().isOpenGlMode() && !PlatformUtil.isAndroid()){
+		if (MT4jSettings.getInstance().isOpenGlMode()){
 //			GL gl = Tools3D.getGL(mtApplication);
 			GL10 gl = PlatformUtil.getGL();
 			gl.glClearColor(this.glClearColor.getR(), this.glClearColor.getG(), this.glClearColor.getB(), this.glClearColor.getAlpha());
+
 			gl.glClear(
 					GL10.GL_COLOR_BUFFER_BIT 
 					| 
 					GL10.GL_DEPTH_BUFFER_BIT
 					);
-//			gl.glDepthMask(false);
-//			gl.glDisable(GL.GL_DEPTH_TEST);
-		}else{
-			//In androids PGraphicsAndroid3D the background() method sets clearColorBuffer to true
-			//which prevents expensive operations each frame..we cant set the variable because its protected..
-			graphics.background(this.clearColor.getR(), this.clearColor.getG(), this.clearColor.getB(), this.clearColor.getAlpha());
+			/*gl.glDepthMask(false);
+			gl.glDisable(GL10.GL_DEPTH_TEST);*/
 		}
 	}
 	
