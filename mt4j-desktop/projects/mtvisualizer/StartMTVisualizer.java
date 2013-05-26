@@ -63,10 +63,10 @@ public class StartMTVisualizer extends MTApplication {
 	@Override
 	public void keyPressed()
 	{
-		/*currentSceneIndex++;
+		currentSceneIndex++;
 		if(currentSceneIndex >= sceneList.length)currentSceneIndex = 0;
 		currentScene = new VisualizationScene(this, oscP5, remoteAddress, sceneList[currentSceneIndex]);
-		this.changeScene(currentScene);*/
+		this.changeScene(currentScene);
 		//currentScene.getIVisual().noteEvent(0, 127, 1);
 	}
 	

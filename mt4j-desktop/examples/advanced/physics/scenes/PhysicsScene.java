@@ -15,6 +15,8 @@ import org.mt4j.util.math.ToolsMath;
 import org.mt4j.util.math.Vector3D;
 import org.mt4j.util.math.Vertex;
 
+import processing.core.PGraphics;
+
 import advanced.physics.physicsShapes.PhysicsCircle;
 import advanced.physics.physicsShapes.PhysicsPolygon;
 import advanced.physics.physicsShapes.PhysicsRectangle;
@@ -135,6 +137,8 @@ public class PhysicsScene extends AbstractScene {
 		borderBottom.setName("borderBottom");
 		parent.addChild(borderBottom);
 	}
+	
+
 
 	@Override
 	public void onEnter() {

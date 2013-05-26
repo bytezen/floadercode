@@ -58,6 +58,7 @@ public class Percentages extends AbstractVisual implements IVisual {
 
 	public Percentages(PApplet app) {
 		this.app = app;
+		Ani.init(app);
 	}
 
 	public void setup() {
@@ -73,7 +74,7 @@ public class Percentages extends AbstractVisual implements IVisual {
 		createMeshes();
 		cam = new PeasyCam(app, 0);
 		cam.setDistance(0);
-		//cam.setActive(false);
+		cam.setActive(false);
 		cam.setMaximumDistance(maxDistance);
 	}
 
