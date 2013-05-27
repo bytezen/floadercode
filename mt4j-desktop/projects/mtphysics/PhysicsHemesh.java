@@ -6,6 +6,7 @@ import mtvisualizer.MTVisualizerConstants;
 import mtvisualizer.components.VisualizationComponent;
 import netP5.NetAddress;
 
+import org.jbox2d.collision.MassData;
 import org.jbox2d.collision.shapes.CircleDef;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
@@ -13,8 +14,17 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 import org.mt4j.AbstractMTApplication;
 import org.mt4j.components.visibleComponents.shapes.MTEllipse;
+import org.mt4j.input.inputProcessors.IGestureEventListener;
+import org.mt4j.input.inputProcessors.MTGestureEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.dragProcessor.DragProcessor;
 import org.mt4j.input.inputProcessors.componentProcessors.rotateProcessor.RotateProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleEvent;
 import org.mt4j.input.inputProcessors.componentProcessors.scaleProcessor.ScaleProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.tapAndHoldProcessor.TapAndHoldProcessor;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapEvent;
+import org.mt4j.input.inputProcessors.componentProcessors.tapProcessor.TapProcessor;
 import org.mt4j.util.MTColor;
 import org.mt4j.util.math.Vector3D;
 
@@ -26,12 +36,16 @@ import advanced.physics.physicsShapes.IPhysicsComponent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import wblut.core.processing.WB_Render;
+import wblut.geom.core.WB_Plane;
+import wblut.geom.core.WB_Point3d;
+import wblut.geom.core.WB_Vector3d;
 import wblut.hemesh.core.HE_Face;
 import wblut.hemesh.core.HE_Mesh;
 import wblut.hemesh.core.HE_Selection;
-import wblut.hemesh.creators.HEC_Creator;
 import wblut.hemesh.creators.*;
+import wblut.hemesh.modifiers.HEM_Lattice;
 import wblut.hemesh.modifiers.HEM_Noise;
+import wblut.hemesh.modifiers.HEM_Slice;
 import wblut.hemesh.modifiers.HEM_VertexExpand;
 import oscP5.OscMessage;
 import oscP5.OscP5;
@@ -73,6 +87,7 @@ public class PhysicsHemesh extends MTEllipse implements IPhysicsComponent{
 	float energy;
 	float maxEnergy = 1;
 	float energyDrainAmount = .003f;
+	float scaleAmount = 1;
 	
 	
 	public PhysicsHemesh(PApplet applet, Vector3D centerPoint, float radius,
@@ -91,29 +106,25 @@ public class PhysicsHemesh extends MTEllipse implements IPhysicsComponent{
 		this.setNoFill(true);
 		this.setNoStroke(true);
 		
-		//hemesh
-		if(shapeType == SPHERE)
-			creator = new HEC_Sphere().setRadius(2.8).setUFacets(8).setVFacets(8).setCenter(0, 0, 0);
-		else if(shapeType == CUBE)
-			creator = new HEC_Cube().setRadius(2.1).setDepthSegments(3).setWidthSegments(2);
-		else if(shapeType == TUBE)
-			creator = new HEC_Tube().setOuterRadius(2.5).setInnerRadius(.1).setSteps(3).setFacets(3).setHeight(4);
-		else if(shapeType == TORUS)
-			creator = new HEC_Torus().setTorusFacets(8).setTubeFacets(8).setRadius(1, 2);
-			
-		mesh = new HE_Mesh(creator);
-		meshRenderer = new WB_Render(applet);
-		this.shapeColor = shapeColor;
-		
-		//Ani
-		this.setGestureAllowance(ScaleProcessor.class, false);
 		this.setGestureAllowance(RotateProcessor.class, false);
+		this.setGestureAllowance(ScaleProcessor.class, false);
+		
+//		this.registerInputProcessor(new TapAndHoldProcessor(app));
+//		this.setGestureAllowance(TapAndHoldProcessor.class, true);
+//		this.addGestureListener(TapAndHoldProcessor.class, new IGestureEventListener() {
+//			@Override
+//			public boolean processGestureEvent(MTGestureEvent ge) {
+//				TapAndHoldEvent te = (TapAndHoldEvent) ge;
+//				
+//				System.out.println(te.isHoldComplete());
+//				return true;
+//			}
+//		});
 		
 		BodyDef dymBodyDef = new BodyDef();
 		dymBodyDef.position = new Vec2(centerPoint.x / worldScale, centerPoint.y / worldScale);
 		this.bodyDefB4CreationCallback(dymBodyDef);
 		this.body = this.world.createBody(dymBodyDef);
-		
 		
 		CircleDef circleDef = new CircleDef();
 //		circleDef.radius = radius/(float)worldScale; 
@@ -128,23 +139,32 @@ public class PhysicsHemesh extends MTEllipse implements IPhysicsComponent{
 		this.circleDefB4CreationCallback(circleDef);
 		this.body.createShape(circleDef);
 		this.body.setMassFromShapes();
-		//FIXME TEST
-		//theBody.setBullet(true);
-		
-//		PhysicsSphere sphere = new PhysicsSphere(app, "sphere", 30,30, radius/scale, TextureMode.Projected);
-//		sphere.setFillColor(new MTColor(255, 255, 0, 255));
-//		sphere.setPositionGlobal(pos);
-//		theBody.setUserData(sphere);
-//		sphere.setUserData("box2d", theBody); 
-//		sphere.setMaterial(this.getMaterial());
-//		sphere.rotateY(sphere.getCenterPointRelativeToParent(), 90);
-//		sphere.rotateX(sphere.getCenterPointRelativeToParent(), 180);
-		
 		this.setPositionGlobal(centerPoint);
 		this.body.setUserData(this);
 		this.setUserData("box2d", this.body); 
+		
+		//hemesh
+		if(shapeType == SPHERE)
+			creator = new HEC_Sphere().setRadius(2.8).setUFacets(8).setVFacets(8).setCenter(0, 0, 0);
+		else if(shapeType == CUBE)
+			creator = new HEC_Cube().setRadius(2.1).setDepthSegments(3).setWidthSegments(2);
+		else if(shapeType == TUBE)
+			creator = new HEC_Tube().setOuterRadius(2.4).setInnerRadius(.1).setSteps(3).setFacets(3).setHeight(4);
+		else if(shapeType == TORUS)
+			creator = new HEC_Torus().setTorusFacets(8).setTubeFacets(8).setRadius(1, 2);
+			
+		mesh = new HE_Mesh(creator);
+		//mesh.modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, -2, 0), new WB_Vector3d(1, 1, 0))));
+		//mesh.modify(new HEM_Slice().setCap(true).setPlane(new WB_Plane(new WB_Point3d(0, 2, 0), new WB_Vector3d(0, -1, 0))));
+		meshRenderer = new WB_Render(applet);
+		this.shapeColor = shapeColor;
 	}
 
+
+	public void setScaleAmount(float amount)
+	{
+		scaleAmount = amount;
+	}
 
 	protected void circleDefB4CreationCallback(CircleDef def){
 		
@@ -200,6 +220,7 @@ public class PhysicsHemesh extends MTEllipse implements IPhysicsComponent{
 	@Override
 	public void drawComponent(PGraphics g)
 	{
+		
 		OscMessage msg;
 		msg = new OscMessage(VisualConstants.OSC_CTRL_PATH);
 				
@@ -264,8 +285,11 @@ public class PhysicsHemesh extends MTEllipse implements IPhysicsComponent{
 //			meshRenderer.drawFace(mesh.getFacesAsArray()[3]);
 //			meshRenderer.drawFace(mesh.getFacesAsArray()[5]);
 			
-			g.scale(1 - (emphasis * 1.7f));
+			//g.scale(1 - (emphasis * 1.7f));
+			g.scale(scaleAmount);
+			
 			mesh.modify(new HEM_Noise().setDistance(emphasis/1.5));
+			
 			
 			g.stroke(255 - (255 * energy));
 			meshRenderer.drawEdges(mesh);
