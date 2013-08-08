@@ -1,21 +1,16 @@
-package floader.visuals.imagineyourgarden;
+package floader.visuals.spincycle;
 
 import floader.looksgood.ani.Ani;
 import floader.visuals.AbstractVisual;
-import floader.visuals.IVisual;
+import floader.visuals.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.creators.*;
-import wblut.geom.core.WB_Line;
-import wblut.geom.core.WB_Point3d;
-import wblut.geom.core.WB_Vector3d;
-import oscP5.*;
-import wblut.hemesh.core.*;
-import wblut.core.processing.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 
 @SuppressWarnings("serial")
-public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
+public class SpinCycleVisual extends AbstractVisual implements IVisual {
 
 	private Object lock = new Object();
 	// Meshes
@@ -79,7 +74,7 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 	Ani rotateAni;
 	Ani zoomAni;
 
-	public ImagineYourGardenVisual(PApplet app) {
+	public SpinCycleVisual(PApplet app) {
 		this.app = app;
 		camStatePath = "data\\imagineyourgarden\\camState";
 	}
@@ -89,7 +84,7 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 		cam = new PeasyCam(app, 100);
 		cam.setMinimumDistance(100);
 		cam.setMaximumDistance(600);
-		cam.setActive(false);
+		cam.setActive(VisualConstants.CAM_ENABLED);
 		meshRenderer = new WB_Render(app);
 		meshes = new HE_Mesh[numMeshes];
 		app.colorMode(PApplet.RGB, 255, 255, 255, 255);
@@ -105,10 +100,10 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 
 	@Override
 	public void draw() {
-		// app.background(255,255,255);
+		app.background(0);
 		cam.feed();
 		app.noStroke();
-		// app.lights();
+		app.lights();
 		// System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] +
 		// ", " + cam.getLookAt()[2]);
 
@@ -195,22 +190,39 @@ public class ImagineYourGardenVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		// Color 1
 		if (num == 2) {
-			innerAlpha = (int) (val / 127.0 * 255);
+			innerAlpha = (int) (val * 255);
 		} else if (num == 3) {
-			outerAlpha = (int) (val / 127.0 * 255);
+			outerAlpha = (int) (val * 255);
 		} else if (num == 6) {
-			rotDuration = (val / 127.0f * (float) maxRotDuration);
+			rotDuration = (val * (float) maxRotDuration);
 		}
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
+	public void camEvent(int note) {
 		// writeCamState();
-		if (vel > 0)
 			loadCamState(note);
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

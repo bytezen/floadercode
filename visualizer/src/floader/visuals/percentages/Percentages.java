@@ -7,12 +7,9 @@ import floader.looksgood.ani.easing.*;
 import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.*;
 import wblut.geom.*;
-import wblut.hemesh.core.*;
-import wblut.core.processing.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 import oscP5.*;
 import peasy.*;
 import processing.core.PApplet;
@@ -211,14 +208,31 @@ public class Percentages extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
-		if (vel > 0)
+	public void camEvent(int note) {
 			loadCamState(note);
+		
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
 		
 	}
 }

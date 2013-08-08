@@ -5,18 +5,14 @@ import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 import toxi.geom.*;
-import wblut.geom.nurbs.WB_BSpline;
 import wblut.hemesh.*;
 import oscP5.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import wblut.hemesh.core.*;
-import wblut.hemesh.creators.HEC_Creator;
-import wblut.hemesh.creators.HEC_Cube;
-import wblut.hemesh.creators.HEC_Sphere;
-import wblut.hemesh.creators.HEC_SweepTube;
-import wblut.core.processing.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 
 @SuppressWarnings("serial")
 public class ParticleMirrorVisual extends AbstractVisual implements IVisual {
@@ -303,16 +299,34 @@ public class ParticleMirrorVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		if (chan == 1 && num == 1) {
-			meshRadius = (int) PApplet.map(val, 0, 127, 4, 512);
+			meshRadius = (int) PApplet.map(val, 0, 1, 4, 512);
 		}
 
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
+	public void camEvent(int note) {
 
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -7,15 +7,9 @@ import floader.looksgood.ani.AniConstants;
 import floader.visuals.VisualConstants;
 
 import processing.core.*;
-import wblut.geom.core.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.tools.*;
-
-import wblut.core.processing.*;
-
-import wblut.hemesh.core.*;
-
-import wblut.hemesh.modifiers.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 
 public class LeakySphereLayer extends AbstractMovingObject {
 

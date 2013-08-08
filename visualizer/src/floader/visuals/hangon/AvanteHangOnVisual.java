@@ -9,16 +9,9 @@ import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.core.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.*;
 import wblut.geom.*;
-import wblut.geom.core.WB_Plane;
-import wblut.geom.core.WB_Point3d;
-import wblut.geom.core.WB_Vector3d;
-import wblut.core.math.WB_Parameter;
-import wblut.core.processing.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 import peasy.*;
 import processing.core.PApplet;
 
@@ -82,6 +75,7 @@ public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 
 	@Override
 	public void setup() {
+		app.lights();
 		meshRenderer = new WB_Render(app);
 		spheres = new HE_Mesh[numSpheres];
 		sphereColors = new int[numSpheres];
@@ -190,7 +184,7 @@ public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 		}
 	}
 
-	void reset() {
+	public void reset() {
 		stopAnimation();
 		cam.setDistance(minDistance);
 		for (int i = 0; i < numSpheres; i++) {
@@ -269,16 +263,27 @@ public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
+	public void camEvent(int note) {
 		if(note>0)lights=true;
-		if(vel>0)
-			loadCamState(note);
+		loadCamState(note);
 		//writeCamState();
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
 	}
 }

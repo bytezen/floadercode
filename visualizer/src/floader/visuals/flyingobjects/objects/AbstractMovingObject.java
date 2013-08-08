@@ -4,15 +4,9 @@ import java.util.Iterator;
 
 import floader.looksgood.ani.*;
 import processing.core.PApplet;
-import wblut.core.processing.WB_Render;
-import wblut.geom.core.WB_Line;
-import wblut.geom.core.WB_Point3d;
-import wblut.geom.core.WB_Vector3d;
-import wblut.hemesh.core.HE_Face;
-import wblut.hemesh.core.HE_Mesh;
-import wblut.hemesh.core.HE_Selection;
-import wblut.hemesh.modifiers.HEM_Extrude;
-import wblut.hemesh.modifiers.HEM_Twist;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 
 public abstract class AbstractMovingObject {
 	

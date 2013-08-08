@@ -6,15 +6,12 @@ import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.creators.*;
 import wblut.hemesh.*;
 import oscP5.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PImage;
-import wblut.hemesh.core.*;
-import wblut.core.processing.*;
+
 
 @SuppressWarnings("serial")
 public class TuringFractalVisual extends AbstractVisual implements IVisual {
@@ -112,13 +109,13 @@ public class TuringFractalVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
+	public void camEvent(int note) {
 
 	}
 	
@@ -241,6 +238,24 @@ public class TuringFractalVisual extends AbstractVisual implements IVisual {
 		      to[i] = (buffer[se] - buffer[sw] - buffer[ne] + buffer[nw]) / area;
 		    }
 		  }
+		}
+
+		@Override
+		public void toggleBackgroundFill() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void cycleColorScheme() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void reset() {
+			// TODO Auto-generated method stub
+			
 		}
 
 

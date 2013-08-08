@@ -5,14 +5,12 @@ import java.util.Iterator;
 import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.*;
 import oscP5.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
-import wblut.hemesh.core.*;
-import wblut.core.processing.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 
 @SuppressWarnings("serial")
 public class KalimbaVisual extends AbstractVisual implements IVisual {
@@ -86,6 +84,7 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 	}
 
 	public void draw() {
+		app.background(0);
 		cam.feed();
 		app.rotateX(app.random(0, rotateAmount));
 		app.rotateY(app.random(0, rotateAmount));
@@ -160,15 +159,32 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
-		if (vel > 0)
+	public void camEvent(int note) {
 			loadCamState(note, 100);
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

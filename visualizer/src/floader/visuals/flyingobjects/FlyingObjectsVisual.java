@@ -15,23 +15,9 @@ import floader.visuals.flyingobjects.objects.CylinderLayer;
 import floader.visuals.flyingobjects.objects.SphereLayer;
 
 import processing.core.*;
-import wblut.geom.core.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.tools.*;
-import wblut.geom.grid.*;
-import wblut.geom.nurbs.*;
-import wblut.core.math.*;
-import wblut.hemesh.subdividors.*;
-import wblut.core.processing.*;
-import wblut.hemesh.composite.*;
-import wblut.core.random.*;
-import wblut.hemesh.core.*;
-import wblut.geom.frame.*;
-import wblut.core.structures.*;
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.simplifiers.*;
-import wblut.geom.triangulate.*;
-import wblut.geom.tree.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 import processing.opengl.*;
 import peasy.*;
 import oscP5.*;
@@ -66,7 +52,7 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 		cam.setMinimumDistance(100);
 		cam.setMaximumDistance(500);
 		cam.setDistance(400);
-		cam.setActive(false);
+		cam.setActive(true);
 		render = new WB_Render(app);
 		masterLayer = new MasterLayer();
 
@@ -102,6 +88,7 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	public void draw() {
 		app.lights();
 		cam.feed();
+		app.background(0);
 
 		synchronized (lock) {
 			masterLayer.drawPlayingLayers();
@@ -151,14 +138,31 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
-		if (vel > 0)
+	public void camEvent(int note) {
 			loadCamState(note);
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

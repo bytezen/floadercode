@@ -1,8 +1,15 @@
--add themeing layer (with theme and alt for each theme)
 -7 generators and 7 effects
 -copy over all legacy visuals
 	-fix hang on
 -super! http://www.k2g2.org/blog:bit.craft:superdupershape_explorer
 -cam effect for flyingobjects
 -q's for joel
-	-public interface WB_Parameter<T> {
+	-public interface WB_Parameter<T> 
+	
+-take screen shot of what's on the screen and recall it later as a background
+-animations for all control values (w/ easing)
+-meta-loader
+-sepblur shader
+-nebula shader for background?
+-check mirror sketch for 2d processing within main sketch 
+-Hemesh disolve - http://amnonp5.wordpress.com/2012/03/14/hemesh-tutorial-color-dissolve/

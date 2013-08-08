@@ -5,23 +5,9 @@ import java.util.Iterator;
 
 
 import processing.core.*;
-import wblut.geom.core.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.tools.*;
-import wblut.geom.grid.*;
-import wblut.geom.nurbs.*;
-import wblut.core.math.*;
-import wblut.hemesh.subdividors.*;
-import wblut.core.processing.*;
-import wblut.hemesh.composite.*;
-import wblut.core.random.*;
-import wblut.hemesh.core.*;
-import wblut.geom.frame.*;
-import wblut.core.structures.*;
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.simplifiers.*;
-import wblut.geom.triangulate.*;
-import wblut.geom.tree.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 import processing.opengl.*;
 import peasy.*;
 

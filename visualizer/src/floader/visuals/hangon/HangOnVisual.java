@@ -6,15 +6,9 @@ import oscP5.OscMessage;
 
 import floader.visuals.IVisual;
 
-import wblut.hemesh.modifiers.*;
-import wblut.hemesh.core.*;
-import wblut.hemesh.creators.*;
-import wblut.hemesh.*;
 import wblut.geom.*;
-import wblut.geom.core.WB_Plane;
-import wblut.geom.core.WB_Point3d;
-import wblut.geom.core.WB_Vector3d;
-import wblut.core.processing.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 import peasy.*;
 import processing.core.PApplet;
 
@@ -167,7 +161,7 @@ public class HangOnVisual implements IVisual {
 		}
 	}
 
-	void reset() {
+	public void reset() {
 		stopAnimation();
 		cam.setDistance(minDistance);
 		for (int i = 0; i < numSpheres; i++) {
@@ -257,28 +251,40 @@ public class HangOnVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 			if (num == 1) {
 				// spin rate
-				multiplier = ((float) val / 127.0f * 8.0f) - 4.0f;
+				multiplier = (val * 8.0f) - 4.0f;
 			} else if (num == 2) {
 				// zoom distance
-				distance = ((float) val / 127.0f * maxDistance);
+				distance = (val * maxDistance);
 			} else if (num == 3) {
 				// look X
-				lookX = ((double) val / 127.0 * 2400) - 1200;
+				lookX = (val * 2400) - 1200;
 			} else if (num == 4) {
 				// look Y
-				lookY = ((double) val / 127.0 * 2400) - 1200;
+				lookY = (val * 2400) - 1200;
 			} else if (num == 5) {
 				// look Z
-				lookZ = ((double) val / 127.0 * app.height);
+				lookZ = (val * app.height);
 			}
 		
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
+	public void camEvent(int note) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -8,11 +8,9 @@ import wblut.hemesh.*;
 import oscP5.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
-import wblut.hemesh.core.*;
-import wblut.hemesh.creators.HEC_Creator;
-import wblut.hemesh.creators.HEC_Cube;
-import wblut.hemesh.creators.HEC_Sphere;
-import wblut.core.processing.*;
+import wblut.geom.*;
+import wblut.processing.*;
+import wblut.hemesh.*;
 
 @SuppressWarnings("serial")
 public class ParticleVisual extends AbstractVisual implements IVisual {
@@ -251,17 +249,35 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, int val, int chan) {
+	public void ctrlEvent(int num, float val, int chan) {
 		if(chan == 1 && num == 1)
 		{
-			meshRadius = (int)PApplet.map(val, 0, 127, 4, 1024);
+			meshRadius = (int)PApplet.map(val, 0, 1, 4, 1024);
 		}
 
 	}
 
 	@Override
-	public void noteCamEvent(int note, int vel) {
+	public void camEvent(int note) {
 
+	}
+
+	@Override
+	public void toggleBackgroundFill() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cycleColorScheme() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
