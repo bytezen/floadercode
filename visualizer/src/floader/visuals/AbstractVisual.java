@@ -7,16 +7,34 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import floader.visuals.colorschemes.ColorScheme;
+import floader.visuals.colorschemes.Terminal;
 import peasy.CameraState;
 import peasy.PeasyCam;
+import processing.core.PGraphics;
 
-public class AbstractVisual {
+public class AbstractVisual  implements IVisual {
 	protected String camStatePath;
 	protected PeasyCam cam;
 	protected int camCounter = 0;
+	protected ColorScheme curColorScheme;
+	
+	public void setup(){
+
+	}
+	
+	public void draw(PGraphics g)
+	{
+		//g.background(colorSchemes[curColorSchemeIndex].getBgColor().getRed(), colorSchemes[curColorSchemeIndex].getBgColor().getGreen(), colorSchemes[curColorSchemeIndex].getBgColor().getBlue(), bgAlpha);
+	}
 	
 	protected void loadCamState(int index) {
 		loadCamState(index, 300);
+	}
+
+	public void setColorScheme(ColorScheme newColorScheme)
+	{
+		curColorScheme = newColorScheme;
 	}
 	
 	protected void loadCamState(int index, int time) {
@@ -63,4 +81,42 @@ public class AbstractVisual {
 		}
 		camCounter++;
 	}
+
+	@Override
+	public void noteObjEvent(int note, int vel) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void camEvent(int camState) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void ctrlEvent(int num, float val, int chan) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dragEvent(int eventType, float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void tapEvent(int eventType, boolean isTapDown) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
+
+		
+	}
+	
+	
 }

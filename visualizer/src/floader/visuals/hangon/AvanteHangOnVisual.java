@@ -3,17 +3,16 @@ package floader.visuals.hangon;
 import java.util.Iterator;
 
 import oscP5.OscMessage;
-
 import floader.looksgood.ani.Ani;
 import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
-
 import wblut.geom.*;
 import wblut.processing.*;
 import wblut.hemesh.*;
 import peasy.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 @SuppressWarnings("serial")
 public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
@@ -133,7 +132,7 @@ public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void draw() {
+	public void draw(PGraphics graphics) {
 		app.background(r, g, b);
 		app.noStroke();
 		if (lights)
@@ -275,15 +274,4 @@ public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 		//writeCamState();
 	}
 
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
 }

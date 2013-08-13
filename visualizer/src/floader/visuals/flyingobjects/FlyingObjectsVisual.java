@@ -85,7 +85,7 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 
 	private Object lock = new Object();
 
-	public void draw() {
+	public void draw(PGraphics g) {
 		app.lights();
 		cam.feed();
 		app.background(0);
@@ -145,18 +145,6 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	@Override
 	public void camEvent(int note) {
 			loadCamState(note);
-	}
-
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

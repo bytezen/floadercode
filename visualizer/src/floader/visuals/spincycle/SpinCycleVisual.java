@@ -1,10 +1,16 @@
 package floader.visuals.spincycle;
 
 import floader.looksgood.ani.Ani;
-import floader.visuals.AbstractVisual;
 import floader.visuals.*;
+import floader.visuals.colorschemes.AccentedTerminal;
+import floader.visuals.colorschemes.BlueSunset;
+import floader.visuals.colorschemes.ColorScheme;
+import floader.visuals.colorschemes.SeaGreenSeaShell;
+import floader.visuals.colorschemes.SpinCyclz;
+import floader.visuals.colorschemes.Terminal;
 import peasy.PeasyCam;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import wblut.geom.*;
 import wblut.processing.*;
 import wblut.hemesh.*;
@@ -43,10 +49,13 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 	boolean randomizeDir = true;
 	float cylHeight = 25000;
 
-	float rotDuration = 4;
-	float origRotDuration = rotDuration;
-	float maxRotDuration = 1;
+	float rotDuration = 7;
+	float minRotDuration = 2;
+	float maxRotDuration = 7;
 	float rotateY;
+	float rotateZDegrees;
+	float rotateZAmount;
+	float maxRotateZAmount = 10;
 
 	float zoomAmt = -(cylHeight - 10000) / 2;
 	float origZoomDuration = 10;
@@ -64,8 +73,8 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 	int cameraX = 0;
 	int maxCameraX = 360;
 
-	float twistAmt = 0;
-	float maxTwistAmt = 1f;
+	float twistAmount = 0;
+	float maxTwistAmount = 1f;
 	int maxColor = 255;
 
 	float totalTwistAmt = 0;
@@ -76,61 +85,46 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 
 	public SpinCycleVisual(PApplet app) {
 		this.app = app;
-		camStatePath = "data\\imagineyourgarden\\camState";
 	}
 
 	@Override
 	public void setup() {
-		cam = new PeasyCam(app, 100);
-		cam.setMinimumDistance(100);
-		cam.setMaximumDistance(600);
-		cam.setActive(VisualConstants.CAM_ENABLED);
+		super.setup();
+		
 		meshRenderer = new WB_Render(app);
 		meshes = new HE_Mesh[numMeshes];
-		app.colorMode(PApplet.RGB, 255, 255, 255, 255);
-		app.noStroke();
 		createMeshes();
-		rotateAni = new Ani(this, rotDuration, "rotateXAmt", 360);
+		/*rotateAni = new Ani(this, rotDuration, "rotateXAmt", 360);
 		rotateAni.repeat();
-		rotateAni.start();
+		rotateAni.start();*/
 		zoomAni = new Ani(this, origZoomDuration, "zoomAmt", (cylHeight - 12000) / 2);
 		zoomAni.repeat();
 		zoomAni.start();
 	}
 
 	@Override
-	public void draw() {
-		app.background(0);
-		cam.feed();
-		app.noStroke();
-		app.lights();
-		// System.out.println(cam.getLookAt()[0] + ", " + cam.getLookAt()[1] +
-		// ", " + cam.getLookAt()[2]);
+	public void draw(PGraphics g) {
+		super.draw(g);
+		g.noStroke();
 
-		totalTwistAmt += twistAmt;
-		if (reset) {
-			createMeshes();
-			alphaMult = 1;
-			rotateAni.setDuration(origRotDuration);
-			twistAmt = 0;
-			reset = false;
-		}
-
-		app.translate(0, 0, zoomAmt);
-		app.rotateZ(PApplet.radians(rotateXAmt));
+		totalTwistAmt += twistAmount;
+		
+		g.translate(0, 0, zoomAmt);
+		rotateZDegrees = (rotateZDegrees + rotateZAmount) % 360;
+		g.rotateZ(PApplet.radians(rotateZDegrees));
 		synchronized (lock) {
-			drawMesh(0);
-			drawMesh(1);
+			drawMesh(0, g);
+			drawMesh(1,g);
 		}
 	}
 
-	void drawMesh(int meshIndex) {
+	void drawMesh(int meshIndex, PGraphics g) {
 		if (meshIndex == 0)
-			app.fill(outerR, outerG, outerB, outerAlpha * alphaMult);
+			g.fill(curColorScheme.getColor(0).getRGB());
 		else
-			app.fill(innerR, innerG, innerB, innerAlpha * alphaMult);
+			g.fill(curColorScheme.getColor(1).getRGB());
 
-		meshes[meshIndex].modify(new HEM_Twist().setAngleFactor((twistAmt)).setTwistAxis(new WB_Line(new WB_Point3d(0, 0, 0), new WB_Vector3d(0, 0, 1))));
+		meshes[meshIndex].modify(new HEM_Twist().setAngleFactor((twistAmount)).setTwistAxis(new WB_Line(new WB_Point3d(0, 0, 0), new WB_Vector3d(0, 0, 1))));
 		meshRenderer.drawFaces(meshes[meshIndex]);
 	}
 
@@ -147,82 +141,20 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void dragEvent(int eventType, float amount) {
-		/*
-		 * if (eventType == 0 || eventType == 2) { float delta = rotateY -
-		 * (amount * 180); cam.rotateY(PApplet.radians(delta)); rotateY -=
-		 * delta; }
-		 */
-	}
-
-	@Override
-	public void tapEvent(int eventType, boolean isTapDown) {
-		// TODO Auto-generated method stub
-		/*
-		 * if(isTapDown)twistAmt = maxTwistAmt; else
-		 * if(!isTapDown){reset();twistAmt=0;}
-		 */
-
-	}
-
-	@Override
-	public void noteObjEvent(int note, int velocity) {
-
-		if (note == 4 && velocity > 0) {
-			synchronized (lock) {
-				twistAmt = maxTwistAmt;
-			}
-		} else if (note == 4 && velocity == 0) {
-			synchronized (lock) {
-				twistAmt = 0;
-			}
-		} else if (note == 5 && velocity > 0) {
-			reset = true;
-		} else if (note == 6 && velocity > 0) {
-			rotateAni.setDuration(rotDuration);
-		} else if (note == 7 && velocity > 0) {
-			zoomAni.setDuration(origZoomDuration);
-		} else if (note == 8 && velocity > 0) {
-			rotateAni.setDuration(10);
-		} else if (note == 9 && velocity > 0) {
-			zoomAni.setDuration(100);
-		}
-	}
-
-	@Override
 	public void ctrlEvent(int num, float val, int chan) {
-		// Color 1
-		if (num == 2) {
-			innerAlpha = (int) (val * 255);
-		} else if (num == 3) {
-			outerAlpha = (int) (val * 255);
-		} else if (num == 6) {
-			rotDuration = (val * (float) maxRotDuration);
+		if (num == 0){
+			rotateZAmount = val * maxRotateZAmount;
+		} if(num == 1){
+			twistAmount = PApplet.map(val, 0, 1, 0, maxTwistAmount);
 		}
 	}
 
-	@Override
-	public void camEvent(int note) {
-		// writeCamState();
-			loadCamState(note);
-	}
-
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
+		createMeshes();
+		alphaMult = 1;
+		rotateZAmount = 0;
+		rotDuration = maxRotDuration;
+		twistAmount = 0;
 	}
 
 }

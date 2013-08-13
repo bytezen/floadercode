@@ -3,14 +3,13 @@ package floader.visuals.hangon;
 import java.util.Iterator;
 
 import oscP5.OscMessage;
-
 import floader.visuals.IVisual;
-
 import wblut.geom.*;
 import wblut.processing.*;
 import wblut.hemesh.*;
 import peasy.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 @SuppressWarnings("serial")
 public class HangOnVisual implements IVisual {
@@ -99,7 +98,7 @@ public class HangOnVisual implements IVisual {
 	}
 
 	@Override
-	public void draw() {
+	public void draw(PGraphics g) {
 		app.background(0, 0, 0);
 		app.lights();
 		cam.feed();
@@ -277,15 +276,4 @@ public class HangOnVisual implements IVisual {
 		
 	}
 
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
 }

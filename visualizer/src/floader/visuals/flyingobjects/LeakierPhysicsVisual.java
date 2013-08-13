@@ -56,7 +56,7 @@ public class LeakierPhysicsVisual extends AbstractVisual implements IVisual {
 		masterLayer.addGroup(sphereGroup);
 	}
 
-	public void draw() {
+	public void draw(PGraphics g) {
 		cam.feed();
 		masterLayer.drawPlayingLayers();
 
@@ -90,17 +90,6 @@ public class LeakierPhysicsVisual extends AbstractVisual implements IVisual {
 			loadCamState(note);
 	}
 
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void reset() {

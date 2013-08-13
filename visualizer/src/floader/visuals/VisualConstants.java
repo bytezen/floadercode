@@ -6,9 +6,14 @@ public final class VisualConstants {
 	public static final int CAM_EVENT_CHANNEL = 2;
 	public static final String OSC_CTRL_PATH = "/mtn/ctrl";
 	public static final String OSC_NOTE_PATH = "/mtn/note";
-	public static final int WIDTH = 1200;
-	public static final int HEIGHT = 900;
 	public static final boolean CAM_ENABLED = true;
+	public static final boolean PROSCENE_GUIDES_ENABLED = false;
+	
+	public static final int WIDTH = 1920;
+	public static final int HEIGHT = 1440;
+	/*public static final int WIDTH = 1920;
+	public static final int HEIGHT = 1080;*/
+	public static final boolean FULLSCREEN = true;
 	
 	//nanoKONTROL mappings
 	public static final int MIDI_CHANNEL = 0;

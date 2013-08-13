@@ -79,7 +79,7 @@ public class ParticleMirrorVisual extends AbstractVisual implements IVisual {
 		averageRebirth = false;
 	}
 
-	public void draw() {
+	public void draw(PGraphics g) {
 		cam.feed();
 
 		avg = new Vec3D();
@@ -309,18 +309,6 @@ public class ParticleMirrorVisual extends AbstractVisual implements IVisual {
 	@Override
 	public void camEvent(int note) {
 
-	}
-
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

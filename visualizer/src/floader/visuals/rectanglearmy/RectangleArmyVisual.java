@@ -3,6 +3,7 @@ package floader.visuals.rectanglearmy;
 import java.awt.Color;
 import java.util.Iterator;
 
+import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import floader.visuals.VisualConstants;
 import wblut.hemesh.*;
@@ -14,7 +15,7 @@ import floader.visuals.colorschemes.*;
 import floader.looksgood.ani.Ani;
 
 @SuppressWarnings("serial")
-public class RectangleArmyVisual implements IVisual {
+public class RectangleArmyVisual extends AbstractVisual {
 	// Meshes
 	WB_Render meshRenderer;
 	HEC_Creator creator;
@@ -22,11 +23,9 @@ public class RectangleArmyVisual implements IVisual {
 	int numRows = 25;
 	int numCols = 25;
 	int RESET = 0;
-	
-	ColorScheme curColorScheme;
+
 
 	boolean fillBackground = true;
-	boolean readyDraw = false;
 	float maxVertexDistance = 400;
 	float vertexDistance = 10;
 	float maxPerspectiveWidth = 5000;
@@ -37,14 +36,9 @@ public class RectangleArmyVisual implements IVisual {
 	
 	// presentation
 	int bgcolor; // background color
-	Color shapecolor; // shape color
+	int maxBgColor = 255;
 	boolean facesOn = true; // toggle display of faces
 	boolean edgesOn = true; // toggle display of edges
-	float shapeHue = 57; // default hue
-	float shapeSaturation = 100; // default saturation
-	float shapeBrightness = 96; // default brightness
-	float[] shapeMult;
-	int[][] counter;
 	float ax, ay;
 	boolean clock = false;
 	boolean eighth = true;
@@ -52,16 +46,22 @@ public class RectangleArmyVisual implements IVisual {
 	HE_Selection selection;
 	Iterator<HE_Face> fItr;
 	HE_Face f;
-	PeasyCam cam;
 	CameraState camState;
 	float minDistance = 400;
 	float initDistance = 700;
 	float maxDistance = 2000;
 
+	float individualRotateAmount;
+	float maxIndividualRotateAmount = .02f;
+	float individualRotateDegrees = 0;
+	
+	float globalRotateAmount;
+	float maxGlobalRotateAmount = 8;
+	float globalRotateDegrees = 0;
+	
 	float rotateZ = 0;
 	float maxRotateZ = .4f;
 	float rotateIndividual = 0;
-	float maxRotateIndividual = .4f;
 	float rotateForward = 0;
 	float maxRotateForward = 1;
 	float rotateCombine = 0;
@@ -71,22 +71,51 @@ public class RectangleArmyVisual implements IVisual {
 	float rotateY;
 
 	PApplet app;
+	
+	Ani localSpinAni;
+	float localSpinAniSpeed = 1;
+	float localSpinAniSpeedMin = .5f;
+	float localSpinAniSpeedMax = 10;
+	
+	Ani globalSpinAni;
+	float globalSpinAniSpeed = 1;
+	float globalSpinAniSpeedMin = .5f;
+	float globalSpinAniSpeedMax = 10;
+	
+	Ani noiseAni;
+	static final int MAXNOISE = 8;
+	float noise = 0;
+	float maxNoise = 0;
+	float initNoiseDuration = .2f;
+	
+	Ani explodeEaseAni;
+	float explodeEaseAniDuration = 2;
+	
+	float rectScale = 1;
+	float maxRectScale = 3.67f;
+
 
 	public RectangleArmyVisual(PApplet app) {
 		this.app = app;
 	}
 
 	public void setup() {
-		curColorScheme = new MyColorScheme();
-		Ani.init(app);
-		
+		super.setup();
 		meshRenderer = new WB_Render(app);
 		
-		app.noStroke();
-		cam = new PeasyCam(app, initDistance);
-		cam.setMinimumDistance(minDistance);
-		cam.setMaximumDistance(maxDistance);
-		cam.setActive(VisualConstants.CAM_ENABLED);
+		//Ani's
+		localSpinAni = new Ani(this, localSpinAniSpeed, "rotateIndividual", 360);
+		localSpinAni.repeat();
+		globalSpinAni = new Ani(this, globalSpinAniSpeed, "rotateZ", 360);
+		globalSpinAni.repeat();
+		explodeEaseAni = new Ani(this, explodeEaseAniDuration, "explodeAmount", 1);
+		explodeEaseAni.repeat();
+		explodeEaseAni.setPlayMode(Ani.YOYO);
+		explodeEaseAni.setEasing(Ani.EXPO_IN_OUT);
+		noiseAni = new Ani(this, initNoiseDuration, "noise", 0);
+		noiseAni.setEasing(Ani.EXPO_IN);
+		noiseAni.pause();
+		
 		reset();
 	}
 	
@@ -99,38 +128,31 @@ public class RectangleArmyVisual implements IVisual {
 	boolean enableMouse = true;
 	boolean addLattice = false;
 
-	public void draw() {
-		if(fillBackground)
-			app.background(curColorScheme.getBgColor().getRGB());
+	public void draw(PGraphics g) {
 		
-		app.lights();
-		cam.feed();
-
-		//need to redo
-		if (scroll) {
-			if (totalYPan >= 300) {
-				totalYPan = 0;
-				app.translate(0, -300);
-			} else {
-				totalYPan += panYAmount;
-				app.translate(0, totalYPan);
-			}
-		}
-		
-		
-		creator = new HEC_Grid().setUSize(110).setVSize(110).setU(2).setV(2);
+		super.draw(g);
+		g.noStroke();
+		g.lights();
+		//creator = new HEC_Grid().setUSize(110).setVSize(110).setU(2).setV(2);
+		creator = new HEC_Cube().setRadius(20);
 		HE_Mesh rect = new HE_Mesh(creator);
+		rect.modify(new HEM_Noise().setDistance(noise));
 		
-		app.pushMatrix();
-			app.rotateZ(PApplet.radians(rotateZ));
+		g.pushMatrix();
+			g.translate(0, 0, 0);
+			globalRotateDegrees = (globalRotateDegrees + globalRotateAmount) % 360;
+			g.rotateZ(PApplet.radians(globalRotateDegrees));
 		
-			for (int j = 0; j < numCols; j++)
+			for (int j = 0; j < numCols; j++){
+				
+				g.fill(curColorScheme.getColor(j % curColorScheme.getLength()).getRGB());
 				for (int k = 0; k < numRows; k++) {
-					app.fill(curColorScheme.getColor(j % curColorScheme.getLength()).getRGB());
+					
 		
-					app.pushMatrix();
-						app.translate(j * 150 - (numCols * 150 / 2), k * 150 - (numRows * 150 / 2));
-						app.rotateZ(PApplet.radians(rotateIndividual));
+					g.pushMatrix();
+						g.translate(j * 150 - (numCols * 150 / 2), k * 150 - (numRows * 150 / 2));
+						individualRotateDegrees = (individualRotateDegrees + individualRotateAmount) % 360;
+						g.rotateZ(PApplet.radians(-individualRotateDegrees));
 						
 						//Explode!
 						rect.rotateAboutAxis(PApplet.radians(explodeAmount), numCols / 2 * 150, numRows / 2 * 150, 0, numCols / 2 * 100, numRows / 2 * 150, 0);
@@ -139,18 +161,23 @@ public class RectangleArmyVisual implements IVisual {
 						//rect.rotateAboutAxis(rotateCrazy, -j / 4 * 150 + numCols / 2 * 150, k / 4 * 150 + numRows / 2 * 150, 0, j / 4 * 150 + numCols / 2 * 150, k / 4 * 150 + numRows / 2 * 150, 1);
 						// Rotate forward
 						//rect.rotateAboutAxis(rotateForward, meshes[j][k].getVerticesAsPoint()[0], meshes[j][k].getVerticesAsPoint()[1]);
+						g.scale(rectScale);
 						
 						meshRenderer.drawFaces(rect);
-					app.popMatrix();
+					g.popMatrix();
 				}
+			}
 
-		app.popMatrix();
+		g.popMatrix();
+
 	}
 
 	public void reset() {
-
-		cam.reset(0);
-		cam.pan(0, 0);
+		super.reset();
+		noise = 0;
+		individualRotateAmount = 0;
+		globalRotateAmount = 0;
+		rectScale = 1;
 		rotateZ = 0;
 		rotateIndividual = 0;
 		rotateForward = 0;
@@ -158,73 +185,66 @@ public class RectangleArmyVisual implements IVisual {
 		rotateCombine = 0;
 		explodeAmount = 0;
 		rotate = false;
-		scroll = false;
+		localSpinAni.pause();
+		globalSpinAni.pause();
+		explodeEaseAni.pause();
+		explodeEaseAniDuration = 2;
 	}
-
-	/*
-	 * @Override public void keyPressed() { if(key=='1') { popMesh(50); } else
-	 * if(key=='2') { popMesh(-50); } else if(key=='3') { addLattice = true; }
-	 * else if(key == 's') { scroll = !scroll; } else if(key == 'r') { rotate =
-	 * !rotate; } else if(key == 'x') { reset(); } else if(key == '9') {
-	 * cam.rotateZ(radians(90)); } }
-	 */
 
 	@Override
 	public void dragEvent(int eventType, float amount) {
-		switch (eventType) {
-		case 2:
-			rotateIndividual = (1 - amount) * maxRotateIndividual - (maxRotateIndividual / 2);
-			break;
-		// Right box Y
-		case 3:
-			rotateZ = (1 - amount) * maxRotateZ - (maxRotateZ / 2);
-			break;
-		}
+		
 	}
 
 	@Override
 	public void tapEvent(int eventType, boolean isTapDown) {
-/*		if(eventType == 0 && isTapDown)
-			scroll = !scroll;*/
+
 	}
 
 	@Override
 	public void noteObjEvent(int note, int vel) {
+			
 		
-			if (note == 0 && vel != 0) {
-				rotateForward = .03f;
-			} else if(note==0 && vel == 0)
-				rotateForward = -.03f;
+		noiseAni.setBegin(maxNoise);
+			noiseAni.setEnd(0);
+			noiseAni.start();
 	}
 
 	@Override
 	public void ctrlEvent(int num, float val, int chan) {
 		//Rotate individual amount
 		if (num == 0) {
-			rotateIndividual = val * 360 - (360 / 2);
+			individualRotateAmount = val * maxIndividualRotateAmount;
 		} else
 		//Rotate cam Z amount
 		if (num == 1) {
-			rotateZ = val * 360 - (360 / 2);
+			globalRotateAmount = val * maxGlobalRotateAmount;
 		} else
 		//Explode
 		if (num == 2) {
-			explodeAmount = val * 360 - (360 / 2);
+			explodeEaseAni.setBegin(explodeAmount);
+			explodeEaseAni.setEnd(val * 3);
+			explodeEaseAni.start();
+			
+			//explodeAmount = val * 360 - (360 / 2);
 		} else
 		//Rotate combine amount
 		if (num == 3) {
-			//rotateCombine = val * maxRotateCombine - (maxRotateCombine / 2);
-		} else
-		//Rotate crazy amount
-		if (num == 4) {
-			//rotateCrazy = val * maxRotateCrazy - (maxRotateCrazy / 2);
-		}
+			explodeEaseAniDuration = 10 - (val * 10) + .2f;
 
+			explodeEaseAni.setDuration(explodeEaseAniDuration);
+		} else if(num == 4)
+		{
+			rectScale = 1 + val * maxRectScale;
+		} else if(num == 5)
+		{	
+			noise = maxNoise = val * MAXNOISE;	
+		}
 	}
 
 	@Override
 	public void camEvent(int note) {
-			switch (note) {
+			/*switch (note) {
 			case 0:
 				cam.setDistance(minDistance);
 				break;
@@ -234,18 +254,11 @@ public class RectangleArmyVisual implements IVisual {
 			case 2:
 				cam.setDistance((minDistance + maxDistance) / 2);
 				break;
-			}
+			}*/
 	}
 
-	@Override
-	public void toggleBackgroundFill() {
-		fillBackground = !fillBackground;	
-	}
 
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
+
+	
 
 }

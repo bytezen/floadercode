@@ -1,6 +1,7 @@
 package floader.visuals.particles;
 
 import java.util.Vector;
+
 import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
 import toxi.geom.*;
@@ -8,6 +9,7 @@ import wblut.hemesh.*;
 import oscP5.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import wblut.geom.*;
 import wblut.processing.*;
 import wblut.hemesh.*;
@@ -49,11 +51,6 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 		particles = new Vector();
 		for (int i = 0; i < n; i++)
 			particles.add(new Particle());
-
-		cam = new PeasyCam(app, 0);
-		cam.setMaximumDistance(1000);
-		cam.setDistance(1000);
-		cam.setActive(false);
 	}
 
 	void setParameters() {
@@ -71,9 +68,7 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 		averageRebirth = false;
 	}
 
-	public void draw() {
-		cam.feed();
-
+	public void draw(PGraphics g) {
 		avg = new Vec3D();
 		for (int i = 0; i < particles.size(); i++) {
 			Particle cur = ((Particle) particles.get(i));
@@ -84,18 +79,18 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 		cameraCenter.scaleSelf(1 - cameraRate);
 		cameraCenter.addSelf(avg.scale(cameraRate));
 
-		app.translate(-cameraCenter.x, -cameraCenter.y, -cameraCenter.z);
+		//app.translate(-cameraCenter.x, -cameraCenter.y, -cameraCenter.z);
 
 		float[] camPosition = cam.getPosition();
 		focalPlane = new Plane(avg, new Vec3D(camPosition[0], camPosition[1], camPosition[2]));
 
-		app.noFill();
-		app.hint(PApplet.DISABLE_DEPTH_TEST);
+		g.noFill();
+		g.hint(PApplet.DISABLE_DEPTH_TEST);
 		for (int i = 0; i < particles.size(); i++) {
 			Particle cur = ((Particle) particles.get(i));
 			if (!paused)
 				cur.update();
-			cur.draw();
+			cur.draw(g);
 		}
 
 		for (int i = 0; i < rebirth; i++)
@@ -134,12 +129,12 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 				position.addSelf(randomParticle().position);
 		}
 
-		void draw() {
+		void draw(PGraphics g) {
 			float distanceToFocalPlane = focalPlane.getDistanceToPoint(position);
 			distanceToFocalPlane *= 1 / dofRatio;
 			distanceToFocalPlane = PApplet.constrain(distanceToFocalPlane, 1, 15);
-			app.strokeWeight(distanceToFocalPlane);
-			app.stroke(255, PApplet.constrain(255 / (distanceToFocalPlane * distanceToFocalPlane), 1, 150));
+			g.strokeWeight(distanceToFocalPlane);
+			g.stroke(255, PApplet.constrain(255 / (distanceToFocalPlane * distanceToFocalPlane), 1, 150));
 			//meshRadius = app.mouseX;
 			//creator = new HEC_Cube().setRadius(meshRadius).setUFacets(4).setVFacets(3).setCenter(position.x, position.y, position.z);
 			//creator = new HEC_Cube().setRadius(meshRadius).setCenter(position.x, position.y, position.z);
@@ -147,9 +142,9 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 			//meshRenderer.drawEdges(mesh);
 			
 			
-			app.point(position.x, position.y, position.z);
-			app.stroke(255, PApplet.constrain(255 / (distanceToFocalPlane * distanceToFocalPlane), 1, 20));
-			app.line(position.x, position.y, position.z, 0, 0, 0);
+			g.point(position.x, position.y, position.z);
+			g.stroke(255, PApplet.constrain(255 / (distanceToFocalPlane * distanceToFocalPlane), 1, 20));
+			g.line(position.x, position.y, position.z, 0, 0, 0);
 		}
 
 		void applyFlockingForce() {
@@ -262,17 +257,6 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 
 	}
 
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void reset() {

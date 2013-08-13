@@ -4,10 +4,10 @@ import java.util.Iterator;
 
 import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
-
 import oscP5.*;
 import peasy.PeasyCam;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import wblut.geom.*;
 import wblut.processing.*;
 import wblut.hemesh.*;
@@ -83,7 +83,7 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 
 	}
 
-	public void draw() {
+	public void draw(PGraphics g) {
 		app.background(0);
 		cam.feed();
 		app.rotateX(app.random(0, rotateAmount));
@@ -167,24 +167,6 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 	@Override
 	public void camEvent(int note) {
 			loadCamState(note, 100);
-	}
-
-	@Override
-	public void toggleBackgroundFill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cycleColorScheme() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
