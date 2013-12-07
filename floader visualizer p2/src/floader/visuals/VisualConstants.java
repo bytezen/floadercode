@@ -8,6 +8,11 @@ public final class VisualConstants {
 	public static final String OSC_NOTE_PATH = "/mtn/note";
 	public static final boolean CAM_ENABLED = true;
 	public static final boolean PROSCENE_GUIDES_ENABLED = false;
+	public static final String MIDI_DEVICE = "5. Internal MIDI";
+	//public static final String MIDI_DEVICE = "nanoKONTROL2";
+	public static final boolean NANOKONTROL2_ENABLED = false;
+	public static final boolean MONOMEMIDI_ENABLED = true;
+	public static final boolean COMPUTERKEYBOARD_ENABLED = true;
 	
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 960;
@@ -15,42 +20,25 @@ public final class VisualConstants {
 	public static final int HEIGHT =  3000;*/
 	public static final boolean FULLSCREEN = false;
 	
-	//nanoKONTROL mappings
-	public static final int MIDI_CHANNEL = 0;
-	public static final int KNOB_1_CTRL_NUM = 16;
-	public static final int KNOB_2_CTRL_NUM = 17;
-	public static final int KNOB_3_CTRL_NUM = 18;
-	public static final int KNOB_4_CTRL_NUM = 19;
-	public static final int KNOB_5_CTRL_NUM = 20;
-	public static final int KNOB_6_CTRL_NUM = 21;
-	public static final int KNOB_7_CTRL_NUM = 22;
-	public static final int KNOB_8_CTRL_NUM = 23;
-	public static final int KNOB_9_CTRL_NUM = 24;
-	public static final int SLDR_1_CTRL_NUM = 0;
-	public static final int SLDR_2_CTRL_NUM = 1;
-	public static final int SLDR_3_CTRL_NUM = 2;
-	public static final int SLDR_4_CTRL_NUM = 3;
-	public static final int SLDR_5_CTRL_NUM = 4;
-	public static final int SLDR_6_CTRL_NUM = 5;
-	public static final int SLDR_7_CTRL_NUM = 6;
-	public static final int SLDR_8_CTRL_NUM = 7;
-	public static final int NOTE_1 = 43;
-	public static final int NOTE_2 = 44;
-	public static final int NOTE_3 = 42;
-	public static final int NOTE_4 = 41;
-	public static final int NOTE_5 = 45;
-	public static final int NOTE_6 = 35;
-	public static final int NOTE_7 = 26;
-	public static final int NOTE_8 = 36;
-	public static final int NOTE_9 = 27;
-	public static final int NOTE_10 = 37;
-	public static final int NOTE_11 = 28;
-	public static final int NOTE_12 = 38;
-	public static final int NOTE_13 = 29;
-	public static final int NOTE_14 = 39;
-	public static final int NOTE_15 = 30;
-	public static final int NOTE_16 = 40;
-	public static final int NOTE_17 = 31;
-	public static final int NOTE_18 = 41;
-	
+	//Global Effects
+	public static final int GLOBAL_EFFECT_BLUR = 0;
+	public static final int GLOBAL_EFFECT_CAMDISTANCE = 1;
+	public static final int GLOBAL_EFFECT_PERSPECTIVE = 2;
+	public static final int GLOBAL_EFFECT_SCALE = 3;
+	public static final int GLOBAL_EFFECT_ROTATEX = 4;
+	public static final int GLOBAL_EFFECT_ROTATEY = 5;
+	public static final int GLOBAL_EFFECT_ROTATEZ = 6;
+	//Global Triggers
+	public static final int GLOBAL_TRIGGER_CUBE = 7;
+	public static final int GLOBAL_TRIGGER_CAPTUREBG = 8;
+	public static final int GLOBAL_TRIGGER_EDGEDETECTION = 9;
+	public static final int GLOBAL_TRIGGER_MIRROR = 10;
+	public static final int GLOBAL_TRIGGER_TOGGLEBGFILL = 11;
+	public static final int GLOBAL_TRIGGER_RESET = 12;
+	public static final int GLOBAL_TRIGGER_CYCLECOLORSCHEME = 17;
+	//Global Scenes
+	public static final int GLOBAL_SCENE_RECTANGLES = 13;
+	public static final int GLOBAL_SCENE_PERCENTAGES = 14;
+	public static final int GLOBAL_SCENE_SPINCYCLE = 15;
+	public static final int GLOBAL_SCENE_FLYINGOBJECTS = 16;
 }

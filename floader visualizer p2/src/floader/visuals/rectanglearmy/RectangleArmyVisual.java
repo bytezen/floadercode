@@ -51,12 +51,20 @@ public class RectangleArmyVisual extends AbstractVisual {
 	float initDistance = 700;
 	float maxDistance = 2000;
 
-	float individualRotateAmount;
-	float maxIndividualRotateAmount = .02f;
-	float individualRotateDegrees = 0;
+	float individualRotateZ;
+	float maxIndividualRotateZ = .02f;
+	float individualRotateZDegrees = 0;
+	
+	float individualRotateX;
+	float maxIndividualRotateX = .02f;
+	float individualRotateXDegrees = 0;
+	
+	float individualRotateY;
+	float maxIndividualRotateY = .02f;
+	float individualRotateYDegrees = 0;
 	
 	float globalRotateAmount;
-	float maxGlobalRotateAmount = 8;
+	float maxGlobalRotateAmount = 6;
 	float globalRotateDegrees = 0;
 	
 	float rotateZ = 0;
@@ -151,8 +159,14 @@ public class RectangleArmyVisual extends AbstractVisual {
 		
 					g.pushMatrix();
 						g.translate(j * 150 - (numCols * 150 / 2), k * 150 - (numRows * 150 / 2));
-						individualRotateDegrees = (individualRotateDegrees + individualRotateAmount) % 360;
-						g.rotateZ(PApplet.radians(-individualRotateDegrees));
+						individualRotateZDegrees = (individualRotateZDegrees + individualRotateZ) % 360;
+						g.rotateZ(PApplet.radians(-individualRotateZDegrees));
+						
+						individualRotateYDegrees = (individualRotateYDegrees + individualRotateY) % 360;
+						g.rotateY(PApplet.radians(-individualRotateYDegrees));
+						
+						individualRotateXDegrees = (individualRotateXDegrees + individualRotateX) % 360;
+						g.rotateX(PApplet.radians(-individualRotateXDegrees));
 						
 						//Explode!
 						rect.rotateAboutAxis(PApplet.radians(explodeAmount), numCols / 2 * 150, numRows / 2 * 150, 0, numCols / 2 * 100, numRows / 2 * 150, 0);
@@ -175,7 +189,12 @@ public class RectangleArmyVisual extends AbstractVisual {
 	public void reset() {
 		super.reset();
 		noise = 0;
-		individualRotateAmount = 0;
+		individualRotateZ = 0;
+		individualRotateY = 0;
+		individualRotateX = 0;
+		individualRotateZDegrees=0;
+		individualRotateYDegrees=0;
+		individualRotateXDegrees=0;
 		globalRotateAmount = 0;
 		rectScale = 1;
 		rotateZ = 0;
@@ -202,26 +221,24 @@ public class RectangleArmyVisual extends AbstractVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int vel) {
-			
-		
+	public void noteObjEvent(int index, float amount) {
 		noiseAni.setBegin(maxNoise);
 			noiseAni.setEnd(0);
 			noiseAni.start();
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		//Rotate individual amount
-		if (num == 0) {
-			individualRotateAmount = val * maxIndividualRotateAmount;
-		} else
+	public void ctrlEvent(int index, float val) {
 		//Rotate cam Z amount
-		if (num == 1) {
+		if (index == 0) {
 			globalRotateAmount = val * maxGlobalRotateAmount;
-		} else
-		//Explode
-		if (num == 2) {
+		} else if(index == 1)
+		{	
+			noise = maxNoise = val * MAXNOISE;	
+		}
+			
+		//Explode - kind of annoying to work with
+		/*if (num == 2) {
 			explodeEaseAni.setBegin(explodeAmount);
 			explodeEaseAni.setEnd(val * 3);
 			explodeEaseAni.start();
@@ -231,15 +248,8 @@ public class RectangleArmyVisual extends AbstractVisual {
 		//Rotate combine amount
 		if (num == 3) {
 			explodeEaseAniDuration = 10 - (val * 10) + .2f;
-
 			explodeEaseAni.setDuration(explodeEaseAniDuration);
-		} else if(num == 4)
-		{
-			rectScale = 1 + val * maxRectScale;
-		} else if(num == 5)
-		{	
-			noise = maxNoise = val * MAXNOISE;	
-		}
+		} else */
 	}
 
 	@Override
@@ -256,7 +266,26 @@ public class RectangleArmyVisual extends AbstractVisual {
 				break;
 			}*/
 	}
+	
+	public void scale(float amount)
+	{
+		rectScale = 1 + (amount * maxRectScale);
+	}
 
+	public void rotateZ(float amount)
+	{
+		individualRotateZ = amount * maxIndividualRotateZ;
+	}
+	
+	public void rotateX(float amount)
+	{
+		individualRotateX = amount * maxIndividualRotateX;
+	}
+	
+	public void rotateY(float amount)
+	{
+		individualRotateY = amount * maxIndividualRotateY;
+	}
 
 
 	

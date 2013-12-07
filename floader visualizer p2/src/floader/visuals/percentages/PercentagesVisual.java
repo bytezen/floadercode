@@ -165,25 +165,22 @@ public class PercentagesVisual extends AbstractVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int vel) {
+	public void noteObjEvent(int index, float vel) {
 		speedAni.setBegin(0);
 		speedAni.setEnd(curMaxSpeed);
 		speedAni.start();
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
+	public void ctrlEvent(int index, float val) {
 		//Control speed
-		if(num == 0)
+		if(index == 0)
 		{
 			speed = val * MAXSPEED;
-		} else if(num == 1)
+		} else if(index == 1)
 		{
 			vertexExpandAmount = val * maxVertexExpandAmount;
-		} else if(num == 2)
-		{
-			
-		}
+		} 
 	}
 
 	@Override

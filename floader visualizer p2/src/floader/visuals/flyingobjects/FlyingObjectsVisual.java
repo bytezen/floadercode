@@ -141,7 +141,7 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int vel) {
+	public void noteObjEvent(int note, float vel) {
 		if (note == 0 && vel == 127) {
 				// Remove the last element from the list, put it first and play
 				// it
@@ -163,13 +163,13 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		if (num == 0 ) {
+	public void ctrlEvent(int index, float val) {
+		if (index == 0 ) {
 			masterLayer.effectEnableTwistX(1-val);
-		} else if (num == 1)
+		} else if (index == 1)
 		{
 			rotateX = PApplet.radians(val  * 180);
-		} else if(num == 2)
+		} else if(index == 2)
 		{
 			duration = 1 + (val * maxDuration);
 			masterLayer.effectEnableDuration(duration);
@@ -186,7 +186,7 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 		setup();
 	}
 	
-	public void scaleObjects(float val)
+	public void scale(float val)
 	{
 		this.scale = 1 + (val * maxScale);
 	}

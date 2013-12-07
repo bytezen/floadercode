@@ -11,6 +11,10 @@ import floader.visuals.colorschemes.Terminal;
 import floader.visuals.flyingobjects.*;
 import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
+import floader.visuals.hardwarecontrollers.ComputerKeyboard;
+import floader.visuals.hardwarecontrollers.HardwareController;
+import floader.visuals.hardwarecontrollers.MonomeMidi;
+import floader.visuals.hardwarecontrollers.NanoKontrol2;
 import floader.visuals.kalimba.KalimbaVisual;
 import floader.visuals.particles.*;
 import floader.visuals.percentages.PercentagesVisual;
@@ -30,11 +34,12 @@ import processing.opengl.*;
 import remixlab.proscene.*;
 
 public class StartVisual extends PApplet {
-	
+
 	int ctrl0;
 	int ctrl1;
 	int ctrl2;
-	
+
+	boolean midiReady = false;
 
 	AbstractVisual viz;
 	OscP5 oscP5;
@@ -48,39 +53,42 @@ public class StartVisual extends PApplet {
 	Scene scene;
 	boolean applyEdges = false;
 	boolean applyCube = false;
+	boolean applyBgCapture = false;
 	int blurSize = 10;
 	int maxBlurSize = 25;
 	float cubeRotate;
-	
+
 	float perspectiveAmount = 0;
 	boolean applyMirror;
 	int bgAlpha = 0;
 	boolean applyBackground = true;
-	//Color schemes
+	// Color schemes
 	int curColorSchemeIndex;
 	ColorScheme colorSchemes[];
-	
+
 	Ani cameraDistanceAni;
-	float maxCameraDistance = 4000;
+	float maxCameraDistance = 3800;
+	float minCameraDistance = 200;
 	float curCameraDistance = maxCameraDistance;
 
 	public static final int OSC_PORT = 7400;
 
 	public void setup() {
 		size(VisualConstants.WIDTH, VisualConstants.HEIGHT, OPENGL);
-		
-		//Color
+
+		// Color
 		colorSchemes = new ColorScheme[5];
 		colorSchemes[0] = new Terminal();
 		colorSchemes[1] = new AccentedTerminal();
 		colorSchemes[2] = new BlueSunset();
 		colorSchemes[3] = new SeaGreenSeaShell();
 		colorSchemes[4] = new SpinCyclz();
-		
-		//Ani
+
+		// Ani
 		Ani.init(this);
 		Ani.setDefaultEasing(Ani.LINEAR);
-		cameraDistanceAni = new Ani(this, .5f, "curCameraDistance", maxCameraDistance);
+		cameraDistanceAni = new Ani(this, .5f, "curCameraDistance",
+				maxCameraDistance);
 		cameraDistanceAni.setEasing(Ani.EXPO_OUT);
 		cameraDistanceAni.pause();
 
@@ -100,9 +108,9 @@ public class StartVisual extends PApplet {
 		scene.disableKeyboardHandling();
 		scene.setGridIsDrawn(VisualConstants.PROSCENE_GUIDES_ENABLED);
 		scene.setAxisIsDrawn(VisualConstants.PROSCENE_GUIDES_ENABLED);
-		//scene.camera().setSceneRadius(maxCameraDistance);
-		//scene.camera().setFocusDistance(2000);
-		
+		// scene.camera().setSceneRadius(maxCameraDistance);
+		// scene.camera().setFocusDistance(2000);
+
 		// Blur
 		sepblur = loadShader("sepblur.glsl");
 		sepblur.set("blurSize", 0);
@@ -111,31 +119,32 @@ public class StartVisual extends PApplet {
 		edges = loadShader("edges.glsl");
 
 		oscP5 = new OscP5(this, OSC_PORT);
-		
-		midiBus = new MidiBus(this, "nanoKONTROL2", "");
+
+		midiBus = new MidiBus(this, VisualConstants.MIDI_DEVICE, "");
+		// MidiBus.list();
 
 		// Load the viz - complete
 		viz = new RectangleArmyVisual(offlineApp);
-		//viz = new Percentages(offlineApp);
-		//viz = new SpinCycleVisual(offlineApp);
-		
+		// viz = new Percentages(offlineApp);
+		// viz = new SpinCycleVisual(offlineApp);
+
 		// Load the viz - todo
 		// viz = new FlyingObjectsVisual(this);
 		// viz = new HangOnVisual(this);
 		// viz = new AvanteHangOnVisual(this);
 		// viz = new LeakierPhysicsVisual(this); //Doesn't seem to work
 		// viz = new KalimbaVisual(this);
-		//viz = new ParticleVisual(offlineApp);
+		// viz = new ParticleVisual(offlineApp);
 
 		viz.setup();
 		reset();
 		textureMode(NORMAL);
+		midiReady = true;
 	}
-	
-	void reset()
-	{
+
+	void reset() {
 		background(0);
-		blurSize=0;
+		blurSize = 0;
 		applyBackground = true;
 		perspectiveAmount = 0;
 		scene.camera().setPosition(new PVector(0, 0, maxCameraDistance));
@@ -146,77 +155,78 @@ public class StartVisual extends PApplet {
 
 	public void draw() {
 		background(0);
-		
-		//Set camera zoom
+
+		// Set camera zoom
 		scene.camera().setPosition(
 				new PVector(scene.camera().at().x, scene.camera().at().y,
 						curCameraDistance));
 
-		//Set background image
+		
+		
+		// Set background image
 		if (bgImage != null)
 			image(bgImage, 0, 0);
 
-		//offline buffer
+		// offline buffer
 		offlineApp.g.beginDraw();
 		scene.beginDraw();
-		if(applyBackground)offlineApp.g.background(0, 0);
-		
+		if (applyBackground)
+			offlineApp.g.background(0, 0);
+
 		applyPerspective(offlineApp);
 		viz.draw(offlineApp.g);
-		
+
 		scene.endDraw();
 		offlineApp.g.endDraw();
 
 		// Applying the blur shader along the vertical direction
-		sepblur.set("horizontalPass", 0);sepblur.set("blurSize", blurSize);sepblur.set("sigma", 4f);
-		
+		sepblur.set("horizontalPass", 0);
+		sepblur.set("blurSize", blurSize);
+		sepblur.set("sigma", 4f);
+
 		pass1.beginDraw();
-		if(applyBackground)pass1.background(0, 0);
-		
+		if (applyBackground)
+			pass1.background(0, 0);
+
 		pass1.shader(sepblur);
-		
+
 		pass1.image(offlineApp.g, 0, 0);
 		pass1.endDraw();
 		// Applying the blur shader along the horizontal direction
-		sepblur.set("horizontalPass", 1);sepblur.set("blurSize", blurSize);sepblur.set("sigma", 4f);
+		sepblur.set("horizontalPass", 1);
+		sepblur.set("blurSize", blurSize);
+		sepblur.set("sigma", 4f);
 		pass2.beginDraw();
-		if(applyBackground)pass2.background(0,0);
-		
+		if (applyBackground)
+			pass2.background(0, 0);
+
 		pass2.shader(sepblur);
-		
+
 		pass2.image(pass1, 0, 0);
 		pass2.endDraw();
-		
-		
 
 		if (applyMirror) {
-			/*PImage topLeftCorner = pass2.get(0, 0, VisualConstants.WIDTH / 2,VisualConstants.HEIGHT / 2);
-			
-			pushMatrix();
-			scale(1f, 1f);
-			image(topLeftCorner, 0, 0);
-			popMatrix();
+			/*
+			 * PImage topLeftCorner = pass2.get(0, 0, VisualConstants.WIDTH /
+			 * 2,VisualConstants.HEIGHT / 2);
+			 * 
+			 * pushMatrix(); scale(1f, 1f); image(topLeftCorner, 0, 0);
+			 * popMatrix();
+			 * 
+			 * pushMatrix(); translate(VisualConstants.WIDTH,
+			 * VisualConstants.HEIGHT); scale(-1f, -1f); image(topLeftCorner, 0,
+			 * 0); popMatrix();
+			 * 
+			 * pushMatrix(); translate(0, VisualConstants.HEIGHT); scale(1f,
+			 * -1f); image(topLeftCorner, 0, 0); popMatrix();
+			 * 
+			 * pushMatrix(); translate(VisualConstants.WIDTH, 0); scale(-1f,
+			 * 1f); image(topLeftCorner, 0, 0); popMatrix();
+			 */
 
-			pushMatrix();
-			translate(VisualConstants.WIDTH, VisualConstants.HEIGHT);
-			scale(-1f, -1f);
-			image(topLeftCorner, 0, 0);
-			popMatrix();
+			PImage leftHalf = pass2.get(0, 0, VisualConstants.WIDTH / 2,
+					VisualConstants.HEIGHT);
 
-			pushMatrix();
-			translate(0, VisualConstants.HEIGHT);
-			scale(1f, -1f);
-			image(topLeftCorner, 0, 0);
-			popMatrix();
-
-			pushMatrix();
-			translate(VisualConstants.WIDTH, 0);
-			scale(-1f, 1f);
-			image(topLeftCorner, 0, 0);
-			popMatrix();*/
-			
-			PImage leftHalf = pass2.get(0, 0, VisualConstants.WIDTH / 2,VisualConstants.HEIGHT);
-			
 			pushMatrix();
 			scale(1f, 1f);
 			image(leftHalf, 0, 0);
@@ -227,10 +237,10 @@ public class StartVisual extends PApplet {
 			scale(-1f, 1f);
 			image(leftHalf, 0, 0);
 			popMatrix();
-			
+
 		} else
 			image(pass2, 0, 0);
-		
+
 		if (applyEdges)
 			filter(edges);
 
@@ -247,6 +257,20 @@ public class StartVisual extends PApplet {
 
 		cubeRotate += .5f;
 		cubeRotate = cubeRotate % 360;
+		
+		if(applyBgCapture)
+		{
+			System.out.println("applybg");
+			if (bgImage != null)
+				bgImage.blend(this.g, 0, 0, VisualConstants.WIDTH,
+						VisualConstants.HEIGHT, 0, 0,
+						VisualConstants.WIDTH, VisualConstants.HEIGHT,
+						PImage.BLEND);
+			else
+				bgImage = this.g.get(0, 0, VisualConstants.WIDTH,
+						VisualConstants.HEIGHT);
+			applyBgCapture = false;
+		}
 	}
 
 	void applyPerspective(PApplet p) {
@@ -318,257 +342,209 @@ public class StartVisual extends PApplet {
 		g.endShape();
 	}
 
+	// TODO make keyboard just another hardware controller
 	public void keyPressed() {
-		if (this.key == 'x') {
-			applyCube = !applyCube;
-		} else if (this.key == 'r') {
-			reset();
-			viz.reset();
-		} else if (this.key == 'c') {
-			if (bgImage != null)
-				bgImage.blend(this.g, 0, 0, VisualConstants.WIDTH,
-						VisualConstants.HEIGHT, 0, 0, VisualConstants.WIDTH,
-						VisualConstants.HEIGHT, PImage.BLEND);
-			else
-				bgImage = this.g.get(0, 0, VisualConstants.WIDTH,
-						VisualConstants.HEIGHT);
-		} else if (this.key == 't')
-			applyEdges = !applyEdges;
-		else if (this.key == 's')
-			{
-				curColorSchemeIndex = ++curColorSchemeIndex % colorSchemes.length;
-				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
-			}
-		else if (this.key == 'm')
-			applyMirror = !applyMirror;
-		else if (this.key == 'b')
-			applyBackground = !applyBackground;
-		else if(this.key == '1')
+		if(VisualConstants.COMPUTERKEYBOARD_ENABLED)
 		{
-			viz = new RectangleArmyVisual(offlineApp);
-			viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
-			viz.setup();
-		} else if(this.key == '2')
-		{
-			viz = new SpinCycleVisual(offlineApp);
-			viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
-			viz.setup();
-		} else if(this.key == '3')
-		{
-			viz = new PercentagesVisual(offlineApp);
-			viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
-			viz.setup();
-		}  else if(this.key == '4')
-		{
-			viz = new FlyingObjectsVisual(offlineApp);
-			viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
-			viz.setup();
-		} else if(this.key == '5')
-		{
-			viz = new ParticleMirrorVisual(offlineApp);
-			viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
-			viz.setup();
-		}/* else if(this.key == ' ')
-			{
-				this.save(frameCount + " image.tif");
-			}else if(this.key == 'q')
-			{
-				ctrl0+=3;
-				if(ctrl0>127)ctrl0=127;
-				controllerChange(0, VisualConstants.KNOB_1_CTRL_NUM, ctrl0);
-			} else if(this.key == 'w')
-			{
-				ctrl1+=3;
-				if(ctrl1>127)ctrl1=127;
-				controllerChange(0, VisualConstants.KNOB_2_CTRL_NUM, ctrl1);
-			} else if(this.key == 'e')
-			{
-				ctrl2+=3;
-				if(ctrl2>127)ctrl2=127;
-				controllerChange(0, VisualConstants.SLDR_2_CTRL_NUM, ctrl2);
-			} else if(this.key == 'a')
-			{
-				ctrl0-=3;
-				if(ctrl0<0)ctrl0=0;
-				controllerChange(0, VisualConstants.KNOB_1_CTRL_NUM, ctrl0);
-			} else if(this.key == 's')
-			{
-				ctrl1-=3;
-				if(ctrl1<0)ctrl1=0;
-				controllerChange(0, VisualConstants.KNOB_2_CTRL_NUM, ctrl1);
-			} else if(this.key == 'd')
-			{
-				ctrl2-=3;
-				if(ctrl2<0)ctrl2=0;
-				controllerChange(0, VisualConstants.SLDR_2_CTRL_NUM, ctrl2);
-			}*/
-
-	}
-	
-	public boolean sketchFullScreen() {
-		  return VisualConstants.FULLSCREEN;
+			globalEffectChange(ComputerKeyboard.convertKeyPress(this.key), 1);
 		}
+	}
+
+	public boolean sketchFullScreen() {
+		return VisualConstants.FULLSCREEN;
+	}
 
 	public static void main(String args[]) {
-		PApplet.main( "floader.visuals.StartVisual", args);
+		PApplet.main("floader.visuals.StartVisual", args);
 	}
 
-	public void oscEvent(OscMessage msg) {
-		if (msg.checkAddrPattern(VisualConstants.OSC_CTRL_PATH)) {
-			viz.ctrlEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg
-					.get(2).intValue());
-		} else if (msg.checkAddrPattern(VisualConstants.OSC_NOTE_PATH)) {
-			if (msg.get(2).intValue() == VisualConstants.OBJECT_EVENT_CHANNEL) {
-				// Check if the vel of the incoming note > 0
-				if (msg.get(1).intValue() > 0)
-					viz.noteObjEvent(msg.get(0).intValue(), msg.get(1)
-							.intValue());
-			} else if (msg.get(2).intValue() == VisualConstants.CAM_EVENT_CHANNEL) {
-				// Check if the vel of the incoming note > 0
-				if (msg.get(1).intValue() > 0)
-					viz.camEvent(msg.get(0).intValue());
+	/*
+	 * public void oscEvent(OscMessage msg) { if
+	 * (msg.checkAddrPattern(VisualConstants.OSC_CTRL_PATH)) {
+	 * viz.ctrlEvent(msg.get(0).intValue(), msg.get(1).intValue(), msg
+	 * .get(2).intValue()); } else if
+	 * (msg.checkAddrPattern(VisualConstants.OSC_NOTE_PATH)) { if
+	 * (msg.get(2).intValue() == VisualConstants.OBJECT_EVENT_CHANNEL) { //
+	 * Check if the vel of the incoming note > 0 if (msg.get(1).intValue() > 0)
+	 * viz.noteObjEvent(msg.get(0).intValue(), msg.get(1) .intValue()); } else
+	 * if (msg.get(2).intValue() == VisualConstants.CAM_EVENT_CHANNEL) { //
+	 * Check if the vel of the incoming note > 0 if (msg.get(1).intValue() > 0)
+	 * viz.camEvent(msg.get(0).intValue()); } } }
+	 */
+
+	public void noteOn(int chan, int note, int vel) {
+		if (midiReady) {
+			System.out.println("Channel: " + chan + ", Note: " + note + ", Vel: " + vel);
+			float amount = PApplet.map(vel, 0, 127, 0, 1);
+			if (VisualConstants.MONOMEMIDI_ENABLED) {
+				if(MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
+					globalEffectChange(MonomeMidi.convertNote(chan, note), amount);
+				else if(MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
+					viz.noteObjEvent(MonomeMidi.convertNote(chan, note), amount);
+			}
+		}
+	}
+	
+	public void noteOff(int chan, int note, int vel) {
+		if (midiReady) {
+			System.out.println("Channel: " + chan + ", Note: " + note + ", Vel: " + vel);
+			if (VisualConstants.MONOMEMIDI_ENABLED) {
+				if(MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
+					globalEffectChange(MonomeMidi.convertNote(chan, note), 0);
+				else if(MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
+					viz.noteObjEvent(MonomeMidi.convertNote(chan, note), 0);
 			}
 		}
 	}
 
-	public void noteOn(int channel, int pitch, int vel) {
-		viz.noteObjEvent(hardwareNoteToVisPitch(pitch), vel);
-	}
+	// TODO create hardware class for this
+	/*
+	 * // Translate the incoming pitch value from the hardware to a range of 0-9
+	 * private int hardwareNoteToVisPitch(int pitch) { int convertedPitch = 0;
+	 * switch (pitch) { case VisualConstants.NOTE_1: convertedPitch = 0; break;
+	 * case VisualConstants.NOTE_2: convertedPitch = 1; break; case
+	 * VisualConstants.NOTE_3: convertedPitch = 2; break; case
+	 * VisualConstants.NOTE_4: convertedPitch = 3; break; case
+	 * VisualConstants.NOTE_5: convertedPitch = 4; break; case
+	 * VisualConstants.NOTE_6: convertedPitch = 5; break; case
+	 * VisualConstants.NOTE_7: convertedPitch = 6; break; case
+	 * VisualConstants.NOTE_8: convertedPitch = 7; break; case
+	 * VisualConstants.NOTE_9: convertedPitch = 8; break; case
+	 * VisualConstants.NOTE_10: convertedPitch = 9; break; default:
+	 * System.err.println("Error: unidentified pitch: " + pitch +
+	 * " sent to funtion: hardwarePitchToVisPitch"); break; } return
+	 * convertedPitch; }
+	 */
 
-	// Translate the incoming pitch value from the hardware to a range of 0-9
-	private int hardwareNoteToVisPitch(int pitch) {
-		int convertedPitch = 0;
-		switch (pitch) {
-		case VisualConstants.NOTE_1:
-			convertedPitch = 0;
-			break;
-		case VisualConstants.NOTE_2:
-			convertedPitch = 1;
-			break;
-		case VisualConstants.NOTE_3:
-			convertedPitch = 2;
-			break;
-		case VisualConstants.NOTE_4:
-			convertedPitch = 3;
-			break;
-		case VisualConstants.NOTE_5:
-			convertedPitch = 4;
-			break;
-		case VisualConstants.NOTE_6:
-			convertedPitch = 5;
-			break;
-		case VisualConstants.NOTE_7:
-			convertedPitch = 6;
-			break;
-		case VisualConstants.NOTE_8:
-			convertedPitch = 7;
-			break;
-		case VisualConstants.NOTE_9:
-			convertedPitch = 8;
-			break;
-		case VisualConstants.NOTE_10:
-			convertedPitch = 9;
-			break;
-		default:
-			System.err.println("Error: unidentified pitch: " + pitch
-					+ " sent to funtion: hardwarePitchToVisPitch");
-			break;
-		}
-		return convertedPitch;
-	}
-
-	public void noteOff(int channel, int pitch, int vel) {
-		viz.noteObjEvent(hardwareNoteToVisPitch(pitch), vel);
-	}
-
-	private int hardwareCtrlToVisCtrl(int ctrl) {
-		int convertedCtrl = -1;
-		switch (ctrl) {
-		case VisualConstants.KNOB_1_CTRL_NUM:
-			convertedCtrl = 0;
-			break;
-		case VisualConstants.KNOB_2_CTRL_NUM:
-			convertedCtrl = 1;
-			break;
-		case VisualConstants.KNOB_3_CTRL_NUM:
-			convertedCtrl = 2;
-			break;
-		case VisualConstants.KNOB_4_CTRL_NUM:
-			convertedCtrl = 3;
-			break;
-		case VisualConstants.KNOB_5_CTRL_NUM:
-			convertedCtrl = 4;
-			break;
-		case VisualConstants.KNOB_6_CTRL_NUM:
-			convertedCtrl = 5;
-			break;
-			
-		case VisualConstants.SLDR_1_CTRL_NUM:
-			convertedCtrl = 6;
-			break;
-		case VisualConstants.SLDR_2_CTRL_NUM:
-			convertedCtrl = 7;
-			break;
-		case VisualConstants.SLDR_3_CTRL_NUM:
-			convertedCtrl = 8;
-			break;
-		case VisualConstants.SLDR_4_CTRL_NUM:
-			convertedCtrl = 9;
-			break;
-		case VisualConstants.SLDR_5_CTRL_NUM:
-			convertedCtrl = 10;
-			break;
-		case VisualConstants.SLDR_6_CTRL_NUM:
-			convertedCtrl = 11;
-			break;
-		case VisualConstants.SLDR_7_CTRL_NUM:
-			convertedCtrl = 12;
-			break;
-		case VisualConstants.SLDR_8_CTRL_NUM:
-			convertedCtrl = 13;
-			break;
-		default:
-			System.err.println("Error: unidentified ctrl num: " + ctrl
-					+ " sent to funtion: hardwareCtrlToVisCtrl");
-			break;
-		}
-		return convertedCtrl;
-	}
+	
 
 	public void controllerChange(int chan, int num, int val) {
-		float newVal = PApplet.map(val, 0, 127, 0, 1);
+		// Some junk MIDI is being spewed out every time the port is opened by
+		// midiBus
+		if (midiReady) {
+			//System.out.println("Chan: " + chan + ", Ctrl Num: " + num + ", Val: " + val);
+			float amount = PApplet.map(val, 0, 127, 0, 1);
 
-		// Viz controls
-		viz.ctrlEvent(hardwareCtrlToVisCtrl(num), newVal, chan);
+			if (VisualConstants.NANOKONTROL2_ENABLED) {
+				if (NanoKontrol2.getInputType(chan, num) == HardwareController.GLOBAL)
+					globalEffectChange(
+							NanoKontrol2.convertInputToIndex(chan, num), amount);
+				else if (NanoKontrol2.getInputType(chan, num) == HardwareController.LOCAL)
+					vizEffectChange(
+							NanoKontrol2.convertInputToIndex(chan, num), amount);
+			}
 
-		// Global controls
-		switch (num) {
-		// Change bg alpha
-		case VisualConstants.SLDR_1_CTRL_NUM:
-			blurSize = (int)(newVal * maxBlurSize);
+			if (VisualConstants.MONOMEMIDI_ENABLED) {
+				if (MonomeMidi.getControllerInputType(chan, num) == HardwareController.GLOBAL)
+					globalEffectChange(MonomeMidi.convertController(chan, num),
+							amount);
+				else if (MonomeMidi.getControllerInputType(chan, num) == HardwareController.LOCAL)
+					vizEffectChange(MonomeMidi.convertController(chan, num),
+							amount);
+			}
+		}
+	}
+
+	private void vizEffectChange(int index, float amount) {
+		viz.ctrlEvent(index, amount);
+	}
+
+	private void globalEffectChange(int index, float amount) {
+		switch (index) {
+		case VisualConstants.GLOBAL_EFFECT_BLUR:
+			blurSize = (int) (amount * maxBlurSize);
 			break;
-		case VisualConstants.SLDR_2_CTRL_NUM:
-			float pDistance = Math.abs(curCameraDistance - newVal * maxCameraDistance); 
-			
+		case VisualConstants.GLOBAL_EFFECT_CAMDISTANCE:
+			float pDistance = Math.abs(curCameraDistance - amount
+					* maxCameraDistance);
 			cameraDistanceAni.setBegin(curCameraDistance);
-			cameraDistanceAni.setEnd(newVal * maxCameraDistance);
-			cameraDistanceAni.setDuration(.5f * ( 1 / (pDistance / maxCameraDistance)));
+			cameraDistanceAni.setEnd((amount * maxCameraDistance)
+					+ minCameraDistance);
+			cameraDistanceAni
+					.setDuration(.5f * (1 / (pDistance / maxCameraDistance)));
 			cameraDistanceAni.start();
-			
-			//curCameraDistance = maxCameraDistance * newVal;
 			break;
-		case VisualConstants.SLDR_3_CTRL_NUM:
-			if (newVal < 1)
-				perspectiveAmount = newVal;
+		case VisualConstants.GLOBAL_EFFECT_PERSPECTIVE:
+			if (amount < 1)
+				perspectiveAmount = amount;
 			else
-				newVal = .999f;
+				amount = .999f;
 			break;
-		case VisualConstants.SLDR_4_CTRL_NUM:
-			viz.scaleObjects(newVal);
-		case VisualConstants.SLDR_5_CTRL_NUM:
+		case VisualConstants.GLOBAL_EFFECT_SCALE:
+			viz.scale(amount);
+			break;
+		case VisualConstants.GLOBAL_EFFECT_ROTATEX:
+			viz.rotateX(amount);
+			break;
+		case VisualConstants.GLOBAL_EFFECT_ROTATEY:
+			viz.rotateY(amount);
+			break;
+		case VisualConstants.GLOBAL_EFFECT_ROTATEZ:
+			viz.rotateZ(amount);
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_CUBE:
+			if (amount > 0)
+				applyCube = !applyCube;
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_CAPTUREBG:
+			if (amount > 0) {
+				applyBgCapture = true;
+			}
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_EDGEDETECTION:
+			if (amount > 0)
+				applyEdges = !applyEdges;
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_CYCLECOLORSCHEME:
+			if (amount > 0) {
+				curColorSchemeIndex = ++curColorSchemeIndex
+						% colorSchemes.length;
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+			}
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_RESET:
+			if (amount > 0) {
+				reset();
+				viz.reset();
+			}
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_MIRROR:
+			if (amount > 0)
+				applyMirror = !applyMirror;
+			break;
+		case VisualConstants.GLOBAL_TRIGGER_TOGGLEBGFILL:
+			if (amount > 0)
+				applyBackground = !applyBackground;
+			break;
+		case VisualConstants.GLOBAL_SCENE_RECTANGLES:
+			if (amount > 0) {
+				viz = new RectangleArmyVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
+		case VisualConstants.GLOBAL_SCENE_PERCENTAGES:
+			if (amount > 0) {
+				viz = new SpinCycleVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
+		case VisualConstants.GLOBAL_SCENE_SPINCYCLE:
+			if (amount > 0) {
+				viz = new PercentagesVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
+		case VisualConstants.GLOBAL_SCENE_FLYINGOBJECTS:
+			if (amount > 0) {
+				viz = new FlyingObjectsVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
 			break;
 		}
-
 	}
 
 }

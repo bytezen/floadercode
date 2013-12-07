@@ -72,17 +72,12 @@ public class LeakierPhysicsVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int velocity) {
+	public void noteObjEvent(int note, float velocity) {
 		// System.out.println("note received in leaky viz");
 		if (note == 0 && velocity > 0)
 			sphereGroup.get(0).noteEvent(0, 127);
 	}
 
-	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void camEvent(int note) {

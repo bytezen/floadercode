@@ -200,7 +200,7 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int velocity) {
+	public void noteObjEvent(int note, float velocity) {
 		if (note == 0 && velocity > 0) {
 			independence = 3f;
 			turbulence = 4f;
@@ -244,8 +244,8 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		if(chan == 1 && num == 1)
+	public void ctrlEvent(int num, float val) {
+		if(num == 1)
 		{
 			meshRadius = (int)PApplet.map(val, 0, 1, 4, 1024);
 		}

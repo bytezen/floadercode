@@ -141,10 +141,10 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		if (num == 0){
+	public void ctrlEvent(int index, float val) {
+		if (index == 0){
 			rotateZAmount = val * maxRotateZAmount;
-		} if(num == 1){
+		} if(index == 1){
 			twistAmount = PApplet.map(val, 0, 1, 0, maxTwistAmount);
 		}
 	}

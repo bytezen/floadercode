@@ -103,16 +103,6 @@ public class TuringFractalVisual extends AbstractVisual implements IVisual {
 
 	}
 
-	@Override
-	public void noteObjEvent(int note, int velocity) {
-
-	}
-
-	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void camEvent(int note) {

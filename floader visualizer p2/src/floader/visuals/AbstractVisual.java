@@ -83,7 +83,7 @@ public class AbstractVisual  implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int vel) {
+	public void noteObjEvent(int index, float amount) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -95,7 +95,7 @@ public class AbstractVisual  implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
+	public void ctrlEvent(int index, float val) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -112,16 +112,39 @@ public class AbstractVisual  implements IVisual {
 		
 	}
 	
-	public void scaleObjects(float scale) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	@Override
 	public void reset() {
 
 		
 	}
+
+	@Override
+	public void scale(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateX(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateY(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateZ(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 	
 }

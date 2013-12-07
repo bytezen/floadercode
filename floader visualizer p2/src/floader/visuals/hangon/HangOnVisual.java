@@ -200,7 +200,7 @@ public class HangOnVisual implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int velocity) {
+	public void noteObjEvent(int note, float velocity) {
 		//System.out.println(msg.get(0).intValue());
 		if (note == 1 && velocity > 1) {
 			initSpinRates();
@@ -250,7 +250,7 @@ public class HangOnVisual implements IVisual {
 	}
 
 	@Override
-	public void ctrlEvent(int num, float val, int chan) {
+	public void ctrlEvent(int num, float val) {
 			if (num == 1) {
 				// spin rate
 				multiplier = (val * 8.0f) - 4.0f;
@@ -272,6 +272,30 @@ public class HangOnVisual implements IVisual {
 
 	@Override
 	public void camEvent(int note) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void scale(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateX(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateY(float amount) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateZ(float amount) {
 		// TODO Auto-generated method stub
 		
 	}

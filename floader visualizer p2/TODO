@@ -6,10 +6,10 @@
 -use tint for transparency on mirrored image
 -load on external monitor
 -cycle through colors one object at a time
--get rid of weird ani flying rectangles on knob 3
 -point lights for percentages visual?
 -tile effect with images?
 -more shaders
 	http://forum.processing.org/two/discussion/1471/pimp-up-your-sketches-with-glsl-filters
 	http://forum.processing.org/two/discussion/1292/photoshop-blend-modes-now-in-processing
-	
+-midi looper for control changes
+-new colors

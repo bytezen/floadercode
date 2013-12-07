@@ -143,7 +143,7 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int note, int velocity) {
+	public void noteObjEvent(int note, float velocity) {
 		if (note == 1 && velocity > 0) {
 			for (int j = 0; j < numRows; j++)
 				for (int k = 0; k < numCols; k++) {
@@ -158,11 +158,6 @@ public class KalimbaVisual extends AbstractVisual implements IVisual {
 
 	}
 
-	@Override
-	public void ctrlEvent(int num, float val, int chan) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void camEvent(int note) {
