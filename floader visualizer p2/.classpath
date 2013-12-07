@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/apfloat.jar"/>
+	<classpathentry kind="lib" path="lib/oscP5.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/oscP5/src"/>
+	<classpathentry kind="lib" path="lib/quickhull3d.jar"/>
+	<classpathentry kind="lib" path="lib/Ani_floader_namespace.jar" sourcepath="/Ani/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/toxiclibscore.jar"/>
+	<classpathentry kind="lib" path="C:/processing-2.0.1/core/library/core.jar"/>
+	<classpathentry kind="lib" path="C:/processing-2.0.1/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="C:/processing-2.0.1/core/library/jogl-all.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/peasycam/library/peasycam.jar" sourcepath="C:/Users/Owner/Documents/Processing/libraries/peasycam/src"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/hemesh/library/hemesh.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/hemesh/library/javolution-5.5.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/themidibus/library/themidibus.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/proscene/library/proscene.jar" sourcepath="C:/Users/Owner/Documents/Processing/libraries/proscene/src"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/GLGraphics/library/GLGraphics.jar" sourcepath="C:/Users/Owner/Documents/Processing/libraries/GLGraphics/src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
