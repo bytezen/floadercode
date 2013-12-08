@@ -58,7 +58,6 @@ public class StartVisual extends PApplet {
 	int maxBlurSize = 25;
 	float cubeRotate;
 
-	float perspectiveAmount = 0;
 	boolean applyMirror;
 	int bgAlpha = 0;
 	boolean applyBackground = true;
@@ -71,6 +70,10 @@ public class StartVisual extends PApplet {
 	float minCameraDistance = 200;
 	float curCameraDistance = maxCameraDistance;
 
+	Ani perspectiveAni;
+	float perspective = 0;
+	float maxPerspective = .999f;
+	
 	public static final int OSC_PORT = 7400;
 
 	public void setup() {
@@ -84,13 +87,19 @@ public class StartVisual extends PApplet {
 		colorSchemes[3] = new SeaGreenSeaShell();
 		colorSchemes[4] = new SpinCyclz();
 
-		// Ani
 		Ani.init(this);
 		Ani.setDefaultEasing(Ani.LINEAR);
+		// Camera Distance Ani
 		cameraDistanceAni = new Ani(this, .5f, "curCameraDistance",
 				maxCameraDistance);
 		cameraDistanceAni.setEasing(Ani.EXPO_OUT);
 		cameraDistanceAni.pause();
+
+		// Perspective Ani
+		perspectiveAni = new Ani(this, 0, "perspective", maxPerspective);
+		perspectiveAni.setEasing(Ani.EXPO_OUT);
+		perspectiveAni.pause();
+
 
 		// Offline drawing
 		offlineApp = new PApplet();
@@ -146,7 +155,7 @@ public class StartVisual extends PApplet {
 		background(0);
 		blurSize = 0;
 		applyBackground = true;
-		perspectiveAmount = 0;
+		perspective = 0;
 		scene.camera().setPosition(new PVector(0, 0, maxCameraDistance));
 		bgImage = null;
 		applyEdges = false;
@@ -155,23 +164,21 @@ public class StartVisual extends PApplet {
 
 	public void draw() {
 		background(0);
-
 		// Set camera zoom
 		scene.camera().setPosition(
 				new PVector(scene.camera().at().x, scene.camera().at().y,
 						curCameraDistance));
 
-		
-		
 		// Set background image
 		if (bgImage != null)
 			image(bgImage, 0, 0);
 
 		// offline buffer
 		offlineApp.g.beginDraw();
-		scene.beginDraw();
 		if (applyBackground)
 			offlineApp.g.background(0, 0);
+		
+		scene.beginDraw();
 
 		applyPerspective(offlineApp);
 		viz.draw(offlineApp.g);
@@ -197,6 +204,7 @@ public class StartVisual extends PApplet {
 		sepblur.set("blurSize", blurSize);
 		sepblur.set("sigma", 4f);
 		pass2.beginDraw();
+
 		if (applyBackground)
 			pass2.background(0, 0);
 
@@ -257,15 +265,13 @@ public class StartVisual extends PApplet {
 
 		cubeRotate += .5f;
 		cubeRotate = cubeRotate % 360;
-		
-		if(applyBgCapture)
-		{
+
+		if (applyBgCapture) {
 			System.out.println("applybg");
 			if (bgImage != null)
 				bgImage.blend(this.g, 0, 0, VisualConstants.WIDTH,
-						VisualConstants.HEIGHT, 0, 0,
-						VisualConstants.WIDTH, VisualConstants.HEIGHT,
-						PImage.BLEND);
+						VisualConstants.HEIGHT, 0, 0, VisualConstants.WIDTH,
+						VisualConstants.HEIGHT, PImage.BLEND);
 			else
 				bgImage = this.g.get(0, 0, VisualConstants.WIDTH,
 						VisualConstants.HEIGHT);
@@ -279,7 +285,7 @@ public class StartVisual extends PApplet {
 		float cameraZ = (float) ((VisualConstants.HEIGHT / 2.0f) / Math
 				.tan(fov / 2.0f));
 		p.perspective(fov, (float) VisualConstants.WIDTH
-				/ (float) VisualConstants.HEIGHT * (1 - perspectiveAmount),
+				/ (float) VisualConstants.HEIGHT * (1 - perspective),
 
 		cameraZ / 10.0f, cameraZ * 50.0f);
 	}
@@ -344,8 +350,7 @@ public class StartVisual extends PApplet {
 
 	// TODO make keyboard just another hardware controller
 	public void keyPressed() {
-		if(VisualConstants.COMPUTERKEYBOARD_ENABLED)
-		{
+		if (VisualConstants.COMPUTERKEYBOARD_ENABLED) {
 			globalEffectChange(ComputerKeyboard.convertKeyPress(this.key), 1);
 		}
 	}
@@ -374,24 +379,27 @@ public class StartVisual extends PApplet {
 
 	public void noteOn(int chan, int note, int vel) {
 		if (midiReady) {
-			System.out.println("Channel: " + chan + ", Note: " + note + ", Vel: " + vel);
+			System.out.println("Channel: " + chan + ", Note: " + note
+					+ ", Vel: " + vel);
 			float amount = PApplet.map(vel, 0, 127, 0, 1);
 			if (VisualConstants.MONOMEMIDI_ENABLED) {
-				if(MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
-					globalEffectChange(MonomeMidi.convertNote(chan, note), amount);
-				else if(MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
+				if (MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
+					globalEffectChange(MonomeMidi.convertNote(chan, note),
+							amount);
+				else if (MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
 					viz.noteObjEvent(MonomeMidi.convertNote(chan, note), amount);
 			}
 		}
 	}
-	
+
 	public void noteOff(int chan, int note, int vel) {
 		if (midiReady) {
-			System.out.println("Channel: " + chan + ", Note: " + note + ", Vel: " + vel);
+			System.out.println("Channel: " + chan + ", Note: " + note
+					+ ", Vel: " + vel);
 			if (VisualConstants.MONOMEMIDI_ENABLED) {
-				if(MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
+				if (MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
 					globalEffectChange(MonomeMidi.convertNote(chan, note), 0);
-				else if(MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
+				else if (MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
 					viz.noteObjEvent(MonomeMidi.convertNote(chan, note), 0);
 			}
 		}
@@ -416,13 +424,12 @@ public class StartVisual extends PApplet {
 	 * convertedPitch; }
 	 */
 
-	
-
 	public void controllerChange(int chan, int num, int val) {
 		// Some junk MIDI is being spewed out every time the port is opened by
 		// midiBus
 		if (midiReady) {
-			//System.out.println("Chan: " + chan + ", Ctrl Num: " + num + ", Val: " + val);
+			// System.out.println("Chan: " + chan + ", Ctrl Num: " + num +
+			// ", Val: " + val);
 			float amount = PApplet.map(val, 0, 127, 0, 1);
 
 			if (VisualConstants.NANOKONTROL2_ENABLED) {
@@ -465,10 +472,13 @@ public class StartVisual extends PApplet {
 			cameraDistanceAni.start();
 			break;
 		case VisualConstants.GLOBAL_EFFECT_PERSPECTIVE:
-			if (amount < 1)
-				perspectiveAmount = amount;
-			else
-				amount = .999f;
+			float perspectiveDelta = Math.abs(perspective
+					- (amount * maxPerspective));
+			perspectiveAni.setBegin(perspective);
+			perspectiveAni.setEnd(amount * maxPerspective);
+			perspectiveAni
+					.setDuration(.5f * (1 / (perspectiveDelta / maxPerspective)));
+			perspectiveAni.start();
 			break;
 		case VisualConstants.GLOBAL_EFFECT_SCALE:
 			viz.scale(amount);

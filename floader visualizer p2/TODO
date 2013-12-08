@@ -13,3 +13,7 @@
 	http://forum.processing.org/two/discussion/1292/photoshop-blend-modes-now-in-processing
 -midi looper for control changes
 -new colors
+-smooth changes beween sliders
+-apply nanokontrol live set effects as visuals
+	-dblue stretch = repeating and shrinking image
+	-filters = lighting? saturation?

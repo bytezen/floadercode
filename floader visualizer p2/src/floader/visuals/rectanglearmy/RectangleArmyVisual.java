@@ -64,7 +64,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 	float individualRotateYDegrees = 0;
 	
 	float globalRotateAmount;
-	float maxGlobalRotateAmount = 6;
+	float maxGlobalRotateAmount = 5;
 	float globalRotateDegrees = 0;
 	
 	float rotateZ = 0;
@@ -99,9 +99,10 @@ public class RectangleArmyVisual extends AbstractVisual {
 	Ani explodeEaseAni;
 	float explodeEaseAniDuration = 2;
 	
+	Ani scaleAni;
 	float rectScale = 1;
-	float maxRectScale = 3.67f;
-
+	float minRectScale = 1;
+	float maxRectScale = 3.6f;
 
 	public RectangleArmyVisual(PApplet app) {
 		this.app = app;
@@ -123,6 +124,9 @@ public class RectangleArmyVisual extends AbstractVisual {
 		noiseAni = new Ani(this, initNoiseDuration, "noise", 0);
 		noiseAni.setEasing(Ani.EXPO_IN);
 		noiseAni.pause();
+		scaleAni = new Ani(this, 1, "rectScale", maxRectScale);
+		scaleAni.setEasing(Ani.EXPO_OUT);
+		scaleAni.pause();
 		
 		reset();
 	}
@@ -137,7 +141,6 @@ public class RectangleArmyVisual extends AbstractVisual {
 	boolean addLattice = false;
 
 	public void draw(PGraphics g) {
-		
 		super.draw(g);
 		g.noStroke();
 		g.lights();
@@ -152,11 +155,9 @@ public class RectangleArmyVisual extends AbstractVisual {
 			g.rotateZ(PApplet.radians(globalRotateDegrees));
 		
 			for (int j = 0; j < numCols; j++){
-				
-				g.fill(curColorScheme.getColor(j % curColorScheme.getLength()).getRGB());
 				for (int k = 0; k < numRows; k++) {
+					g.fill(curColorScheme.getColor(k % curColorScheme.getLength()).getRGB());
 					
-		
 					g.pushMatrix();
 						g.translate(j * 150 - (numCols * 150 / 2), k * 150 - (numRows * 150 / 2));
 						individualRotateZDegrees = (individualRotateZDegrees + individualRotateZ) % 360;
@@ -171,12 +172,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 						//Explode!
 						rect.rotateAboutAxis(PApplet.radians(explodeAmount), numCols / 2 * 150, numRows / 2 * 150, 0, numCols / 2 * 100, numRows / 2 * 150, 0);
 						
-						// Crazy flying rotate
-						//rect.rotateAboutAxis(rotateCrazy, -j / 4 * 150 + numCols / 2 * 150, k / 4 * 150 + numRows / 2 * 150, 0, j / 4 * 150 + numCols / 2 * 150, k / 4 * 150 + numRows / 2 * 150, 1);
-						// Rotate forward
-						//rect.rotateAboutAxis(rotateForward, meshes[j][k].getVerticesAsPoint()[0], meshes[j][k].getVerticesAsPoint()[1]);
 						g.scale(rectScale);
-						
 						meshRenderer.drawFaces(rect);
 					g.popMatrix();
 				}
@@ -269,7 +265,15 @@ public class RectangleArmyVisual extends AbstractVisual {
 	
 	public void scale(float amount)
 	{
-		rectScale = 1 + (amount * maxRectScale);
+		//rectScale = 1 + (amount * maxRectScale);
+		
+		float scaleDelta = Math.abs(rectScale
+				- (amount * maxRectScale));
+		scaleAni.setBegin(rectScale);
+		scaleAni.setEnd(minRectScale + (amount * maxRectScale));
+		scaleAni
+				.setDuration(.5f * (1 / (scaleDelta / maxRectScale)));
+		scaleAni.start();
 	}
 
 	public void rotateZ(float amount)
