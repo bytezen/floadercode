@@ -41,4 +41,22 @@ public final class VisualConstants {
 	public static final int GLOBAL_SCENE_PERCENTAGES = 14;
 	public static final int GLOBAL_SCENE_SPINCYCLE = 15;
 	public static final int GLOBAL_SCENE_FLYINGOBJECTS = 16;
+	//Local Effects
+	public static final int LOCAL_EFFECT_1 = 100;
+	public static final int LOCAL_EFFECT_2 = 101;
+	public static final int LOCAL_EFFECT_3 = 102;
+	public static final int LOCAL_EFFECT_4 = 103;
+	public static final int LOCAL_EFFECT_5 = 104;
+	public static final int LOCAL_EFFECT_6 = 105;
+	public static final int LOCAL_EFFECT_7 = 106;
+	public static final int LOCAL_EFFECT_8 = 107;
+	public static final int LOCAL_EFFECT_START_INDEX = LOCAL_EFFECT_1;
+	
+	public static boolean isGlobalEffect(int effectIndex)
+	{
+		if(effectIndex >= LOCAL_EFFECT_START_INDEX)
+			return false;
+		else return true;
+	}
+	
 }

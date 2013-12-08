@@ -12,7 +12,6 @@ import floader.visuals.flyingobjects.*;
 import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.hardwarecontrollers.ComputerKeyboard;
-import floader.visuals.hardwarecontrollers.HardwareController;
 import floader.visuals.hardwarecontrollers.MonomeMidi;
 import floader.visuals.hardwarecontrollers.NanoKontrol2;
 import floader.visuals.kalimba.KalimbaVisual;
@@ -40,7 +39,7 @@ public class StartVisual extends PApplet {
 	int ctrl2;
 
 	boolean midiReady = false;
-
+	boolean applyReset = false;
 	AbstractVisual viz;
 	OscP5 oscP5;
 	MidiBus midiBus;
@@ -73,7 +72,7 @@ public class StartVisual extends PApplet {
 	Ani perspectiveAni;
 	float perspective = 0;
 	float maxPerspective = .999f;
-	
+
 	public static final int OSC_PORT = 7400;
 
 	public void setup() {
@@ -99,7 +98,6 @@ public class StartVisual extends PApplet {
 		perspectiveAni = new Ani(this, 0, "perspective", maxPerspective);
 		perspectiveAni.setEasing(Ani.EXPO_OUT);
 		perspectiveAni.pause();
-
 
 		// Offline drawing
 		offlineApp = new PApplet();
@@ -163,6 +161,12 @@ public class StartVisual extends PApplet {
 	}
 
 	public void draw() {
+		if(applyReset)
+		{
+			reset();
+			viz.reset();
+			applyReset = false;
+		}
 		background(0);
 		// Set camera zoom
 		scene.camera().setPosition(
@@ -177,7 +181,7 @@ public class StartVisual extends PApplet {
 		offlineApp.g.beginDraw();
 		if (applyBackground)
 			offlineApp.g.background(0, 0);
-		
+
 		scene.beginDraw();
 
 		applyPerspective(offlineApp);
@@ -381,13 +385,14 @@ public class StartVisual extends PApplet {
 		if (midiReady) {
 			System.out.println("Channel: " + chan + ", Note: " + note
 					+ ", Vel: " + vel);
+
+			int effect = MonomeMidi.convertNote(chan, note);
 			float amount = PApplet.map(vel, 0, 127, 0, 1);
-			if (VisualConstants.MONOMEMIDI_ENABLED) {
-				if (MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
-					globalEffectChange(MonomeMidi.convertNote(chan, note),
-							amount);
-				else if (MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
-					viz.noteObjEvent(MonomeMidi.convertNote(chan, note), amount);
+			if (VisualConstants.MONOMEMIDI_ENABLED && effect != -1) {
+				if (VisualConstants.isGlobalEffect(effect))
+					globalEffectChange(effect, amount);
+				else
+					viz.noteObjEvent(effect, amount);
 			}
 		}
 	}
@@ -396,11 +401,13 @@ public class StartVisual extends PApplet {
 		if (midiReady) {
 			System.out.println("Channel: " + chan + ", Note: " + note
 					+ ", Vel: " + vel);
-			if (VisualConstants.MONOMEMIDI_ENABLED) {
-				if (MonomeMidi.getNoteInputType(chan) == HardwareController.GLOBAL)
-					globalEffectChange(MonomeMidi.convertNote(chan, note), 0);
-				else if (MonomeMidi.getNoteInputType(chan) == HardwareController.LOCAL)
-					viz.noteObjEvent(MonomeMidi.convertNote(chan, note), 0);
+
+			int effect = MonomeMidi.convertNote(chan, note);
+			if (VisualConstants.MONOMEMIDI_ENABLED && effect != -1) {
+				if (VisualConstants.isGlobalEffect(effect))
+					globalEffectChange(effect, 0);
+				else
+					viz.noteObjEvent(effect, 0);
 			}
 		}
 	}
@@ -431,23 +438,22 @@ public class StartVisual extends PApplet {
 			// System.out.println("Chan: " + chan + ", Ctrl Num: " + num +
 			// ", Val: " + val);
 			float amount = PApplet.map(val, 0, 127, 0, 1);
+			int effect;
 
 			if (VisualConstants.NANOKONTROL2_ENABLED) {
-				if (NanoKontrol2.getInputType(chan, num) == HardwareController.GLOBAL)
-					globalEffectChange(
-							NanoKontrol2.convertInputToIndex(chan, num), amount);
-				else if (NanoKontrol2.getInputType(chan, num) == HardwareController.LOCAL)
-					vizEffectChange(
-							NanoKontrol2.convertInputToIndex(chan, num), amount);
+				effect = NanoKontrol2.convertInputToIndex(chan, num);
+				if (VisualConstants.isGlobalEffect(effect))
+					globalEffectChange(effect, amount);
+				else
+					vizEffectChange(effect, amount);
 			}
 
 			if (VisualConstants.MONOMEMIDI_ENABLED) {
-				if (MonomeMidi.getControllerInputType(chan, num) == HardwareController.GLOBAL)
-					globalEffectChange(MonomeMidi.convertController(chan, num),
-							amount);
-				else if (MonomeMidi.getControllerInputType(chan, num) == HardwareController.LOCAL)
-					vizEffectChange(MonomeMidi.convertController(chan, num),
-							amount);
+				effect = MonomeMidi.convertController(chan, num);
+				if (VisualConstants.isGlobalEffect(effect))
+					globalEffectChange(effect,amount);
+				else 
+					vizEffectChange(effect,amount);
 			}
 		}
 	}
@@ -514,8 +520,7 @@ public class StartVisual extends PApplet {
 			break;
 		case VisualConstants.GLOBAL_TRIGGER_RESET:
 			if (amount > 0) {
-				reset();
-				viz.reset();
+				applyReset = true;
 			}
 			break;
 		case VisualConstants.GLOBAL_TRIGGER_MIRROR:

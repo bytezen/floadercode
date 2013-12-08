@@ -2,7 +2,7 @@ package floader.visuals.hardwarecontrollers;
 
 import floader.visuals.VisualConstants;
 
-public class ComputerKeyboard extends HardwareController {
+public class ComputerKeyboard {
 	public static int convertKeyPress(int key)
 	{
 		switch(key){

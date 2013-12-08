@@ -2,7 +2,7 @@ package floader.visuals.hardwarecontrollers;
 
 import floader.visuals.VisualConstants;
 
-public class MonomeMidi extends HardwareController {
+public class MonomeMidi  {
 		
 		//Controll sliders
 		private static final int SLIDER_MIDI_CHANNEL = 0;
@@ -37,49 +37,14 @@ public class MonomeMidi extends HardwareController {
 		private static final int PAGE_1_ROW_1_NOTE_5 = 88;
 		private static final int PAGE_1_ROW_1_NOTE_6 = 89;
 		private static final int PAGE_1_ROW_1_NOTE_7 = 90;
-		private static final int PAGE_2_ROW_1_NOTE_1 = 84;
-		private static final int PAGE_2_ROW_1_NOTE_2 = 85;
-		private static final int PAGE_2_ROW_1_NOTE_3 = 86;
-		private static final int PAGE_2_ROW_1_NOTE_4 = 87;
-		private static final int PAGE_2_ROW_1_NOTE_5 = 88;
-		private static final int PAGE_2_ROW_1_NOTE_6 = 89;
-		private static final int PAGE_2_ROW_1_NOTE_7 = 90;
+		private static final int PAGE_1_ROW_2_NOTE_1 = 72;
+		private static final int PAGE_1_ROW_2_NOTE_2 = 73;
+		private static final int PAGE_1_ROW_2_NOTE_3 = 74;
+		private static final int PAGE_1_ROW_2_NOTE_4 = 75;
+		private static final int PAGE_1_ROW_2_NOTE_5 = 76;
+		private static final int PAGE_1_ROW_2_NOTE_6 = 77;
+		private static final int PAGE_1_ROW_2_NOTE_7 = 78;
 		
-		
-		public static int getControllerInputType(int chan, int num)
-		{
-			if(chan == SLIDER_MIDI_CHANNEL)
-			{
-				if(num >=PAGE_2_SLDR_1 && num <=PAGE_2_SLDR_7)
-				{
-					return HardwareController.GLOBAL;
-				}
-				else if(num >=PAGE_3_SLDR_1 && num <=PAGE_3_SLDR_7)
-					return HardwareController.LOCAL;
-				else
-				{
-					System.err.println("Unrecognized control number in MonomeMidi class, getControllerInputType function.  Ctrl: " + num);
-					return -1;
-				}
-			}
-			else
-			{
-				System.err.println("Unrecognized channel number in MonomeMidi class, getControllerInputType function.  Chan: " + chan);
-				return -1;
-			}
-		}
-		
-		public static int getNoteInputType(int chan)
-		{
-			if(chan == NOTE_GLOBAL_MIDI_CHANNEL)
-				return HardwareController.GLOBAL;
-			else if(chan == NOTE_LOCAL_MIDI_CHANNEL)
-				return HardwareController.LOCAL;
-			else {
-				System.err.println("Unrecognized channel number in MonomeMidi class, getNoteInputeType function.  Chan: " + chan);
-				return -1;
-			}
-		}
 		
 		public static int convertNote(int chan, int note)
 		{
@@ -89,7 +54,7 @@ public class MonomeMidi extends HardwareController {
 				switch(note)
 				{
 				case PAGE_1_ROW_1_NOTE_1:
-					return index = VisualConstants.GLOBAL_TRIGGER_CUBE;
+					return index = VisualConstants.GLOBAL_TRIGGER_RESET;
 				case PAGE_1_ROW_1_NOTE_2:
 					return index = VisualConstants.GLOBAL_TRIGGER_CAPTUREBG;
 				case PAGE_1_ROW_1_NOTE_3:
@@ -99,7 +64,7 @@ public class MonomeMidi extends HardwareController {
 				case PAGE_1_ROW_1_NOTE_5:
 					return index = VisualConstants.GLOBAL_TRIGGER_TOGGLEBGFILL;
 				case PAGE_1_ROW_1_NOTE_6:
-					return index = VisualConstants.GLOBAL_TRIGGER_RESET;
+					return index = VisualConstants.GLOBAL_TRIGGER_CUBE;
 				case PAGE_1_ROW_1_NOTE_7:
 					return index = VisualConstants.GLOBAL_TRIGGER_CYCLECOLORSCHEME;
 				}
@@ -136,25 +101,25 @@ public class MonomeMidi extends HardwareController {
 				break;
 			//Local effects
 			case PAGE_3_SLDR_1:
-				index = 0;
+				index = VisualConstants.LOCAL_EFFECT_1;
 				break;
 			case PAGE_3_SLDR_2:
-				index = 1;
+				index = VisualConstants.LOCAL_EFFECT_2;
 				break;
 			case PAGE_3_SLDR_3:
-				index = 2;
+				index = VisualConstants.LOCAL_EFFECT_3;
 				break;
 			case PAGE_3_SLDR_4:
-				index = 3;
+				index = VisualConstants.LOCAL_EFFECT_4;
 				break;
 			case PAGE_3_SLDR_5:
-				index = 4;
+				index = VisualConstants.LOCAL_EFFECT_5;
 				break;
 			case PAGE_3_SLDR_6:
-				index = 5;
+				index = VisualConstants.LOCAL_EFFECT_6;
 				break;
 			case PAGE_3_SLDR_7:
-				index = 6;
+				index = VisualConstants.LOCAL_EFFECT_7;
 				break;
 			default:
 				System.err.println("Error: unidentified ctrl num in MonomeMidi conversion: " + num);

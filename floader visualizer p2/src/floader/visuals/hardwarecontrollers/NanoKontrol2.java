@@ -2,7 +2,7 @@ package floader.visuals.hardwarecontrollers;
 
 import floader.visuals.VisualConstants;
 
-public class NanoKontrol2 extends HardwareController {
+public class NanoKontrol2  {
 		private static final int MIDI_CHANNEL = 0;
 		private static final int KNOB_1_CTRL_NUM = 16;
 		private static final int KNOB_2_CTRL_NUM = 17;
@@ -40,51 +40,28 @@ public class NanoKontrol2 extends HardwareController {
 		private static final int NOTE_17 = 31;
 		private static final int NOTE_18 = 41;
 		
-		public static int getInputType(int chan, int num)
-		{
-			if(chan == MIDI_CHANNEL)
-			{
-				if(num >=SLDR_1_CTRL_NUM && num <=SLDR_8_CTRL_NUM)
-				{
-					return HardwareController.GLOBAL;
-				}
-				else if(num >=KNOB_1_CTRL_NUM && num <=KNOB_9_CTRL_NUM)
-					return HardwareController.LOCAL;
-				else
-				{
-					System.err.println("Unrecognized control number in nanKontrol2 class.  Ctrl: " + num);
-					return -1;
-				}
-			}
-			else
-			{
-				System.err.println("Unrecognized channel number in nanKontrol2 class.  Chan: " + chan);
-				return -1;
-			}
-		}
-		
 		public static int convertInputToIndex(int chan, int num)
 		{
 			int  index = -1;
 			switch (num) {
 			//Local vars
 			case KNOB_1_CTRL_NUM:
-				index = 0;
+				index = VisualConstants.LOCAL_EFFECT_1;
 				break;
 			case KNOB_2_CTRL_NUM:
-				index = 1;
+				index = VisualConstants.LOCAL_EFFECT_2;
 				break;
 			case KNOB_3_CTRL_NUM:
-				index = 2;
+				index = VisualConstants.LOCAL_EFFECT_3;
 				break;
 			case KNOB_4_CTRL_NUM:
-				index = 3;
+				index = VisualConstants.LOCAL_EFFECT_4;
 				break;
 			case KNOB_5_CTRL_NUM:
-				index = 4;
+				index = VisualConstants.LOCAL_EFFECT_5;
 				break;
 			case KNOB_6_CTRL_NUM:
-				index = 5;
+				index = VisualConstants.LOCAL_EFFECT_6;
 				break;
 				
 			//Global vars

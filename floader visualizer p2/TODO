@@ -17,3 +17,4 @@
 -apply nanokontrol live set effects as visuals
 	-dblue stretch = repeating and shrinking image
 	-filters = lighting? saturation?
+-assign buttons to particle states.  Ex: when pressing button 3, enable particles with .2 turbulence. button 4 enables with .3 turbulence.
