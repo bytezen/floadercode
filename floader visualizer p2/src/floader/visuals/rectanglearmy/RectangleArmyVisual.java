@@ -111,9 +111,9 @@ public class RectangleArmyVisual extends AbstractVisual {
 	public float neighborhood, viscosity, speed, turbulence, cameraRate,
 			rebirthRadius, spread, independence, dofRatio;
 	public float neighborhoodDefault = 100, viscosityDefault = .1f,
-			speedDefault = 20, turbulenceDefault = 0.2f,
+			speedDefault = 9, turbulenceDefault = 0.2f,
 			cameraRateDefault = .07f, rebirthRadiusDefault = 250,
-			spreadDefault = 60, independenceDefault = .04f,
+			spreadDefault = 30, independenceDefault = .01f,
 			dofRatioDefault = 50;
 	public int n, rebirth;
 	public int nDefault = numCols * numRows, rebirthDefault = 0;
@@ -353,19 +353,39 @@ public class RectangleArmyVisual extends AbstractVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int index, float amount) {
-		noiseAni.setBegin(maxNoise);
-		noiseAni.setEnd(0);
-		noiseAni.start();
-	}
-
-	@Override
 	public void ctrlEvent(int index, float val) {
 		// Rotate cam Z amount
 		if (index == VisualConstants.LOCAL_EFFECT_1) {
 			globalRotateAmount = val * maxGlobalRotateAmount;
 		} else if (index == VisualConstants.LOCAL_EFFECT_2) {
 			noise = maxNoise = val * MAXNOISE;
+		} else if(index == VisualConstants.LOCAL_EFFECT_3)
+		{
+			if(val > 0)
+			{
+				noiseAni.setBegin(maxNoise);
+				noiseAni.setEnd(0);
+				noiseAni.start();
+			}
+		} else if(index == VisualConstants.LOCAL_EFFECT_4)
+		{
+			if (val > 0) {
+				independence = 5f;
+				turbulence = 4f;
+				viscosity = .1f;
+				neighborhood = 70;
+				speed = 150;
+				spread = 100;
+
+			} else {
+				independence = independenceDefault;
+				turbulence = turbulenceDefault;
+				viscosity = viscosityDefault;
+				neighborhood = neighborhoodDefault;
+				speed = speedDefault;
+				spread = spreadDefault;
+			}
+
 		}
 
 		// Explode - kind of annoying to work with

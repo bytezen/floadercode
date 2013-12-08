@@ -67,6 +67,20 @@ public class MonomeMidi  {
 					return index = VisualConstants.GLOBAL_TRIGGER_CUBE;
 				case PAGE_1_ROW_1_NOTE_7:
 					return index = VisualConstants.GLOBAL_TRIGGER_CYCLECOLORSCHEME;
+				case PAGE_1_ROW_2_NOTE_1:
+					return index = VisualConstants.LOCAL_EFFECT_1;
+				case PAGE_1_ROW_2_NOTE_2:
+					return index = VisualConstants.LOCAL_EFFECT_2;
+				case PAGE_1_ROW_2_NOTE_3:
+					return index = VisualConstants.LOCAL_EFFECT_3;
+				case PAGE_1_ROW_2_NOTE_4:
+					return index = VisualConstants.LOCAL_EFFECT_4;
+				case PAGE_1_ROW_2_NOTE_5:
+					return index = VisualConstants.LOCAL_EFFECT_5;
+				case PAGE_1_ROW_2_NOTE_6:
+					return index = VisualConstants.LOCAL_EFFECT_6;
+				case PAGE_1_ROW_2_NOTE_7:
+					return index = VisualConstants.LOCAL_EFFECT_7;
 				}
 			}
 			System.err.println("Unrecognized input to MonomeMidi class, convertNote. Chan: " + chan + ", Note: " + note);

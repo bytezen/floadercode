@@ -271,7 +271,6 @@ public class StartVisual extends PApplet {
 		cubeRotate = cubeRotate % 360;
 
 		if (applyBgCapture) {
-			System.out.println("applybg");
 			if (bgImage != null)
 				bgImage.blend(this.g, 0, 0, VisualConstants.WIDTH,
 						VisualConstants.HEIGHT, 0, 0, VisualConstants.WIDTH,
@@ -392,7 +391,7 @@ public class StartVisual extends PApplet {
 				if (VisualConstants.isGlobalEffect(effect))
 					globalEffectChange(effect, amount);
 				else
-					viz.noteObjEvent(effect, amount);
+					vizEffectChange(effect, amount);
 			}
 		}
 	}
@@ -407,7 +406,7 @@ public class StartVisual extends PApplet {
 				if (VisualConstants.isGlobalEffect(effect))
 					globalEffectChange(effect, 0);
 				else
-					viz.noteObjEvent(effect, 0);
+					vizEffectChange(effect, 0);
 			}
 		}
 	}

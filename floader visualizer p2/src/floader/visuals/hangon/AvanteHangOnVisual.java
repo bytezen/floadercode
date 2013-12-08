@@ -239,7 +239,6 @@ public class AvanteHangOnVisual extends AbstractVisual implements IVisual {
 
 	}
 
-	@Override
 	public void noteObjEvent(int note, float vel) {
 
 		if(lights)

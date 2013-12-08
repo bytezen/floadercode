@@ -199,7 +199,6 @@ public class HangOnVisual implements IVisual {
 
 	}
 
-	@Override
 	public void noteObjEvent(int note, float velocity) {
 		//System.out.println(msg.get(0).intValue());
 		if (note == 1 && velocity > 1) {

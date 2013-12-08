@@ -83,12 +83,6 @@ public class AbstractVisual  implements IVisual {
 	}
 
 	@Override
-	public void noteObjEvent(int index, float amount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void camEvent(int camState) {
 		// TODO Auto-generated method stub
 		

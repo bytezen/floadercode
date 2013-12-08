@@ -140,7 +140,6 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 
 	}
 
-	@Override
 	public void noteObjEvent(int note, float vel) {
 		if (note == 0 && vel == 127) {
 				// Remove the last element from the list, put it first and play

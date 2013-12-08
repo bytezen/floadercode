@@ -199,7 +199,6 @@ public class ParticleVisual extends AbstractVisual implements IVisual {
 		}
 	}
 
-	@Override
 	public void noteObjEvent(int note, float velocity) {
 		if (note == 0 && velocity > 0) {
 			independence = 3f;

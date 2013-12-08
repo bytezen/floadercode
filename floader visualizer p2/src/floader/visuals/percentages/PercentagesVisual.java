@@ -164,7 +164,6 @@ public class PercentagesVisual extends AbstractVisual {
 		meshes[meshIndex].modify(new HEM_Lattice().setDepth(1).setWidth(latticeWidth).setThresholdAngle(PApplet.radians(45)).setFuse(false));
 	}
 
-	@Override
 	public void noteObjEvent(int index, float vel) {
 		speedAni.setBegin(0);
 		speedAni.setEnd(curMaxSpeed);

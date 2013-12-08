@@ -71,7 +71,6 @@ public class LeakierPhysicsVisual extends AbstractVisual implements IVisual {
 		masterLayer.tapEffect(eventType, isTapDown);
 	}
 
-	@Override
 	public void noteObjEvent(int note, float velocity) {
 		// System.out.println("note received in leaky viz");
 		if (note == 0 && velocity > 0)
