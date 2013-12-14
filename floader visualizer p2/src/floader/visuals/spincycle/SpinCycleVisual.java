@@ -2,7 +2,7 @@ package floader.visuals.spincycle;
 
 import floader.looksgood.ani.Ani;
 import floader.visuals.*;
-import floader.visuals.colorschemes.AccentedTerminal;
+import floader.visuals.colorschemes.BlackAndWhite;
 import floader.visuals.colorschemes.BlueSunset;
 import floader.visuals.colorschemes.ColorScheme;
 import floader.visuals.colorschemes.SeaGreenSeaShell;
@@ -120,9 +120,9 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 
 	void drawMesh(int meshIndex, PGraphics g) {
 		if (meshIndex == 0)
-			g.fill(curColorScheme.getColor(0).getRGB());
+			g.fill(curColorScheme.getColor(0).getRGB(),curColorScheme.getColor(0).getAlpha());
 		else
-			g.fill(curColorScheme.getColor(1).getRGB());
+			g.fill(curColorScheme.getColor(1).getRGB(),curColorScheme.getColor(1).getAlpha());
 
 		meshes[meshIndex].modify(new HEM_Twist().setAngleFactor((twistAmount)).setTwistAxis(new WB_Line(new WB_Point3d(0, 0, 0), new WB_Vector3d(0, 0, 1))));
 		meshRenderer.drawFaces(meshes[meshIndex]);
@@ -142,9 +142,9 @@ public class SpinCycleVisual extends AbstractVisual implements IVisual {
 
 	@Override
 	public void ctrlEvent(int index, float val) {
-		if (index == 0){
+		if (index == VisualConstants.LOCAL_EFFECT_1){
 			rotateZAmount = val * maxRotateZAmount;
-		} if(index == 1){
+		} if(index == VisualConstants.LOCAL_EFFECT_2){
 			twistAmount = PApplet.map(val, 0, 1, 0, maxTwistAmount);
 		}
 	}

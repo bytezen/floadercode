@@ -2,7 +2,7 @@ package floader.visuals;
 
 import codeanticode.glgraphics.GLGraphicsOffScreen;
 import floader.looksgood.ani.Ani;
-import floader.visuals.colorschemes.AccentedTerminal;
+import floader.visuals.colorschemes.BlackAndWhite;
 import floader.visuals.colorschemes.BlueSunset;
 import floader.visuals.colorschemes.ColorScheme;
 import floader.visuals.colorschemes.SeaGreenSeaShell;
@@ -12,8 +12,10 @@ import floader.visuals.flyingobjects.*;
 import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.hardwarecontrollers.ComputerKeyboard;
+import floader.visuals.hardwarecontrollers.Effect;
 import floader.visuals.hardwarecontrollers.MonomeMidi;
-import floader.visuals.hardwarecontrollers.NanoKontrol2;
+import floader.visuals.hardwarecontrollers.NanoKontrol2Midi;
+import floader.visuals.hardwarecontrollers.NanoKontrol2Osc;
 import floader.visuals.kalimba.KalimbaVisual;
 import floader.visuals.particles.*;
 import floader.visuals.percentages.PercentagesVisual;
@@ -37,6 +39,8 @@ public class StartVisual extends PApplet {
 	int ctrl0;
 	int ctrl1;
 	int ctrl2;
+	int clipX;
+	int clipY;
 
 	boolean midiReady = false;
 	boolean applyReset = false;
@@ -50,6 +54,7 @@ public class StartVisual extends PApplet {
 	PApplet offlineApp;
 	PImage bgImage;
 	Scene scene;
+	boolean mirrorTriggered = false;
 	boolean applyEdges = false;
 	boolean applyCube = false;
 	boolean applyBgCapture = false;
@@ -57,7 +62,7 @@ public class StartVisual extends PApplet {
 	int maxBlurSize = 25;
 	float cubeRotate;
 
-	boolean applyMirror;
+	boolean applyMirror = false;
 	int bgAlpha = 0;
 	boolean applyBackground = true;
 	// Color schemes
@@ -65,7 +70,7 @@ public class StartVisual extends PApplet {
 	ColorScheme colorSchemes[];
 
 	Ani cameraDistanceAni;
-	float maxCameraDistance = 3800;
+	float maxCameraDistance = 3200;
 	float minCameraDistance = 200;
 	float curCameraDistance = maxCameraDistance;
 
@@ -81,7 +86,7 @@ public class StartVisual extends PApplet {
 		// Color
 		colorSchemes = new ColorScheme[5];
 		colorSchemes[0] = new Terminal();
-		colorSchemes[1] = new AccentedTerminal();
+		colorSchemes[1] = new BlackAndWhite();
 		colorSchemes[2] = new BlueSunset();
 		colorSchemes[3] = new SeaGreenSeaShell();
 		colorSchemes[4] = new SpinCyclz();
@@ -150,6 +155,8 @@ public class StartVisual extends PApplet {
 	}
 
 	void reset() {
+		perspectiveAni.pause();
+		cameraDistanceAni.pause();
 		background(0);
 		blurSize = 0;
 		applyBackground = true;
@@ -158,15 +165,18 @@ public class StartVisual extends PApplet {
 		bgImage = null;
 		applyEdges = false;
 		viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+		applyMirror = false;
+		clipX = VisualConstants.WIDTH;
+		clipY = VisualConstants.HEIGHT;
 	}
 
 	public void draw() {
-		if(applyReset)
-		{
+		if (applyReset) {
 			reset();
 			viz.reset();
 			applyReset = false;
 		}
+		
 		background(0);
 		// Set camera zoom
 		scene.camera().setPosition(
@@ -177,7 +187,15 @@ public class StartVisual extends PApplet {
 		if (bgImage != null)
 			image(bgImage, 0, 0);
 
-		// offline buffer
+		// TODO figure out how to use clipping to handle mirror effect
+		/*
+		 * // offline buffer if(applyMirror){ offlineApp.setBounds(0, 0,
+		 * VisualConstants.WIDTH/2, VisualConstants.HEIGHT); offlineApp.clip(0,
+		 * 0, VisualConstants.WIDTH / 2, VisualConstants.HEIGHT); } else {
+		 * offlineApp.setBounds(0, 0, VisualConstants.WIDTH,
+		 * VisualConstants.HEIGHT); offlineApp.noClip(); }
+		 */
+
 		offlineApp.g.beginDraw();
 		if (applyBackground)
 			offlineApp.g.background(0, 0);
@@ -190,6 +208,9 @@ public class StartVisual extends PApplet {
 		scene.endDraw();
 		offlineApp.g.endDraw();
 
+		// Clipping
+		offlineApp.g.clip(0, 0, clipX, clipY);
+
 		// Applying the blur shader along the vertical direction
 		sepblur.set("horizontalPass", 0);
 		sepblur.set("blurSize", blurSize);
@@ -200,58 +221,30 @@ public class StartVisual extends PApplet {
 			pass1.background(0, 0);
 
 		pass1.shader(sepblur);
-
 		pass1.image(offlineApp.g, 0, 0);
 		pass1.endDraw();
 		// Applying the blur shader along the horizontal direction
 		sepblur.set("horizontalPass", 1);
 		sepblur.set("blurSize", blurSize);
 		sepblur.set("sigma", 4f);
-		pass2.beginDraw();
 
+		pass2.beginDraw();
 		if (applyBackground)
 			pass2.background(0, 0);
-
 		pass2.shader(sepblur);
-
 		pass2.image(pass1, 0, 0);
 		pass2.endDraw();
 
 		if (applyMirror) {
-			/*
-			 * PImage topLeftCorner = pass2.get(0, 0, VisualConstants.WIDTH /
-			 * 2,VisualConstants.HEIGHT / 2);
-			 * 
-			 * pushMatrix(); scale(1f, 1f); image(topLeftCorner, 0, 0);
-			 * popMatrix();
-			 * 
-			 * pushMatrix(); translate(VisualConstants.WIDTH,
-			 * VisualConstants.HEIGHT); scale(-1f, -1f); image(topLeftCorner, 0,
-			 * 0); popMatrix();
-			 * 
-			 * pushMatrix(); translate(0, VisualConstants.HEIGHT); scale(1f,
-			 * -1f); image(topLeftCorner, 0, 0); popMatrix();
-			 * 
-			 * pushMatrix(); translate(VisualConstants.WIDTH, 0); scale(-1f,
-			 * 1f); image(topLeftCorner, 0, 0); popMatrix();
-			 */
-
-			PImage leftHalf = pass2.get(0, 0, VisualConstants.WIDTH / 2,
-					VisualConstants.HEIGHT);
-
-			pushMatrix();
-			scale(1f, 1f);
-			image(leftHalf, 0, 0);
-			popMatrix();
-
+			image(pass2, 0, 0);
 			pushMatrix();
 			translate(VisualConstants.WIDTH, 0);
 			scale(-1f, 1f);
-			image(leftHalf, 0, 0);
-			popMatrix();
-
-		} else
 			image(pass2, 0, 0);
+			popMatrix();
+		} else {
+			image(pass2, 0, 0);
+		}
 
 		if (applyEdges)
 			filter(edges);
@@ -382,12 +375,13 @@ public class StartVisual extends PApplet {
 
 	public void noteOn(int chan, int note, int vel) {
 		if (midiReady) {
-			System.out.println("Channel: " + chan + ", Note: " + note
-					+ ", Vel: " + vel);
+			// System.out.println("Channel: " + chan + ", Note: " + note
+			// + ", Vel: " + vel);
 
-			int effect = MonomeMidi.convertNote(chan, note);
+			int effect;
 			float amount = PApplet.map(vel, 0, 127, 0, 1);
-			if (VisualConstants.MONOMEMIDI_ENABLED && effect != -1) {
+			if (VisualConstants.MONOMEMIDI_ENABLED) {
+				effect = MonomeMidi.convertNote(chan, note);
 				if (VisualConstants.isGlobalEffect(effect))
 					globalEffectChange(effect, amount);
 				else
@@ -398,8 +392,8 @@ public class StartVisual extends PApplet {
 
 	public void noteOff(int chan, int note, int vel) {
 		if (midiReady) {
-			System.out.println("Channel: " + chan + ", Note: " + note
-					+ ", Vel: " + vel);
+			// System.out.println("Channel: " + chan + ", Note: " + note
+			// + ", Vel: " + vel);
 
 			int effect = MonomeMidi.convertNote(chan, note);
 			if (VisualConstants.MONOMEMIDI_ENABLED && effect != -1) {
@@ -439,8 +433,9 @@ public class StartVisual extends PApplet {
 			float amount = PApplet.map(val, 0, 127, 0, 1);
 			int effect;
 
-			if (VisualConstants.NANOKONTROL2_ENABLED) {
-				effect = NanoKontrol2.convertInputToIndex(chan, num);
+			if (VisualConstants.NANOKONTROL2MIDI_ENABLED) {
+				effect = NanoKontrol2Midi.convertInputToIndex(chan, num);
+
 				if (VisualConstants.isGlobalEffect(effect))
 					globalEffectChange(effect, amount);
 				else
@@ -450,9 +445,9 @@ public class StartVisual extends PApplet {
 			if (VisualConstants.MONOMEMIDI_ENABLED) {
 				effect = MonomeMidi.convertController(chan, num);
 				if (VisualConstants.isGlobalEffect(effect))
-					globalEffectChange(effect,amount);
-				else 
-					vizEffectChange(effect,amount);
+					globalEffectChange(effect, amount);
+				else
+					vizEffectChange(effect, amount);
 			}
 		}
 	}
@@ -473,7 +468,7 @@ public class StartVisual extends PApplet {
 			cameraDistanceAni.setEnd((amount * maxCameraDistance)
 					+ minCameraDistance);
 			cameraDistanceAni
-					.setDuration(.5f * (1 / (pDistance / maxCameraDistance)));
+					.setDuration(.5f * (1 / ((pDistance / maxCameraDistance) + .1f)));
 			cameraDistanceAni.start();
 			break;
 		case VisualConstants.GLOBAL_EFFECT_PERSPECTIVE:
@@ -482,7 +477,7 @@ public class StartVisual extends PApplet {
 			perspectiveAni.setBegin(perspective);
 			perspectiveAni.setEnd(amount * maxPerspective);
 			perspectiveAni
-					.setDuration(.5f * (1 / (perspectiveDelta / maxPerspective)));
+					.setDuration(.5f * (1 / ((perspectiveDelta / maxPerspective) + .1f)));
 			perspectiveAni.start();
 			break;
 		case VisualConstants.GLOBAL_EFFECT_SCALE:
@@ -523,8 +518,10 @@ public class StartVisual extends PApplet {
 			}
 			break;
 		case VisualConstants.GLOBAL_TRIGGER_MIRROR:
+			mirrorTriggered = true;
 			if (amount > 0)
 				applyMirror = !applyMirror;
+
 			break;
 		case VisualConstants.GLOBAL_TRIGGER_TOGGLEBGFILL:
 			if (amount > 0)
@@ -558,7 +555,34 @@ public class StartVisual extends PApplet {
 				viz.setup();
 			}
 			break;
+		case VisualConstants.GLOBAL_EFFECT_CLIPX:
+			if (amount < .01)
+				clipX = 0;
+			else if (amount > .98)
+				clipX = VisualConstants.WIDTH;
+			else
+				clipX = (int) (amount * VisualConstants.WIDTH);
+			break;
+		case VisualConstants.GLOBAL_EFFECT_CLIPY:
+			if (amount < .01)
+				clipY = 0;
+			else if (amount > .98)
+				clipY = VisualConstants.HEIGHT;
+			else
+				clipY = (int) (amount * VisualConstants.HEIGHT);
+			break;
 		}
 	}
 
+	void oscEvent(OscMessage msg) {
+		int effect = NanoKontrol2Osc.convertInputToIndex(msg);
+		if (effect != -1) {
+			float value = PApplet.map(msg.get(1).intValue(), 0, 127, 0, 1);
+			if (VisualConstants.isGlobalEffect(effect))
+				globalEffectChange(effect, value);
+			else
+				vizEffectChange(effect, value);
+		}
+
+	}
 }

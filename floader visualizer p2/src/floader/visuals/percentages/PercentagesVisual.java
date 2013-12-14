@@ -6,7 +6,8 @@ import floader.looksgood.ani.Ani;
 import floader.looksgood.ani.easing.*;
 import floader.visuals.AbstractVisual;
 import floader.visuals.IVisual;
-import floader.visuals.colorschemes.AccentedTerminal;
+import floader.visuals.VisualConstants;
+import floader.visuals.colorschemes.BlackAndWhite;
 import floader.visuals.colorschemes.BlueSunset;
 import floader.visuals.colorschemes.ColorScheme;
 import floader.visuals.colorschemes.SeaGreenSeaShell;
@@ -63,6 +64,8 @@ public class PercentagesVisual extends AbstractVisual {
 	float sliceAmount = 0;
 	float maxSliceAmount = 200;
 	boolean slice = false;
+	int noise;
+	int maxNoise = 8;
 
 	public PercentagesVisual(PApplet app) {
 		this.app = app;
@@ -110,6 +113,9 @@ public class PercentagesVisual extends AbstractVisual {
 			/*if(vertexExpandAmount < .3)
 				expandVertexes(2);*/
 		}
+		
+		meshes[0].modify(new HEM_Noise().setDistance(noise));
+		meshes[1].modify(new HEM_Noise().setDistance(noise));
 
 		g.pushMatrix();
 		g.rotateX(PApplet.radians(rotateXAmt * 1.1f));
@@ -152,7 +158,10 @@ public class PercentagesVisual extends AbstractVisual {
 	}
 
 	void drawMesh(int meshIndex, PGraphics g) {
-		g.fill(curColorScheme.getColor(meshIndex % (curColorScheme.getLength() - 1)).getRGB());
+		int rgb = curColorScheme.getColor(meshIndex).getRGB();
+		int alpha = curColorScheme.getColor(meshIndex).getAlpha();
+		System.out.println("Index: " + meshIndex + ", Alpha: " + alpha);
+		g.fill(rgb,alpha);
 		meshRenderer.drawFaces(meshes[meshIndex]);
 	}
 
@@ -173,10 +182,14 @@ public class PercentagesVisual extends AbstractVisual {
 	@Override
 	public void ctrlEvent(int index, float val) {
 		//Control speed
-		if(index == 0)
+		if(index == VisualConstants.LOCAL_EFFECT_1)
 		{
 			speed = val * MAXSPEED;
-		} else if(index == 1)
+		} else if(index == VisualConstants.LOCAL_EFFECT_2)
+		{
+			noise = (int)(val * maxNoise);
+		} 
+		else if(index == VisualConstants.LOCAL_EFFECT_3)
 		{
 			vertexExpandAmount = val * maxVertexExpandAmount;
 		} 
@@ -185,6 +198,7 @@ public class PercentagesVisual extends AbstractVisual {
 	@Override
 	public void reset() {
 		super.reset();
+		noise = 0;
 		speedAni.pause();
 		vertexExpandAmount = 0;
 		createMeshes();

@@ -10,15 +10,16 @@ public final class VisualConstants {
 	public static final boolean PROSCENE_GUIDES_ENABLED = false;
 	public static final String MIDI_DEVICE = "5. Internal MIDI";
 	//public static final String MIDI_DEVICE = "nanoKONTROL2";
-	public static final boolean NANOKONTROL2_ENABLED = false;
+	public static final boolean NANOKONTROL2MIDI_ENABLED = false;
+	public static final boolean NANOKONTROL2OSC_ENABLED = true;
 	public static final boolean MONOMEMIDI_ENABLED = true;
 	public static final boolean COMPUTERKEYBOARD_ENABLED = true;
 	
 	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 960;
+	public static final int HEIGHT = 720;
 	/*public static final int WIDTH = 4000;
 	public static final int HEIGHT =  3000;*/
-	public static final boolean FULLSCREEN = false;
+	public static final boolean FULLSCREEN = true;
 	
 	//Global Effects
 	public static final int GLOBAL_EFFECT_BLUR = 0;
@@ -28,6 +29,8 @@ public final class VisualConstants {
 	public static final int GLOBAL_EFFECT_ROTATEX = 4;
 	public static final int GLOBAL_EFFECT_ROTATEY = 5;
 	public static final int GLOBAL_EFFECT_ROTATEZ = 6;
+	public static final int GLOBAL_EFFECT_CLIPX = 18;
+	public static final int GLOBAL_EFFECT_CLIPY = 19;
 	//Global Triggers
 	public static final int GLOBAL_TRIGGER_CUBE = 7;
 	public static final int GLOBAL_TRIGGER_CAPTUREBG = 8;

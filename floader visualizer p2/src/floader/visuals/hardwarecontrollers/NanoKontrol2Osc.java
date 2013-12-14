@@ -1,13 +1,14 @@
 package floader.visuals.hardwarecontrollers;
 
 import floader.visuals.VisualConstants;
+import oscP5.*;
 
-public class NanoKontrol2  {
+public class NanoKontrol2Osc  {
 		private static final int MIDI_CHANNEL = 0;
-		private static final int KNOB_1_CTRL_NUM = 16;
-		private static final int KNOB_2_CTRL_NUM = 17;
-		private static final int KNOB_3_CTRL_NUM = 18;
-		private static final int KNOB_4_CTRL_NUM = 19;
+		private static final int KNOB_1_CTRL_NUM = 4;
+		private static final int KNOB_2_CTRL_NUM = 5;
+		private static final int KNOB_3_CTRL_NUM = 6;
+		private static final int KNOB_4_CTRL_NUM = 7;
 		private static final int KNOB_5_CTRL_NUM = 20;
 		private static final int KNOB_6_CTRL_NUM = 21;
 		private static final int KNOB_7_CTRL_NUM = 22;
@@ -19,8 +20,8 @@ public class NanoKontrol2  {
 		private static final int SLDR_4_CTRL_NUM = 3;
 		private static final int SLDR_5_CTRL_NUM = 4;
 		private static final int SLDR_6_CTRL_NUM = 5;
-		private static final int SLDR_7_CTRL_NUM = 6;
-		private static final int SLDR_8_CTRL_NUM = 7;
+		private static final int SLDR_7_CTRL_NUM = 2;
+		private static final int SLDR_8_CTRL_NUM = 3;
 		private static final int NOTE_1 = 43;
 		private static final int NOTE_2 = 44;
 		private static final int NOTE_3 = 42;
@@ -40,11 +41,27 @@ public class NanoKontrol2  {
 		private static final int NOTE_17 = 31;
 		private static final int NOTE_18 = 41;
 		
-		public static int convertInputToIndex(int chan, int num)
-		{
-			int  index = -1;
-			switch (num) {
-			//Local vars
+		public static int convertInputToIndex(OscMessage msg)
+		{			
+			if(!msg.checkAddrPattern("/mtn/ctrl"))
+				return -1;
+			
+			int index = -1;
+			int ctrlNum = msg.get(0).intValue();
+			switch (ctrlNum) {
+				
+			case SLDR_1_CTRL_NUM:
+				index = VisualConstants.GLOBAL_EFFECT_CLIPX;
+				break;
+			case SLDR_2_CTRL_NUM:
+				index = VisualConstants.GLOBAL_EFFECT_CLIPY;
+				break;
+			case SLDR_7_CTRL_NUM:
+				index = VisualConstants.GLOBAL_EFFECT_CAMDISTANCE;
+				break;
+			case SLDR_8_CTRL_NUM:
+				index = VisualConstants.GLOBAL_EFFECT_PERSPECTIVE;
+				break;
 			case KNOB_1_CTRL_NUM:
 				index = VisualConstants.LOCAL_EFFECT_1;
 				break;
@@ -57,40 +74,8 @@ public class NanoKontrol2  {
 			case KNOB_4_CTRL_NUM:
 				index = VisualConstants.LOCAL_EFFECT_4;
 				break;
-			case KNOB_5_CTRL_NUM:
-				index = VisualConstants.LOCAL_EFFECT_5;
-				break;
-			case KNOB_6_CTRL_NUM:
-				index = VisualConstants.LOCAL_EFFECT_6;
-				break;
-				
-			//Global vars
-			case SLDR_1_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_BLUR;
-				break;
-			case SLDR_2_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_CAMDISTANCE;
-				break;
-			case SLDR_3_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_PERSPECTIVE;
-				break;
-			case SLDR_4_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_SCALE;
-				break;
-			case SLDR_5_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_ROTATEX;
-				break;
-			case SLDR_6_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_ROTATEY;
-				break;
-			case SLDR_7_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_ROTATEZ;
-				break;
-			case SLDR_8_CTRL_NUM:
-				index = 7;
-				break;
 			default:
-				System.err.println("Error: unidentified ctrl num in NanoKontrol2 conversion: " + num);
+				System.err.println("Error: unidentified ctrl num in NanoKontrol2Osc conversion: " + ctrlNum);
 				break;
 			}
 			return index;

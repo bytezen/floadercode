@@ -53,8 +53,8 @@ public class MonomeMidi  {
 			{
 				switch(note)
 				{
-				case PAGE_1_ROW_1_NOTE_1:
-					return index = VisualConstants.GLOBAL_TRIGGER_RESET;
+/*				case PAGE_1_ROW_1_NOTE_1:
+					return index = VisualConstants.GLOBAL_TRIGGER_RESET;*/
 				case PAGE_1_ROW_1_NOTE_2:
 					return index = VisualConstants.GLOBAL_TRIGGER_CAPTUREBG;
 				case PAGE_1_ROW_1_NOTE_3:

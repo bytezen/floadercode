@@ -23,10 +23,11 @@ public class RectangleArmyVisual extends AbstractVisual {
 	WB_Render meshRenderer;
 	HEC_Creator creator;
 
-	int numRows = 25;
-	int numCols = 25;
+	int numRows = 15;
+	int numCols = 15;
 	int RESET = 0;
 
+	boolean enableParticles = false;
 	boolean fillBackground = true;
 	float maxVertexDistance = 400;
 	float vertexDistance = 10;
@@ -104,7 +105,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 	Ani scaleAni;
 	float rectScale = 1;
 	float minRectScale = 1;
-	float maxRectScale = 3.6f;
+	float maxRectScale = 7.6f;
 
 	// Particle variables
 	Vec3D globalOffset, avg, cameraCenter;
@@ -123,6 +124,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 	PeasyCam cam;
 	Vec3D centeringForce = new Vec3D();
 	int meshRadius, meshRadiusDefault = 20;
+	Particle cur;
 
 	public RectangleArmyVisual(PApplet app) {
 		this.app = app;
@@ -170,9 +172,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 		avg = new Vec3D();
 		globalOffset = new Vec3D(0, 1.f / 3, 2.f / 3);
 
-		particles = new Vector();
-		for (int i = 0; i < n; i++)
-			particles.add(new Particle());
+	
 
 		reset();
 	}
@@ -189,7 +189,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 		}
 
 		void resetPosition() {
-			position = Vec3D.randomVector();
+			position = new Vec3D(0,0,0);//Vec3D.randomVector();
 			position.scaleSelf(app.random(rebirthRadius));
 			if (particles.size() == 0)
 				position.addSelf(avg);
@@ -247,41 +247,47 @@ public class RectangleArmyVisual extends AbstractVisual {
 	boolean addLattice = false;
 
 	public void draw(PGraphics g) {
-		// Particles
-		avg = new Vec3D();
-		for (int i = 0; i < particles.size(); i++) {
-			Particle cur = ((Particle) particles.get(i));
-			avg.addSelf(cur.position);
-		}
-		avg.scaleSelf(1.f / particles.size());
 
-		
-
-		super.draw(g);
 		g.noStroke();
 		g.lights();
 		// creator = new HEC_Grid().setUSize(110).setVSize(110).setU(2).setV(2);
-		creator = new HEC_Cube().setRadius(20);
+		creator = new HEC_Cube().setRadius(10);
 		HE_Mesh rect = new HE_Mesh(creator);
 		rect.modify(new HEM_Noise().setDistance(noise));
 		
 		g.pushMatrix();
 		globalRotateDegrees = (globalRotateDegrees + globalRotateAmount) % 360;
 		g.rotateZ(PApplet.radians(globalRotateDegrees));
-		g.translate(-avg.x, -avg.y, -avg.z);
+		if(enableParticles)
+		{
+			avg = new Vec3D();
+			for (int i = 0; i < particles.size(); i++) {
+				Particle cur = ((Particle) particles.get(i));
+				avg.addSelf(cur.position);
+			}
+			avg.scaleSelf(1.f / particles.size());
+		}
 
+		g.translate(-avg.x, -avg.y, -avg.z);
+		
 		for (int j = 0; j < numCols; j++) {
 			for (int k = 0; k < numRows; k++) {
-				Particle cur = ((Particle) particles.get((j*numCols) + k));
-				if (!paused)
+				cur = ((Particle) particles.get((j*numCols) + k));
+				if (enableParticles)
 					cur.update();
 				
 				g.fill(curColorScheme.getColor(k % curColorScheme.getLength())
-						.getRGB());
+						.getRGB(), curColorScheme.getColor(k % curColorScheme.getLength())
+						.getAlpha());
 
 				g.pushMatrix();
-				g.translate(j * 150 - (numCols * 150 / 2) + cur.position.x, k * 150
-						- (numRows * 150 / 2) + cur.position.y, cur.position.z);
+				int padding = 120;
+				g.translate(j * padding - (numCols * padding / 2), k * padding
+						- (numRows * padding / 2) );
+				
+				
+				g.translate(cur.position.x,  cur.position.y, cur.position.z);
+				
 				individualRotateZDegrees = (individualRotateZDegrees + individualRotateZ) % 360;
 				g.rotateZ(PApplet.radians(-individualRotateZDegrees));
 
@@ -316,10 +322,15 @@ public class RectangleArmyVisual extends AbstractVisual {
 				/ neighborhood, turbulence / neighborhood);
 		
 		
+		
 	}
 
 	public void reset() {
 		super.reset();
+		particles = new Vector();
+		for (int i = 0; i < n; i++)
+			particles.add(new Particle());
+		
 		noise = 0;
 		individualRotateZ = 0;
 		individualRotateY = 0;
@@ -343,16 +354,6 @@ public class RectangleArmyVisual extends AbstractVisual {
 	}
 
 	@Override
-	public void dragEvent(int eventType, float amount) {
-
-	}
-
-	@Override
-	public void tapEvent(int eventType, boolean isTapDown) {
-
-	}
-
-	@Override
 	public void ctrlEvent(int index, float val) {
 		// Rotate cam Z amount
 		if (index == VisualConstants.LOCAL_EFFECT_1) {
@@ -361,21 +362,13 @@ public class RectangleArmyVisual extends AbstractVisual {
 			noise = maxNoise = val * MAXNOISE;
 		} else if(index == VisualConstants.LOCAL_EFFECT_3)
 		{
-			if(val > 0)
-			{
-				noiseAni.setBegin(maxNoise);
-				noiseAni.setEnd(0);
-				noiseAni.start();
-			}
-		} else if(index == VisualConstants.LOCAL_EFFECT_4)
-		{
-			if (val > 0) {
-				independence = 5f;
-				turbulence = 4f;
-				viscosity = .1f;
-				neighborhood = 70;
-				speed = 150;
-				spread = 100;
+			if (val > 0.1) {
+				independence = PApplet.map(val, 0, 1, 0, 5f);
+				turbulence = PApplet.map(val, 0, 1, 0, 4f);
+				viscosity = PApplet.map(val, 0, 1, 0, .1f);
+				neighborhood = PApplet.map(val, 0, 1, 0, 70);
+				speed = PApplet.map(val, 0, 1, 0, 150);
+				spread = PApplet.map(val, 0, 1, 0, 100);
 
 			} else {
 				independence = independenceDefault;
@@ -385,7 +378,12 @@ public class RectangleArmyVisual extends AbstractVisual {
 				speed = speedDefault;
 				spread = spreadDefault;
 			}
-
+		} else if(index == VisualConstants.LOCAL_EFFECT_4)
+		{
+			if(val > 0.1)
+				enableParticles = true;
+			else enableParticles = false;
+			
 		}
 
 		// Explode - kind of annoying to work with

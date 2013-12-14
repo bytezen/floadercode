@@ -43,9 +43,6 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 
 	public FlyingObjectsVisual(PApplet app) {
 		this.app = app;
-		cam = new PeasyCam(app, 500);
-		camStatePath = "data\\flyingobjects\\camState";
-
 	}
 
 	public void setup() {
@@ -127,57 +124,39 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 		}
 	}
 
-	@Override
-	public void dragEvent(int eventType, float amount) {
-		// Twist
-		if (eventType == 2 || eventType == 0) {
-			masterLayer.effectEnableTwistX(1-amount);
-		}
-	}
-
-	@Override
-	public void tapEvent(int eventType, boolean isTapDown) {
-
-	}
-
 	public void noteObjEvent(int note, float vel) {
-		if (note == 0 && vel == 127) {
-				// Remove the last element from the list, put it first and play
-				// it
-				synchronized (lock) {
-					cylinderGroup.push(cylinderGroup.removeLast());
-					cylinderGroup.peekFirst().play();
-				}
-			} else if (note == 1 && vel == 127) {
-				synchronized (lock) {
-					sphereGroup.push(sphereGroup.removeLast());
-					sphereGroup.peekFirst().play();
-				}
-			} else if (note == 2 && vel == 127) {
-				synchronized (lock) {
-					coneGroup.push(coneGroup.removeLast());
-					coneGroup.peekFirst().play();
-				}
-			}
+		
 	}
 
 	@Override
 	public void ctrlEvent(int index, float val) {
-		if (index == 0 ) {
+		if (index == VisualConstants.LOCAL_EFFECT_1 ) {
 			masterLayer.effectEnableTwistX(1-val);
-		} else if (index == 1)
+		} else if (index == VisualConstants.LOCAL_EFFECT_2)
 		{
 			rotateX = PApplet.radians(val  * 180);
-		} else if(index == 2)
+		} else if(index == VisualConstants.LOCAL_EFFECT_3)
 		{
 			duration = 1 + (val * maxDuration);
 			masterLayer.effectEnableDuration(duration);
-		} 
-	}
-
-	@Override
-	public void camEvent(int note) {
-			loadCamState(note);
+		} else if (index == VisualConstants.LOCAL_EFFECT_4 && val > 0) {
+			// Remove the last element from the list, put it first and play
+			// it
+			synchronized (lock) {
+				cylinderGroup.push(cylinderGroup.removeLast());
+				cylinderGroup.peekFirst().play();
+			}
+		} else if (index == VisualConstants.LOCAL_EFFECT_5 && val > 0) {
+			synchronized (lock) {
+				sphereGroup.push(sphereGroup.removeLast());
+				sphereGroup.peekFirst().play();
+			}
+		} else if (index == VisualConstants.LOCAL_EFFECT_6 && val > 0) {
+			synchronized (lock) {
+				coneGroup.push(coneGroup.removeLast());
+				coneGroup.peekFirst().play();
+			}
+		}
 	}
 
 	@Override

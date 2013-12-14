@@ -77,7 +77,7 @@ public class MasterLayer {
 			for (AbstractMovingObject obj : layerGroup) {
 				if (obj.isPlaying())
 				{
-					obj.setColor(colorScheme.getColor(curColor));
+					obj.setColor(colorScheme.getColor(curColor % (colorScheme.getLength() - 1)));
 					obj.draw(g);
 				}
 			}

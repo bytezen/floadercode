@@ -25,7 +25,6 @@ public class AbstractVisual  implements IVisual {
 	
 	public void draw(PGraphics g)
 	{
-		//g.background(colorSchemes[curColorSchemeIndex].getBgColor().getRed(), colorSchemes[curColorSchemeIndex].getBgColor().getGreen(), colorSchemes[curColorSchemeIndex].getBgColor().getBlue(), bgAlpha);
 	}
 	
 	protected void loadCamState(int index) {

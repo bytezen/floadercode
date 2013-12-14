@@ -13,8 +13,6 @@
 	http://forum.processing.org/two/discussion/1292/photoshop-blend-modes-now-in-processing
 -midi looper for control changes
 -new colors
--smooth changes beween sliders
 -apply nanokontrol live set effects as visuals
-	-dblue stretch = repeating and shrinking image
 	-filters = lighting? saturation?
--assign buttons to particle states.  Ex: when pressing button 3, enable particles with .2 turbulence. button 4 enables with .3 turbulence.
+-get rid of midi dependencies.  Too buggy. Use OSC only
