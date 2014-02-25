@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="visualizations"/>
 	<classpathentry kind="lib" path="lib/apfloat.jar"/>
 	<classpathentry kind="lib" path="lib/oscP5.jar" sourcepath="C:/Users/Adam Ribaudo/Documents/Processing/libraries/oscP5/src"/>
 	<classpathentry kind="lib" path="lib/quickhull3d.jar"/>
@@ -16,5 +17,6 @@
 	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/themidibus/library/themidibus.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/proscene/library/proscene.jar" sourcepath="C:/Users/Owner/Documents/Processing/libraries/proscene/src"/>
 	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/GLGraphics/library/GLGraphics.jar" sourcepath="C:/Users/Owner/Documents/Processing/libraries/GLGraphics/src"/>
+	<classpathentry kind="lib" path="C:/Users/Owner/Documents/Processing/libraries/SimpleOpenNI/library/SimpleOpenNI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

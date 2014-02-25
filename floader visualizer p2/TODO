@@ -16,3 +16,4 @@
 -apply nanokontrol live set effects as visuals
 	-filters = lighting? saturation?
 -get rid of midi dependencies.  Too buggy. Use OSC only
+-have the local rotation be triggered based on energy in the song (so triggered by OSC Midi clips in Ableton)

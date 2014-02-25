@@ -12,7 +12,7 @@ public class ComputerKeyboard {
 			return VisualConstants.GLOBAL_TRIGGER_RESET;
 		case 'c':
 			return VisualConstants.GLOBAL_TRIGGER_CAPTUREBG;
-		case 't':
+		case 'e':
 			return VisualConstants.GLOBAL_TRIGGER_EDGEDETECTION;
 		case 'm':
 			return VisualConstants.GLOBAL_TRIGGER_MIRROR;
@@ -28,6 +28,8 @@ public class ComputerKeyboard {
 			return VisualConstants.GLOBAL_SCENE_SPINCYCLE;
 		case '4':
 			return VisualConstants.GLOBAL_SCENE_FLYINGOBJECTS;
+		case '5':
+			return VisualConstants.GLOBAL_SCENE_KINECT;
 		//Escape key
 		case 27:
 			return -1;

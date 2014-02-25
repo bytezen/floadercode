@@ -11,15 +11,28 @@ public final class VisualConstants {
 	public static final String MIDI_DEVICE = "5. Internal MIDI";
 	//public static final String MIDI_DEVICE = "nanoKONTROL2";
 	public static final boolean NANOKONTROL2MIDI_ENABLED = false;
-	public static final boolean NANOKONTROL2OSC_ENABLED = true;
+	
+	public static final boolean ABLETON_OSC_NANOKONTROL_ENABLED = true;
+	public static final int ABLETON_OSC_NANOKONTROL_CHANNEL = 2;
+
+	public static final boolean ABLETON_OSC_NOTE_ENABLED = true;
+	public static final int ABLETON_OSC_NOTE_CHANNEL = 0;
+	
+	public static final boolean ABLETON_OSC_CTRL_ENABLED = true;
+	public static final int ABLETON_OSC_CTRL_CHANNEL = 1;
+	
 	public static final boolean MONOMEMIDI_ENABLED = true;
 	public static final boolean COMPUTERKEYBOARD_ENABLED = true;
 	
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+	public static final int OSC_CTRL_INDEX = 1;
+	public static final int OSC_VALUE_INDEX = 0;
+	public static final int OSC_CHANNEL_INDEX = 2;
+	
+	public static final int WIDTH = 1024;
+	public static final int HEIGHT = 768;
 	/*public static final int WIDTH = 4000;
 	public static final int HEIGHT =  3000;*/
-	public static final boolean FULLSCREEN = true;
+	public static final boolean FULLSCREEN = false;
 	
 	//Global Effects
 	public static final int GLOBAL_EFFECT_BLUR = 0;
@@ -44,6 +57,7 @@ public final class VisualConstants {
 	public static final int GLOBAL_SCENE_PERCENTAGES = 14;
 	public static final int GLOBAL_SCENE_SPINCYCLE = 15;
 	public static final int GLOBAL_SCENE_FLYINGOBJECTS = 16;
+	public static final int GLOBAL_SCENE_KINECT = 20;
 	//Local Effects
 	public static final int LOCAL_EFFECT_1 = 100;
 	public static final int LOCAL_EFFECT_2 = 101;

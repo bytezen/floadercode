@@ -11,12 +11,13 @@ import floader.visuals.colorschemes.Terminal;
 import floader.visuals.flyingobjects.*;
 import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
+import floader.visuals.hardwarecontrollers.AbletonOscCtrlClip;
+import floader.visuals.hardwarecontrollers.AbletonOscNoteClip;
 import floader.visuals.hardwarecontrollers.ComputerKeyboard;
-import floader.visuals.hardwarecontrollers.Effect;
 import floader.visuals.hardwarecontrollers.MonomeMidi;
 import floader.visuals.hardwarecontrollers.NanoKontrol2Midi;
 import floader.visuals.hardwarecontrollers.NanoKontrol2Osc;
-import floader.visuals.kalimba.KalimbaVisual;
+import floader.visuals.kinect.KinectVisual;
 import floader.visuals.particles.*;
 import floader.visuals.percentages.PercentagesVisual;
 import floader.visuals.rectanglearmy.RectangleArmyVisual;
@@ -182,6 +183,7 @@ public class StartVisual extends PApplet {
 		scene.camera().setPosition(
 				new PVector(scene.camera().at().x, scene.camera().at().y,
 						curCameraDistance));
+	
 
 		// Set background image
 		if (bgImage != null)
@@ -555,6 +557,13 @@ public class StartVisual extends PApplet {
 				viz.setup();
 			}
 			break;
+		case VisualConstants.GLOBAL_SCENE_KINECT:
+			if (amount > 0) {
+				viz = new KinectVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
 		case VisualConstants.GLOBAL_EFFECT_CLIPX:
 			if (amount < .01)
 				clipX = 0;
@@ -575,14 +584,25 @@ public class StartVisual extends PApplet {
 	}
 
 	void oscEvent(OscMessage msg) {
-		int effect = NanoKontrol2Osc.convertInputToIndex(msg);
+		int effect = -1;
+		System.out.println(msg.get(0).intValue() + ", " + msg.get(1).intValue() + ", " + msg.get(2).intValue());
+		
+		if(msg.checkAddrPattern("/mtn/ctrl") && msg.get(VisualConstants.OSC_CHANNEL_INDEX).intValue() == VisualConstants.ABLETON_OSC_NANOKONTROL_CHANNEL)
+			effect = NanoKontrol2Osc.convertInputToIndex(msg);
+		else if(msg.checkAddrPattern("/mtn/ctrl") && msg.get(VisualConstants.OSC_CHANNEL_INDEX).intValue() == VisualConstants.ABLETON_OSC_CTRL_CHANNEL)
+			effect = AbletonOscCtrlClip.convertInputToIndex(msg);
+		else if(msg.checkAddrPattern("/mtn/note") && msg.get(VisualConstants.OSC_CHANNEL_INDEX).intValue() == VisualConstants.ABLETON_OSC_NOTE_CHANNEL)
+			effect = AbletonOscNoteClip.convertInputToIndex(msg);
+		
 		if (effect != -1) {
-			float value = PApplet.map(msg.get(1).intValue(), 0, 127, 0, 1);
+			float value = PApplet.map(msg.get(VisualConstants.OSC_VALUE_INDEX).intValue(), 0, 127, 0, 1);
 			if (VisualConstants.isGlobalEffect(effect))
 				globalEffectChange(effect, value);
 			else
 				vizEffectChange(effect, value);
-		}
+		} else
+			System.err.println("Error converting OSC event in oscEvent(OscMessage msg)");
+			
 
 	}
 }
