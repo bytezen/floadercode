@@ -35,7 +35,6 @@ public class PercentagesVisual extends AbstractVisual {
 	float perspectiveWidth;
 	float maxBendAmount = 1000;
 	float bendAmount;
-	
 
 	// presentation
 	boolean facesOn = true; // toggle display of faces
@@ -77,7 +76,7 @@ public class PercentagesVisual extends AbstractVisual {
 		meshRenderer = new WB_Render(app);
 		meshes = new HE_Mesh[3];
 		createMeshes();
-		
+
 		speedAni = new Ani(this, .4f, "speed", curMaxSpeed);
 		speedAni.setEasing(Ani.QUAD_IN);
 		speedAni.pause();
@@ -88,14 +87,13 @@ public class PercentagesVisual extends AbstractVisual {
 	void createMeshes() {
 		createMesh(0, 110, 14, 14, 3);
 		createMesh(1, 100, 14, 14, 3);
-		//createMesh(2, 1600, 10, 10, 10);
+		// createMesh(2, 1600, 10, 10, 10);
 	}
 
 	public void draw(PGraphics g) {
 		super.draw(g);
 		g.noStroke();
-		g.lights();
-
+		
 		if (rotateXDir)
 			rotateXAmt += speed;
 		else
@@ -106,17 +104,17 @@ public class PercentagesVisual extends AbstractVisual {
 		else
 			rotateYAmt -= speed;
 
-		if(vertexExpandAmount > .1)
-		{
+		if (vertexExpandAmount > .1) {
 			expandVertexes(0);
 			expandVertexes(1);
-			/*if(vertexExpandAmount < .3)
-				expandVertexes(2);*/
 		}
-		
-		meshes[0].modify(new HEM_Noise().setDistance(noise));
-		meshes[1].modify(new HEM_Noise().setDistance(noise));
 
+		if (noise > 0) {
+			meshes[0].modify(new HEM_Noise().setDistance(noise));
+			meshes[1].modify(new HEM_Noise().setDistance(noise));
+		}
+
+		g.translate(0,0,100);
 		g.pushMatrix();
 		g.rotateX(PApplet.radians(rotateXAmt * 1.1f));
 		g.rotateY(PApplet.radians(rotateYAmt * 1.3f));
@@ -129,21 +127,20 @@ public class PercentagesVisual extends AbstractVisual {
 		drawMesh(1, g);
 		g.popMatrix();
 
-		/*g.pushMatrix();
-		g.rotateX(PApplet.radians(rotateXAmt / 1.5f));
-		g.rotateY(PApplet.radians(rotateYAmt / 1.5f));
-		drawMesh(2, g);
-		g.popMatrix();*/
+		/*
+		 * g.pushMatrix(); g.rotateX(PApplet.radians(rotateXAmt / 1.5f));
+		 * g.rotateY(PApplet.radians(rotateYAmt / 1.5f)); drawMesh(2, g);
+		 * g.popMatrix();
+		 */
 	}
-	
-	void applySlice(int meshIndex)
-	{
-		 meshes[meshIndex].modify(new HEM_Slice().setCap(false).setPlane(new
-		 WB_Plane(new WB_Point3d(0,0,sliceAmount), new WB_Vector3d(-161,0,-161))));
+
+	void applySlice(int meshIndex) {
+		meshes[meshIndex].modify(new HEM_Slice().setCap(false).setPlane(
+				new WB_Plane(new WB_Point3d(0, 0, sliceAmount),
+						new WB_Vector3d(-161, 0, -161))));
 	}
-	
-	void expandVertexes(int meshIndex)
-	{
+
+	void expandVertexes(int meshIndex) {
 		HE_Selection selection = new HE_Selection(meshes[meshIndex]);
 		Iterator<HE_Face> fItr = meshes[meshIndex].fItr();
 		HE_Face f;
@@ -153,24 +150,29 @@ public class PercentagesVisual extends AbstractVisual {
 				selection.add(f);
 			}
 		}
-		
-		meshes[meshIndex].modifySelected(new HEM_VertexExpand().setDistance(vertexExpandAmount), selection);
+
+		meshes[meshIndex].modifySelected(
+				new HEM_VertexExpand().setDistance(vertexExpandAmount),
+				selection);
 	}
 
 	void drawMesh(int meshIndex, PGraphics g) {
 		int rgb = curColorScheme.getColor(meshIndex).getRGB();
 		int alpha = curColorScheme.getColor(meshIndex).getAlpha();
-		System.out.println("Index: " + meshIndex + ", Alpha: " + alpha);
-		g.fill(rgb,alpha);
+		g.fill(rgb, alpha);
 		meshRenderer.drawFaces(meshes[meshIndex]);
 	}
 
-	void createMesh(int meshIndex, int radius, int uFacets, int vFacets, int latticeWidth) {
-		HEC_Creator creator = new HEC_Sphere().setRadius(radius).setUFacets(uFacets).setVFacets(vFacets).setCenter(0, 0, 0);
+	void createMesh(int meshIndex, int radius, int uFacets, int vFacets,
+			int latticeWidth) {
+		HEC_Creator creator = new HEC_Sphere().setRadius(radius)
+				.setUFacets(uFacets).setVFacets(vFacets).setCenter(0, 0, 0);
 		meshes[meshIndex] = new HE_Mesh(creator);
 
 		// Lattice
-		meshes[meshIndex].modify(new HEM_Lattice().setDepth(1).setWidth(latticeWidth).setThresholdAngle(PApplet.radians(45)).setFuse(false));
+		meshes[meshIndex].modify(new HEM_Lattice().setDepth(1)
+				.setWidth(latticeWidth).setThresholdAngle(PApplet.radians(45))
+				.setFuse(false));
 	}
 
 	public void noteObjEvent(int index, float vel) {
@@ -181,18 +183,12 @@ public class PercentagesVisual extends AbstractVisual {
 
 	@Override
 	public void ctrlEvent(int index, float val) {
-		//Control speed
-		if(index == VisualConstants.LOCAL_EFFECT_1)
-		{
+		// Control speed
+		if (index == VisualConstants.LOCAL_EFFECT_1) {
 			speed = val * MAXSPEED;
-		} else if(index == VisualConstants.LOCAL_EFFECT_2)
-		{
-			noise = (int)(val * maxNoise);
-		} 
-		else if(index == VisualConstants.LOCAL_EFFECT_3)
-		{
+		} else if (index == VisualConstants.LOCAL_EFFECT_2) {
 			vertexExpandAmount = val * maxVertexExpandAmount;
-		} 
+		}
 	}
 
 	@Override

@@ -9,7 +9,6 @@ import floader.visuals.colorschemes.SeaGreenSeaShell;
 import floader.visuals.colorschemes.SpinCyclz;
 import floader.visuals.colorschemes.Terminal;
 import floader.visuals.flyingobjects.*;
-import floader.visuals.hangon.AvanteHangOnVisual;
 import floader.visuals.hangon.HangOnVisual;
 import floader.visuals.hardwarecontrollers.AbletonOscCtrlClip;
 import floader.visuals.hardwarecontrollers.AbletonOscNoteClip;
@@ -49,6 +48,7 @@ public class StartVisual extends PApplet {
 	OscP5 oscP5;
 	MidiBus midiBus;
 	// PShader blur;
+	PShader barrelblur;
 	PShader sepblur;
 	PShader edges;
 	PGraphics pass1, pass2;
@@ -71,9 +71,12 @@ public class StartVisual extends PApplet {
 	ColorScheme colorSchemes[];
 
 	Ani cameraDistanceAni;
-	float maxCameraDistance = 3200;
+	float maxCameraDistance = 2300;
 	float minCameraDistance = 200;
 	float curCameraDistance = maxCameraDistance;
+	
+	float lightFallOffAmt = 0;
+	float dimAmt = 0;
 
 	Ani perspectiveAni;
 	float perspective = 0;
@@ -128,6 +131,9 @@ public class StartVisual extends PApplet {
 		sepblur = loadShader("sepblur.glsl");
 		sepblur.set("blurSize", 0);
 		sepblur.set("sigma", 4f);
+		
+		//Barrel Blur
+		barrelblur = loadShader("barrelblur.glsl");
 
 		edges = loadShader("edges.glsl");
 
@@ -140,19 +146,19 @@ public class StartVisual extends PApplet {
 		viz = new RectangleArmyVisual(offlineApp);
 		// viz = new Percentages(offlineApp);
 		// viz = new SpinCycleVisual(offlineApp);
-
+		//viz = new HangOnVisual(offlineApp);
+		
 		// Load the viz - todo
 		// viz = new FlyingObjectsVisual(this);
-		// viz = new HangOnVisual(this);
-		// viz = new AvanteHangOnVisual(this);
 		// viz = new LeakierPhysicsVisual(this); //Doesn't seem to work
-		// viz = new KalimbaVisual(this);
-		// viz = new ParticleVisual(offlineApp);
 
+		offlineApp.g.beginDraw();
 		viz.setup();
+		offlineApp.g.endDraw();
 		reset();
 		textureMode(NORMAL);
 		midiReady = true;
+		
 	}
 
 	void reset() {
@@ -179,11 +185,11 @@ public class StartVisual extends PApplet {
 		}
 		
 		background(0);
+		
 		// Set camera zoom
 		scene.camera().setPosition(
 				new PVector(scene.camera().at().x, scene.camera().at().y,
 						curCameraDistance));
-	
 
 		// Set background image
 		if (bgImage != null)
@@ -199,12 +205,37 @@ public class StartVisual extends PApplet {
 		 */
 
 		offlineApp.g.beginDraw();
+		
+		offlineApp.g.lightFalloff(1 - lightFallOffAmt,0, 0);
+		offlineApp.g.ambientLight(150 - (dimAmt * 128), 150 - (dimAmt * 128), 150 - (dimAmt * 128));
+		offlineApp.g.directionalLight(128 - (dimAmt * 128), 128 - (dimAmt * 128), 128 - (dimAmt * 128), 0, 0, -1);
+		offlineApp.g.lightSpecular(0, 0, 0);
+		offlineApp.g.lightFalloff(1.5f,0, 0);
+		offlineApp.g.pointLight(150, 150, 150, 0, 0, 50);
+
+		
 		if (applyBackground)
 			offlineApp.g.background(0, 0);
 
+		
 		scene.beginDraw();
-
+		
 		applyPerspective(offlineApp);
+		
+		if (!applyBackground)
+		{
+			int rectOuterSize = 40;
+			int rectInnserSize = 30;
+			int numRects = 50;
+			offlineApp.pushMatrix();
+			offlineApp.fill(0);
+			offlineApp.translate(-(rectOuterSize * numRects)/2, -(rectOuterSize * numRects)/2);
+			for(int i = 0; i < numRects;i++)
+				for(int k = 0; k<numRects;k++)
+					offlineApp.rect(i * rectOuterSize ,k * rectOuterSize, rectInnserSize,rectInnserSize);
+			offlineApp.popMatrix();
+		}
+		
 		viz.draw(offlineApp.g);
 
 		scene.endDraw();
@@ -234,6 +265,7 @@ public class StartVisual extends PApplet {
 		if (applyBackground)
 			pass2.background(0, 0);
 		pass2.shader(sepblur);
+
 		pass2.image(pass1, 0, 0);
 		pass2.endDraw();
 
@@ -250,6 +282,8 @@ public class StartVisual extends PApplet {
 
 		if (applyEdges)
 			filter(edges);
+		
+		
 
 		if (applyCube) {
 			this.pushMatrix();
@@ -564,6 +598,13 @@ public class StartVisual extends PApplet {
 				viz.setup();
 			}
 			break;
+		case VisualConstants.GLOBAL_SCENE_HANGON:
+			if (amount > 0) {
+				viz = new HangOnVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
 		case VisualConstants.GLOBAL_EFFECT_CLIPX:
 			if (amount < .01)
 				clipX = 0;
@@ -580,12 +621,19 @@ public class StartVisual extends PApplet {
 			else
 				clipY = (int) (amount * VisualConstants.HEIGHT);
 			break;
+		case VisualConstants.GLOBAL_EFFECT_LIGHTFALLOFF:
+			lightFallOffAmt = amount;
+			if(lightFallOffAmt > .95)lightFallOffAmt = .95f; //Ensure the falloff never drops to 0
+			break;
+		case VisualConstants.GLOBAL_EFFECT_LIGHTDIM:
+			dimAmt = amount;
+			break;
 		}
 	}
 
 	void oscEvent(OscMessage msg) {
 		int effect = -1;
-		System.out.println(msg.get(0).intValue() + ", " + msg.get(1).intValue() + ", " + msg.get(2).intValue());
+		//System.out.println(msg.get(0).intValue() + ", " + msg.get(1).intValue() + ", " + msg.get(2).intValue());
 		
 		if(msg.checkAddrPattern("/mtn/ctrl") && msg.get(VisualConstants.OSC_CHANNEL_INDEX).intValue() == VisualConstants.ABLETON_OSC_NANOKONTROL_CHANNEL)
 			effect = NanoKontrol2Osc.convertInputToIndex(msg);

@@ -80,6 +80,8 @@ public class RectangleArmyVisual extends AbstractVisual {
 	float rotateCrazy = 0;
 	float maxRotateCrazy = 1;
 	float rotateY;
+	
+	float lightAmt;
 
 	PApplet app;
 
@@ -248,8 +250,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 
 	public void draw(PGraphics g) {
 
-		g.noStroke();
-		g.lights();
+		g.noStroke();		
 		// creator = new HEC_Grid().setUSize(110).setVSize(110).setU(2).setV(2);
 		creator = new HEC_Cube().setRadius(10);
 		HE_Mesh rect = new HE_Mesh(creator);
@@ -355,7 +356,7 @@ public class RectangleArmyVisual extends AbstractVisual {
 
 	@Override
 	public void ctrlEvent(int index, float val) {
-		// Rotate cam Z amount
+		// Rotate Z amount
 		if (index == VisualConstants.LOCAL_EFFECT_1) {
 			globalRotateAmount = val * maxGlobalRotateAmount;
 		} else if (index == VisualConstants.LOCAL_EFFECT_2) {

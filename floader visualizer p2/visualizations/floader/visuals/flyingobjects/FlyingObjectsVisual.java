@@ -46,6 +46,7 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	}
 
 	public void setup() {
+		super.setup();
 		rotateX = 0;
 		this.scale = 1;
 		 maxDistance = -4000;
@@ -114,7 +115,6 @@ public class FlyingObjectsVisual extends AbstractVisual implements IVisual {
 	public void draw(PGraphics g) {
 		super.draw(g);
 		g.noStroke();
-		g.lights();
 		g.rotateX(rotateX);
 		g.translate(0,0,2000);
 		

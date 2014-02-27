@@ -1,6 +1,5 @@
 -http://colorschemedesigner.com/
 -copy over all legacy visuals
-	-fix hang on
 -super! http://www.k2g2.org/blog:bit.craft:superdupershape_explorer
 -Hemesh disolve - http://amnonp5.wordpress.com/2012/03/14/hemesh-tutorial-color-dissolve/
 -use tint for transparency on mirrored image
@@ -11,9 +10,11 @@
 -more shaders
 	http://forum.processing.org/two/discussion/1471/pimp-up-your-sketches-with-glsl-filters
 	http://forum.processing.org/two/discussion/1292/photoshop-blend-modes-now-in-processing
+	-https://www.shadertoy.com/view/ldf3RN
 -midi looper for control changes
 -new colors
 -apply nanokontrol live set effects as visuals
 	-filters = lighting? saturation?
--get rid of midi dependencies.  Too buggy. Use OSC only
+-get rid of Ableton midi dependencies. Use OSC only
 -have the local rotation be triggered based on energy in the song (so triggered by OSC Midi clips in Ableton)
+-think about how (point) lights can be used in sketches

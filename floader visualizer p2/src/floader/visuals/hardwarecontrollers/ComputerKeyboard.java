@@ -29,7 +29,7 @@ public class ComputerKeyboard {
 		case '4':
 			return VisualConstants.GLOBAL_SCENE_FLYINGOBJECTS;
 		case '5':
-			return VisualConstants.GLOBAL_SCENE_KINECT;
+			return VisualConstants.GLOBAL_SCENE_HANGON;
 		//Escape key
 		case 27:
 			return -1;

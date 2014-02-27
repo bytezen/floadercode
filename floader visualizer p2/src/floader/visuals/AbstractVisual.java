@@ -19,10 +19,12 @@ public class AbstractVisual  implements IVisual {
 	protected int camCounter = 0;
 	protected ColorScheme curColorScheme;
 	
+	@Override
 	public void setup(){
 
 	}
 	
+	@Override
 	public void draw(PGraphics g)
 	{
 	}

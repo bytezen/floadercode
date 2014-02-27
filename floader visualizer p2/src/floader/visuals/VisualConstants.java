@@ -6,7 +6,6 @@ public final class VisualConstants {
 	public static final int CAM_EVENT_CHANNEL = 2;
 	public static final String OSC_CTRL_PATH = "/mtn/ctrl";
 	public static final String OSC_NOTE_PATH = "/mtn/note";
-	public static final boolean CAM_ENABLED = true;
 	public static final boolean PROSCENE_GUIDES_ENABLED = false;
 	public static final String MIDI_DEVICE = "5. Internal MIDI";
 	//public static final String MIDI_DEVICE = "nanoKONTROL2";
@@ -44,6 +43,9 @@ public final class VisualConstants {
 	public static final int GLOBAL_EFFECT_ROTATEZ = 6;
 	public static final int GLOBAL_EFFECT_CLIPX = 18;
 	public static final int GLOBAL_EFFECT_CLIPY = 19;
+	public static final int GLOBAL_EFFECT_LIGHTFALLOFF = 22;
+	public static final int GLOBAL_EFFECT_LIGHTDIM = 23;
+	
 	//Global Triggers
 	public static final int GLOBAL_TRIGGER_CUBE = 7;
 	public static final int GLOBAL_TRIGGER_CAPTUREBG = 8;
@@ -58,6 +60,7 @@ public final class VisualConstants {
 	public static final int GLOBAL_SCENE_SPINCYCLE = 15;
 	public static final int GLOBAL_SCENE_FLYINGOBJECTS = 16;
 	public static final int GLOBAL_SCENE_KINECT = 20;
+	public static final int GLOBAL_SCENE_HANGON = 21;
 	//Local Effects
 	public static final int LOCAL_EFFECT_1 = 100;
 	public static final int LOCAL_EFFECT_2 = 101;

@@ -44,7 +44,6 @@ public class NanoKontrol2Midi  {
 		{
 			int  index = -1;
 			switch (num) {
-			//Local vars
 			case KNOB_1_CTRL_NUM:
 				index = VisualConstants.LOCAL_EFFECT_1;
 				break;
@@ -63,8 +62,12 @@ public class NanoKontrol2Midi  {
 			case KNOB_6_CTRL_NUM:
 				index = VisualConstants.LOCAL_EFFECT_6;
 				break;
-				
-			//Global vars
+			case KNOB_7_CTRL_NUM:
+				index = VisualConstants.GLOBAL_EFFECT_LIGHTFALLOFF;
+				break;
+			case KNOB_8_CTRL_NUM:
+				index = VisualConstants.GLOBAL_EFFECT_LIGHTDIM;
+				break;
 			case SLDR_1_CTRL_NUM:
 				index = VisualConstants.GLOBAL_EFFECT_BLUR;
 				break;
@@ -78,16 +81,16 @@ public class NanoKontrol2Midi  {
 				index = VisualConstants.GLOBAL_EFFECT_SCALE;
 				break;
 			case SLDR_5_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_ROTATEX;
+				index = VisualConstants.GLOBAL_EFFECT_CLIPX;
 				break;
 			case SLDR_6_CTRL_NUM:
-				index = VisualConstants.GLOBAL_EFFECT_ROTATEY;
+				index = VisualConstants.GLOBAL_EFFECT_CLIPY;
 				break;
 			case SLDR_7_CTRL_NUM:
 				index = VisualConstants.GLOBAL_EFFECT_ROTATEZ;
 				break;
 			case SLDR_8_CTRL_NUM:
-				index = 7;
+				index = VisualConstants.GLOBAL_EFFECT_ROTATEX;
 				break;
 			default:
 				System.err.println("Error: unidentified ctrl num in NanoKontrol2 conversion: " + num);
