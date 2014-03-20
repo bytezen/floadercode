@@ -7,9 +7,9 @@ public final class VisualConstants {
 	public static final String OSC_CTRL_PATH = "/mtn/ctrl";
 	public static final String OSC_NOTE_PATH = "/mtn/note";
 	public static final boolean PROSCENE_GUIDES_ENABLED = false;
-	public static final String MIDI_DEVICE = "5. Internal MIDI";
-	//public static final String MIDI_DEVICE = "nanoKONTROL2";
-	public static final boolean NANOKONTROL2MIDI_ENABLED = false;
+	//public static final String MIDI_DEVICE = "5. Internal MIDI";
+	public static final String MIDI_DEVICE = "nanoKONTROL2";
+	public static final boolean NANOKONTROL2MIDI_ENABLED = true;
 	
 	public static final boolean ABLETON_OSC_NANOKONTROL_ENABLED = true;
 	public static final int ABLETON_OSC_NANOKONTROL_CHANNEL = 2;
@@ -20,7 +20,7 @@ public final class VisualConstants {
 	public static final boolean ABLETON_OSC_CTRL_ENABLED = true;
 	public static final int ABLETON_OSC_CTRL_CHANNEL = 1;
 	
-	public static final boolean MONOMEMIDI_ENABLED = true;
+	public static final boolean MONOMEMIDI_ENABLED = false;
 	public static final boolean COMPUTERKEYBOARD_ENABLED = true;
 	
 	public static final int OSC_CTRL_INDEX = 1;
@@ -61,6 +61,9 @@ public final class VisualConstants {
 	public static final int GLOBAL_SCENE_FLYINGOBJECTS = 16;
 	public static final int GLOBAL_SCENE_KINECT = 20;
 	public static final int GLOBAL_SCENE_HANGON = 21;
+	public static final int GLOBAL_SCENE_NEVELING = 24;
+	public static final int GLOBAL_SCENE_DENSITY = 25;
+	public static final int GLOBAL_SCENE_BATTISTA = 26;
 	//Local Effects
 	public static final int LOCAL_EFFECT_1 = 100;
 	public static final int LOCAL_EFFECT_2 = 101;

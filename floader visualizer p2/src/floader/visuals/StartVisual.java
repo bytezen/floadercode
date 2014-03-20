@@ -2,6 +2,8 @@ package floader.visuals;
 
 import codeanticode.glgraphics.GLGraphicsOffScreen;
 import floader.looksgood.ani.Ani;
+import floader.visuals.alba_francesca_battista.Battista;
+import floader.visuals.clay_shirky_density_variant.Density;
 import floader.visuals.colorschemes.BlackAndWhite;
 import floader.visuals.colorschemes.BlueSunset;
 import floader.visuals.colorschemes.ColorScheme;
@@ -17,6 +19,7 @@ import floader.visuals.hardwarecontrollers.MonomeMidi;
 import floader.visuals.hardwarecontrollers.NanoKontrol2Midi;
 import floader.visuals.hardwarecontrollers.NanoKontrol2Osc;
 import floader.visuals.kinect.KinectVisual;
+import floader.visuals.neveling_untitled_2.Neveling;
 import floader.visuals.particles.*;
 import floader.visuals.percentages.PercentagesVisual;
 import floader.visuals.rectanglearmy.RectangleArmyVisual;
@@ -71,7 +74,7 @@ public class StartVisual extends PApplet {
 	ColorScheme colorSchemes[];
 
 	Ani cameraDistanceAni;
-	float maxCameraDistance = 2300;
+	float maxCameraDistance = 1200;//2300;
 	float minCameraDistance = 200;
 	float curCameraDistance = maxCameraDistance;
 	
@@ -143,12 +146,15 @@ public class StartVisual extends PApplet {
 		// MidiBus.list();
 
 		// Load the viz - complete
-		viz = new RectangleArmyVisual(offlineApp);
+		//viz = new RectangleArmyVisual(offlineApp);
 		// viz = new Percentages(offlineApp);
 		// viz = new SpinCycleVisual(offlineApp);
 		//viz = new HangOnVisual(offlineApp);
+		//viz = new Neveling(offlineApp);
+		//viz = new Density(offlineApp);
+		viz = new Battista(offlineApp);
 		
-		// Load the viz - todo
+		// todo
 		// viz = new FlyingObjectsVisual(this);
 		// viz = new LeakierPhysicsVisual(this); //Doesn't seem to work
 
@@ -601,6 +607,27 @@ public class StartVisual extends PApplet {
 		case VisualConstants.GLOBAL_SCENE_HANGON:
 			if (amount > 0) {
 				viz = new HangOnVisual(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
+		case VisualConstants.GLOBAL_SCENE_NEVELING:
+			if (amount > 0) {
+				viz = new Neveling(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
+		case VisualConstants.GLOBAL_SCENE_DENSITY:
+			if (amount > 0) {
+				viz = new Density(offlineApp);
+				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
+				viz.setup();
+			}
+			break;
+		case VisualConstants.GLOBAL_SCENE_BATTISTA:
+			if (amount > 0) {
+				viz = new Battista(offlineApp);
 				viz.setColorScheme(colorSchemes[curColorSchemeIndex]);
 				viz.setup();
 			}
